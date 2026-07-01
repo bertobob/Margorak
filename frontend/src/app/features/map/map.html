@@ -1,0 +1,21 @@
+<div class="map">
+  @for (row of visibleMap().tiles; track $index; let y = $index) {
+  <div class="row">
+    @for (tile of row; track $index; let x = $index) {
+      @if (x === visibleMap().playerViewX && y === visibleMap().playerViewY) {
+        <img
+          class="charakter"
+          src="/tileicons/charakter.gif"
+          alt="charakter"
+        />
+      } @else {
+        <img
+          class="tile"
+          [src]="'/tileicons/' + terrainImages[tile.terrainId]"
+          [alt]="terrainImages[tile.terrainId]"
+        />
+      }
+    }
+  </div>
+}
+</div>
