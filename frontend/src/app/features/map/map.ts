@@ -26,7 +26,17 @@ export class Map {
   });
 
 visibleMap = computed(() => {
-  const tiles = this.currentMap().tiles;
+   const map = this.currentMap();
+
+  if (!map?.tiles.length || !map.tiles[0]?.length) {
+    return {
+      tiles: [],
+      playerViewX: -1,
+      playerViewY: -1,
+    };
+  }
+
+  const tiles = map.tiles;
   const sight = this.sightRange();
 
   const playerX = this.playerPos()[0];
@@ -52,7 +62,8 @@ visibleMap = computed(() => {
 });
 
   sightRange = computed(() => {
-    //return this.currentMap()?.sightRange ?? 0;
+    console.log(this.currentMap()?.sightRange)
+    return this.currentMap()?.sightRange ?? 8;    
     return 8
   });
 

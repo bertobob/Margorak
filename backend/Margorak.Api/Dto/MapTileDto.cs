@@ -4,5 +4,6 @@
     {
         public int TerrainId { get; set; }
         public bool Accessible { get; set; }
+        public MapInteractionDto? MapInteraction {get;set;}
     }
 }

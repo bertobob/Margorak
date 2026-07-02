@@ -10,6 +10,7 @@ namespace Margorak.Api.Models
         public int ClickRange { get; set; }
 
         public ICollection<MapTile> Tiles { get; set; } = [];
+        public List<MapInteraction> Interactions { get; set; } = [];
 
     }
 }

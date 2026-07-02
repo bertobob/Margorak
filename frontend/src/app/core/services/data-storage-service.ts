@@ -15,8 +15,12 @@ export class DataStorageService {
   playerPos = signal<[number, number]>([1, 1]);
 
   currentMap = computed(() => this.maps()[this.currentMapIndex()]);
-
-  setPlayerPos(x: number, y: number): void {
+  activeMapInteraction = computed(() => {
+    const [x, y] = this.playerPos()
+    return this.maps()[this.currentMapIndex()]
+      ?.tiles[y]?.[x]?.mapInteraction ?? null;
+  });
+  setPlayerPos(x: number, y: number): void {    
     this.playerPos.set([x, y]);
   }
 
@@ -30,6 +34,8 @@ export class DataStorageService {
     }
 
     this.playerPos.set([nextPos.x, nextPos.y]);
+    const interaction = this.activeMapInteraction();
+    
   }
 
   private clampToMap(x: number, y: number) {
@@ -68,8 +74,9 @@ export class DataStorageService {
   }
 
   loadMapData(): void {
-    this.api.loadMapData().subscribe(maps => {
-      this.maps.set(maps);
-    });
-  }
+  this.api.loadMapData().subscribe(maps => {
+    console.log(maps);
+    this.maps.set(maps);
+  });
+}
 }

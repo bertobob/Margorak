@@ -1,7 +1,7 @@
 export interface TileDto {
   terrainId: number
   accessible :number
-  interaction?: MapInteraction;
+  mapInteraction?: MapInteraction | null;
 }
 
 export interface MapDto {
@@ -14,8 +14,6 @@ export interface MapDto {
 
 interface BaseInteraction {
   id: number
-  locX: number
-  locY: number
 }
 
 export interface ShopInteraction extends BaseInteraction {
