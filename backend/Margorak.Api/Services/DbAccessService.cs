@@ -24,7 +24,6 @@ namespace Margorak.Api.Services
                 .Include(x => x.Interactions)
                     .ThenInclude(x => x.Category)
                 .ToListAsync();
-            var a = maps.First().Interactions.Count;
             
             return maps;
         }
