@@ -6,9 +6,9 @@ namespace Margorak.Api.Models
     public class CombatantLoot
     {
         public int CombatantId { get; set; }
-        public Combatant Combatant { get; set; }
+        public Combatant Combatant { get; set; } = null!;
         public int ItemId {  get; set; }
-        public Item Item { get; set; }
+        public Item Item { get; set; } = null!;
         public int Probability {  get; set; }
     }
 }

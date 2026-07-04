@@ -3,8 +3,8 @@
     public class Attack
     {
         public int Id { get; set; } 
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public int AttackSpeed {  get; set; }
         public int AttackRating {  get; set; }
         public int AttackRange {  get; set; }

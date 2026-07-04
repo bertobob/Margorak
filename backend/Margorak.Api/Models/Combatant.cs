@@ -3,7 +3,7 @@
     public class Combatant
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int CombatantRaceId {  get; set; }
         public CombatantRace CombatantRace { get; set; } = null!;
         public int Level {  get; set; } 
@@ -13,6 +13,7 @@
         public int GoldLootMax { get; set; }
         public ICollection<CombatantAttack> CombatantAttacks { get; set; } = [];
         public ICollection<CombatantHabitat> CombatantHabitats { get; set; } = [];
-        public ICollection<CombatantLoot> CombatantLoots{ get; set; } = [];
+        public ICollection<CombatantLoot> CombatantLoots{ get; set; } = []; 
+        public ICollection<CombatantResistance> CombatantResistances { get; set; } = [];
     }
 }

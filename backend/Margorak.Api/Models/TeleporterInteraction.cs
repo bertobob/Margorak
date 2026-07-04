@@ -5,7 +5,7 @@
         public int Id { get; set; }
         
         public int MapInteractionId { get; set; }
-        public MapInteraction MapInteraction { get; set; } = null;
+        public MapInteraction MapInteraction { get; set; } = null!;
         public string? Description { get; set; } 
         public int DestinationMapId { get; set; }
         public Map DestinationMap { get; set; } = null!;

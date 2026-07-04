@@ -23,7 +23,7 @@ namespace Margorak.Api.Services
             {
                 Id = mapInteraction.Id,
                 Type = "teleporter",
-                Description = teleporter.Description,
+                Description = teleporter.Description ?? string.Empty,
                 DestinationMapId = teleporter.DestinationMapId,
                 DestinationLocX = teleporter.DestinationLocX,
                 DestinationLocY = teleporter.DestinationLocY,

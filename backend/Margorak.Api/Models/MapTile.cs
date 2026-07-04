@@ -12,8 +12,5 @@ namespace Margorak.Api.Models
         public int YCoord { get; set; }
         public int TerrainId {  get; set; }
         public Terrain Terrain { get; set; } = null!;
-        
-
-
     }
 }

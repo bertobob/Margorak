@@ -36,5 +36,9 @@
 
         public int LocX { get; set; }
         public int LocY { get; set; }
+        public int Version { get; set; }
+
+        public ICollection<OwnedItem> OwnedItems { get; set; } = [];
+        public ICollection<CharacterEquipment> CharacterEquipment { get; set; } = [];
     }
 }

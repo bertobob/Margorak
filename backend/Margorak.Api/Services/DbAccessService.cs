@@ -41,5 +41,90 @@ namespace Margorak.Api.Services
                 .FirstAsync(x => x.MapInteractionId == id);
             return teleporter;
         }
+
+        public async Task<Item> GetItemByIdAsync(int itemId)
+        {
+            var item = await _db.Items
+                .Include(c => c.ItemCategory)
+                .AsNoTracking()
+                .FirstAsync( x => x.Id == itemId);
+            return item;
+        }
+
+        public async Task<List<Item>> GetItemsByIdsAsync(List<int> itemIds)
+        {
+            var itemList = await _db.Items
+                .Include(c => c.ItemCategory)
+                .Where(x => itemIds.Contains(x.Id))
+                .AsNoTracking()
+                .ToListAsync();
+
+            return itemList;
+        }
+        
+        public async Task<Character?> GetCompleteCharacterAsync(int characterId)
+        {
+            var character = await _db.Characters
+                .Include(c => c.CharacterClass)
+                .Include(c => c.CharacterRace)
+                .Include(c => c.OwnedItems)
+                    .ThenInclude(o => o.Item)
+                        .ThenInclude(i => i.ItemCategory)
+                .Include(c => c.CharacterEquipment)
+                    .ThenInclude(ce => ce.EquipSlot)
+                .Include(c=> c.CharacterEquipment)
+                    .ThenInclude(ce => ce.OwnedItem)
+                        .ThenInclude(oe => oe.Item)
+                .AsNoTracking()
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(c => c.Id == characterId);
+
+            return character;
+        }
+
+        public async Task<List<CombatantHabitat>> GetCombatantHabitatsByMapIdAsync(int mapId)
+        {
+            return await _db.CombatantHabitats
+                .Include(ch => ch.HabitatTerrainType)
+                .AsNoTracking()
+                .Where(ch => ch.MapId == mapId)
+                .ToListAsync();
+        }
+
+        public async Task<Combatant?> GetCombatantForBattleAsync(int combatantId)
+        {
+            return await _db.Combatants
+                .Include(c => c.CombatantAttacks)
+
+                .Include(c => c.CombatantLoots)
+                    .ThenInclude(cl => cl.Item)
+                        .ThenInclude(i => i.ItemCategory)
+
+                .Include(c => c.CombatantResistances)
+                    .ThenInclude(cr => cr.ResistanceType)
+
+                .AsNoTracking()
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(c => c.Id == combatantId);
+        }
+
+        public async Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY)
+        {
+            var character = await _db.Characters
+                .Where(c => c.Id == characterId)
+                .FirstOrDefaultAsync();
+
+            if (character == null) { return; }
+
+            character.CurrentMapId = mapId;
+            character.LocX=locX;
+            character.LocY=locY;
+
+            await _db.SaveChangesAsync();
+            
+        }
+
+        public async Task equip
+
     }
 }

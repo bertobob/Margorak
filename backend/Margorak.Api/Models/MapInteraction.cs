@@ -9,6 +9,8 @@
         public Map Map { get; set; } = null!;
         public int MapInteractionCategoryId {  get; set; }
         public MapInteractionCategory Category { get; set; } = null!;
+        public ShopInteraction? ShopInteraction { get; set; }
+        public TeleporterInteraction? TeleporterInteraction { get; set; }
     }
 
 }

@@ -6,9 +6,9 @@ namespace Margorak.Api.Models
     public class ItemDamage
     {
         public int ItemId {  get; set; }
-        public Item Item { get; set; }
+        public Item Item { get; set; } = null!;
         public int DamageTypeId {  get; set; }
-        public DamageType DamageType { get; set; }
+        public DamageType DamageType { get; set; } = null!;
         public int MinDamage {  get; set; }
         public int MaxDamage { get; set; }
     }

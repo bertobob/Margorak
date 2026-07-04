@@ -27,7 +27,7 @@ namespace Margorak.Api.Services
                 Id = mapInteraction.Id,
                 Type = "shop",
                 Name = shop.Name,
-                Description = shop.Description
+                Description = shop.Description ?? string.Empty
             };
         }
     }

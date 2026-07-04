@@ -37,7 +37,7 @@ namespace Margorak.Api.Services
                         .Where(x => x.LocX == tile.XCoord && x.LocY == tile.YCoord)
                         .FirstOrDefault();
 
-                    MapInteractionDto mapInteractionDto = null;
+                    MapInteractionDto? mapInteractionDto = null;
                     if (mapInteraction != null)
                     {
                         var type = mapInteraction
@@ -58,7 +58,7 @@ namespace Margorak.Api.Services
 
                 mapList.Add(new MapDto
                 {
-                    Id = map.MapId,
+                    Id = map.Id,
                     Name = map.Name,
                     Tiles = tiles,
                     SightRange = map.SightRange,
