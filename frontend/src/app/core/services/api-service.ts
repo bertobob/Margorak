@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../config/config';
 import { MapDto } from '../../features/map/map.dto';
+import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 
 
 @Injectable({
@@ -21,4 +22,11 @@ export class ApiService {
     return this.http.get<MapDto[]>(`${this.apiBaseUrl}/api/map/maps`)
   }
 
+  loadCombatantHabitats(mapId: number) {
+    return this.http.get<CombatantHabitatDto[]>(
+      `${this.apiBaseUrl}/combatantHabitats/${mapId}`
+    );
+  }
 }
+
+

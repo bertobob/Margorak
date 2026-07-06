@@ -1,5 +1,6 @@
 export interface TileDto {
   terrainId: number
+  terrainTypeId : number
   accessible :number
   mapInteraction?: MapInteraction | null;
 }

@@ -26,7 +26,7 @@ namespace Margorak.Api.Data
         public DbSet<DamageType> DamageTypes => Set<DamageType>();
         public DbSet<EffectType> EffectTypes => Set<EffectType>();
         public DbSet<EquipSlot> EquipSlots => Set<EquipSlot>();
-        public DbSet<HabitatTerrainType> HabitatTerrainTypes => Set<HabitatTerrainType>();
+        public DbSet<TerrainType> TerrainTypes => Set<TerrainType>();
         public DbSet<Item> Items => Set<Item>();
         public DbSet<ItemBonus> ItemBonuses => Set<ItemBonus>();
         public DbSet<ItemCategory> ItemCategories => Set<ItemCategory>();

@@ -8,13 +8,11 @@ namespace Margorak.Api.Controllers
     [Route("api/map")]
     public class MapController : Controller
     {
-        private DbAccessService _dbAccessService;
         private MapService _mapService;
 
 
-        public MapController(DbAccessService dbAccessService, MapService mapService)
+        public MapController(MapService mapService)
         {
-            _dbAccessService = dbAccessService;
             _mapService = mapService;
         }
 

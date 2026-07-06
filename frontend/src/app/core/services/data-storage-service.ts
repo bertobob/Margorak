@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ApiService } from './api-service';
 import { MapDto } from '../../features/map/map.dto';
+import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class DataStorageService {
   maps = signal<MapDto[]>([]);
   currentMapIndex = signal(1);
   playerPos = signal<[number, number]>([1, 1]);
+  combatantHabitats = signal<CombatantHabitatDto[]>([])
 
   currentMap = computed(() => this.maps()[this.currentMapIndex()]);
   activeMapInteraction = computed(() => {
@@ -32,11 +34,32 @@ export class DataStorageService {
     if (!this.isAccessible(nextPos.x, nextPos.y)) {
       return;
     }
-
+    
     this.playerPos.set([nextPos.x, nextPos.y]);
+    const ch = this.getCombatantHabitat(this.playerPos(),this.currentMap().tiles[this.playerPos()[0]][this.playerPos()[1]].terrainTypeId)
+    if(ch!==null)
+    {
+      console.log("habitat found ",ch)
+    }
     const interaction = this.activeMapInteraction();
     
   }
+
+  private getCombatantHabitat(pos: [number, number],terrainTypeId :number): CombatantHabitatDto | null {
+    const [posX, posY] = pos;
+    
+    const habitat = this.combatantHabitats().find(h =>
+      terrainTypeId == h.terrainTypeId &&
+      posX >= h.locX1 &&
+      posX <= h.locX2 &&
+      posY >= h.locY1 &&
+      posY <= h.locY2
+    );
+
+    console.log("in get combatant ",habitat)
+
+  return habitat ?? null;
+}
 
   private clampToMap(x: number, y: number) {
     const map = this.currentMap();
@@ -74,9 +97,19 @@ export class DataStorageService {
   }
 
   loadMapData(): void {
-  this.api.loadMapData().subscribe(maps => {
-    console.log(maps);
-    this.maps.set(maps);
+    this.api.loadMapData().subscribe(maps => {
+      console.log(maps);
+      this.maps.set(maps);
+
+      this.loadCombatantHabitats();
+    });
+  }
+
+ loadCombatantHabitats(): void {
+  this.api.loadCombatantHabitats(this.currentMap().id).subscribe(combatantHabitats => {
+    console.log("habitats:", combatantHabitats);
+    this.combatantHabitats.set(combatantHabitats);
   });
 }
+
 }

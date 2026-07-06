@@ -86,7 +86,7 @@ namespace Margorak.Api.Services
         public async Task<List<CombatantHabitat>> GetCombatantHabitatsByMapIdAsync(int mapId)
         {
             return await _db.CombatantHabitats
-                .Include(ch => ch.HabitatTerrainType)
+                .Include(ch => ch.TerrainType)
                 .AsNoTracking()
                 .Where(ch => ch.MapId == mapId)
                 .ToListAsync();

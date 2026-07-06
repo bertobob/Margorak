@@ -10,6 +10,7 @@ namespace Margorak.Api.Mapper
             return new MapTileDto
             {
                 TerrainId = mapTile.TerrainId,
+                TerrainTypeId=mapTile.Terrain.TerrainTypeId,
                 Accessible = mapTile.Terrain.Accessible == 1,
                 MapInteraction = mapInteraction,
             };

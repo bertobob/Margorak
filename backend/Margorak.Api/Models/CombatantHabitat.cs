@@ -10,8 +10,8 @@
         public int MapId { get; set; }
         public Map Map { get; set; } = null!;
 
-        public int HabitatTerrainTypeId { get; set; }
-        public HabitatTerrainType HabitatTerrainType { get; set; } = null!;
+        public int TerrainTypeId { get; set; }
+        public TerrainType TerrainType { get; set; } = null!;
 
         public int LocX1 { get; set; }
         public int LocY1 { get; set; }

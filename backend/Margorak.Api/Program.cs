@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddScoped<CombatantHabitatService>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, ShopInteractionDtoFactory>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, TeleporterInteractionDtoFactory>();
 builder.Services.AddScoped<DbAccessService>();
