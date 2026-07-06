@@ -1,5 +1,6 @@
-﻿using Margorak.Api.Dto;
+using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
+using Margorak.Api.Mapper;
 
 namespace Margorak.Api.Services
 {
@@ -21,49 +22,7 @@ namespace Margorak.Api.Services
 
             foreach (var map in maps)
             {
-                int maxX = map.Tiles.Max(t => t.XCoord);
-                int maxY = map.Tiles.Max(t => t.YCoord);
-
-                var tiles = new MapTileDto[maxY + 1][];
-
-                for (int y = 0; y <= maxY; y++)
-                {
-                    tiles[y] = new MapTileDto[maxX + 1];
-                }
-
-                foreach (var tile in map.Tiles)
-                {
-                    var mapInteraction = map.Interactions
-                        .Where(x => x.LocX == tile.XCoord && x.LocY == tile.YCoord)
-                        .FirstOrDefault();
-
-                    MapInteractionDto? mapInteractionDto = null;
-                    if (mapInteraction != null)
-                    {
-                        var type = mapInteraction
-                            .Category
-                            .Name;
-
-                        var factory = _factories
-                            .First(x => x.CanHandle(type));
-                        mapInteractionDto = await factory.Create(mapInteraction);
-                    }
-                    tiles[tile.YCoord][tile.XCoord] = new MapTileDto
-                    {
-                        TerrainId = tile.TerrainId,
-                        Accessible = tile.Terrain.Accessible == 1,
-                        MapInteraction = mapInteractionDto
-                    }; ;
-                }
-
-                mapList.Add(new MapDto
-                {
-                    Id = map.Id,
-                    Name = map.Name,
-                    Tiles = tiles,
-                    SightRange = map.SightRange,
-                    ClickRange = map.ClickRange
-                });
+                mapList.Add(await MapMapper.ToDto(map, _factories));
             }
             return mapList;
         }

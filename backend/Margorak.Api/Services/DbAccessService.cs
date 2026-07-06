@@ -75,6 +75,7 @@ namespace Margorak.Api.Services
                 .Include(c=> c.CharacterEquipment)
                     .ThenInclude(ce => ce.OwnedItem)
                         .ThenInclude(oe => oe.Item)
+                            .ThenInclude(i => i.ItemCategory)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(c => c.Id == characterId);
@@ -124,7 +125,7 @@ namespace Margorak.Api.Services
             
         }
 
-        public async Task equip
+        //public async Task equip
 
     }
 }
