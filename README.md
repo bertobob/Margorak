@@ -21,11 +21,17 @@ Work-in-progress browser game built with ASP.NET Core, EF Core, SQLite and Angul
 ## How to run
 
 ### Backend
+
+```bash
 cd backend
 dotnet restore
 dotnet run
+```
 
 ### Frontend
+
+```bash
 cd frontend
 npm install
 ng serve
+```
