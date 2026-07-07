@@ -1,0 +1,113 @@
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 25%) minmax(0, 75%);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #151515;
+  color: #f2f2f2;
+}
+
+.equipment-panel {
+  min-height: 0;
+  overflow: auto;
+  border-right: 1px solid #353535;
+  padding: 16px;
+  background: #202020;
+}
+
+.panel-header h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.equipment-slots {
+  display: grid;
+  gap: 10px;
+}
+
+.equipment-slot {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid #3e3e3e;
+  border-radius: 6px;
+  background: #181818;
+}
+
+.play-area {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.view-switch {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px 0;
+}
+
+.view-switch-button {
+  min-width: 110px;
+  min-height: 36px;
+  border: 1px solid #4a4a4a;
+  border-radius: 6px;
+  background: #202020;
+  color: #d8d8d8;
+  font: inherit;
+  cursor: pointer;
+}
+
+.view-switch-button.active {
+  border-color: #777;
+  background: #343434;
+  color: #fff;
+}
+
+.main-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.interaction-bar {
+  display: flex;
+  justify-content: center;
+  padding: 16px 24px 24px;
+}
+
+.interaction-action {
+  min-width: min(420px, 100%);
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid #4a4a4a;
+  border-radius: 6px;
+  background: #262626;
+  color: #f2f2f2;
+  font: inherit;
+}
+
+@media (max-width: 760px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .equipment-panel {
+    border-right: 0;
+    border-bottom: 1px solid #353535;
+  }
+
+  .equipment-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

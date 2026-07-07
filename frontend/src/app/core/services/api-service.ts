@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../config/config';
-import { MapDto } from '../../features/map/map.dto';
+import { MapDto } from '../../features/map/dto/map.dto';
 import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 
 

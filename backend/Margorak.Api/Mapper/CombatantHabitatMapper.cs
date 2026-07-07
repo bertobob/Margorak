@@ -10,7 +10,7 @@ namespace Margorak.Api.Mapper
             var habitatTerrainTypeId = combatantHabitat.TerrainTypeId;
             return new CombatantHabitatDto
             {
-                CombatantHabitatId = combatantHabitat.CombatantId,
+                CombatantId = combatantHabitat.CombatantId,
                 TerrainTypeId = habitatTerrainTypeId,
                 LocX1=combatantHabitat.LocX1,
                 LocX2=combatantHabitat.LocX2,

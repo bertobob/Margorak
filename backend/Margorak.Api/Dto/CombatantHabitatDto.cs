@@ -4,7 +4,8 @@ namespace Margorak.Api.Dto
 {
     public class CombatantHabitatDto
     {
-        public int CombatantHabitatId { get; set; }
+        
+        public int CombatantId { get; set; }
         public int TerrainTypeId { get; set; } 
         public int LocX1 {  get; set; }
         public int LocY1 { get; set; }

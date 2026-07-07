@@ -1,4 +1,5 @@
 export interface CombatantHabitatDto{
+    combatantId : number,
     terrainTypeId : number,
     locX1 : number,
     locY1 : number,

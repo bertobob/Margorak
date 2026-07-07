@@ -1,28 +1,36 @@
 import { inject, Injectable } from '@angular/core';
-import { DataStorageService } from './data-storage-service';
+import { GameStateService } from './game-state.service';
 import { ApiService } from './api-service';
+import { ClientSessionService } from './client-session.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInitService {
-  private _dataStorage = inject(DataStorageService)
-  private apiService = inject(ApiService)
+  private gameState = inject(GameStateService);
+  private apiService = inject(ApiService);
+  private clientSession = inject(ClientSessionService);
   
-    init(){
-    const storedId  = this._dataStorage.getLocalStorageItem('clientId');
-    
-    if(!storedId){
-      let newId = crypto.randomUUID()
-      this._dataStorage.setClientId(newId)
-      this._dataStorage.setLocalStorageItem('clientId',newId)
-      this._dataStorage.saveUser( newId);      
-    }
-    else{
-      this._dataStorage.setClientId(storedId);
-    }
+  init(): void {
+    const clientId = this.clientSession.getOrCreateClientId();
+    this.gameState.setClientId(clientId);
 
-    this._dataStorage.loadMapData()
+    this.loadMapData();
   }
 
+  private loadMapData(): void {
+    this.apiService.loadMapData().subscribe(maps => {
+      this.gameState.setMaps(maps);
+
+      const currentMap = this.gameState.currentMap();
+
+      if (!currentMap) {
+        return;
+      }
+
+      this.apiService.loadCombatantHabitats(currentMap.id).subscribe(combatantHabitats => {
+        this.gameState.setCombatantHabitats(combatantHabitats);
+      });
+    });
+  }
 }

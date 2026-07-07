@@ -1,3 +1,52 @@
-<div>
-  <app-map></app-map>
+<div class="game-layout">
+  <aside class="equipment-panel" aria-label="Ausruestung">
+    <header class="panel-header">
+      <h2>Ausruestung</h2>
+    </header>
+
+    <section class="equipment-slots">
+      <div class="equipment-slot">Kopf</div>
+      <div class="equipment-slot">Brust</div>
+      <div class="equipment-slot">Waffe</div>
+      <div class="equipment-slot">Schild</div>
+      <div class="equipment-slot">Ring</div>
+      <div class="equipment-slot">Stiefel</div>
+    </section>
+  </aside>
+
+  <section class="play-area">
+    <nav class="view-switch" aria-label="Ansicht wechseln">
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'map'"
+        type="button"
+        (click)="showMap()"
+      >
+        Map
+      </button>
+
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'inventory'"
+        type="button"
+        (click)="showInventory()"
+      >
+        Inventar
+      </button>
+    </nav>
+
+    <main class="main-panel">
+      @if (activeView() === 'map') {
+        <app-map></app-map>
+      } @else {
+        <app-inventory></app-inventory>
+      }
+    </main>
+
+    <footer class="interaction-bar" aria-label="Aktionen">
+      <button class="interaction-action" type="button">
+        Keine Aktion verfuegbar
+      </button>
+    </footer>
+  </section>
 </div>
