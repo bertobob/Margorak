@@ -46,9 +46,7 @@ export class Map {
     const bottomIndex = Math.min(mapHeight, topIndex + sight * 2 + 1);
 
     return {
-      tiles: tiles
-        .slice(topIndex, bottomIndex)
-        .map(row => row.slice(leftIndex, rightIndex)),
+      tiles: tiles.slice(topIndex, bottomIndex).map((row) => row.slice(leftIndex, rightIndex)),
 
       playerViewX: playerX - leftIndex,
       playerViewY: playerY - topIndex,

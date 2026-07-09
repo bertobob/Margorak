@@ -46,5 +46,5 @@ export const terrainImages: Record<number, string> = {
   44: 'turmn.jpg',
   45: 'turmw.jpg',
   46: 'turmo.jpg',
-  47: 'turms.jpg'
+  47: 'turms.jpg',
 };

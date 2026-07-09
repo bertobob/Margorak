@@ -9,9 +9,9 @@ export class GameStateService {
   private clientId = '';
 
   maps = signal<MapDto[]>([]);
-  currentMapIndex = signal(1);
-  playerPos = signal<[number, number]>([1, 1]);
-  combatantHabitats = signal<CombatantHabitatDto[]>([]); 
+  currentMapIndex = signal(0);
+  playerPos = signal<[number, number]>([30, 30]);
+  combatantHabitats = signal<CombatantHabitatDto[]>([]);
 
   currentMap = computed(() => this.maps()[this.currentMapIndex()] ?? null);
 
@@ -21,6 +21,8 @@ export class GameStateService {
 
     return map?.tiles[y]?.[x]?.mapInteraction ?? null;
   });
+
+  interactionText = computed(() => this.activeMapInteraction()?.description ?? '');
 
   setClientId(clientId: string): void {
     this.clientId = clientId;

@@ -1,5 +1,7 @@
 interface BaseInteractionDto {
   id: number;
+  type: string;
+  description: string;
 }
 
 export interface ShopInteractionDto extends BaseInteractionDto {
@@ -9,11 +11,14 @@ export interface ShopInteractionDto extends BaseInteractionDto {
 
 export interface TeleporterInteractionDto extends BaseInteractionDto {
   type: 'teleporter';
-  targetMapId: number;
-  targetX: number;
-  targetY: number;
+  destinationMapId: number;
+  destinationLocX: number;
+  destinationLocY: number;
 }
 
-export type MapInteractionDto =
-  | ShopInteractionDto
-  | TeleporterInteractionDto;
+export type MapInteractionDto = ShopInteractionDto | TeleporterInteractionDto;
+
+export interface MapInteractionHandler {
+  type: MapInteractionDto['type'];
+  handle(interaction: MapInteractionDto): void;
+}

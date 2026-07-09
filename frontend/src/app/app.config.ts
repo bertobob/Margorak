@@ -1,8 +1,4 @@
-import {
-  ApplicationConfig,
-  provideAppInitializer,
-  inject
-} from '@angular/core';
+import { ApplicationConfig, provideAppInitializer, inject } from '@angular/core';
 
 import { provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -19,6 +15,6 @@ export const appConfig: ApplicationConfig = {
 
     provideAppInitializer(() => {
       inject(AppInitService).init();
-    })
-  ]
+    }),
+  ],
 };

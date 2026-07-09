@@ -37,16 +37,14 @@
 
     <main class="main-panel">
       @if (activeView() === 'map') {
-        <app-map></app-map>
+      <app-map></app-map>
       } @else {
-        <app-inventory></app-inventory>
+      <app-inventory></app-inventory>
       }
     </main>
 
     <footer class="interaction-bar" aria-label="Aktionen">
-      <button class="interaction-action" type="button">
-        Keine Aktion verfuegbar
-      </button>
+      <app-interaction-bar></app-interaction-bar>
     </footer>
   </section>
 </div>

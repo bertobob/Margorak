@@ -25,8 +25,7 @@ namespace Margorak.Api.Services
             return new ShopInteractionDto
             {
                 Id = mapInteraction.Id,
-                Type = "shop",
-                Name = shop.Name,
+                ShopName = shop.Name,
                 Description = shop.Description ?? string.Empty
             };
         }

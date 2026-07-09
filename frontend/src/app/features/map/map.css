@@ -1,13 +1,11 @@
-
-
 .row {
-    display: flex;
-    height: 32px;
+  display: flex;
+  height: 32px;
 }
 
 .tile {
-    width: 32px;
-    height: 32px;
-    display: block;
-    image-rendering: pixelated;
+  width: 32px;
+  height: 32px;
+  display: block;
+  image-rendering: pixelated;
 }

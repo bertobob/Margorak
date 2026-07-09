@@ -21,8 +21,7 @@ namespace Margorak.Api.Services
             var teleporter = await _dbAccessService.GetTeleporterInteractionAsync(mapInteraction.Id);
             return new TeleporterInteractionDto
             {
-                Id = mapInteraction.Id,
-                Type = "teleporter",
+                Id = mapInteraction.Id,               
                 Description = teleporter.Description ?? string.Empty,
                 DestinationMapId = teleporter.DestinationMapId,
                 DestinationLocX = teleporter.DestinationLocX,

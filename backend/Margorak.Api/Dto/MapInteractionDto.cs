@@ -1,20 +1,24 @@
-﻿namespace Margorak.Api.Dto
+﻿using System.Text.Json.Serialization;
+
+namespace Margorak.Api.Dto
 {
+
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+    [JsonDerivedType(typeof(ShopInteractionDto), "shop")]
+    [JsonDerivedType(typeof(TeleporterInteractionDto), "teleporter")]
     public abstract class MapInteractionDto
     {
         public int Id { get; set; }
-        public string Type { get;set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 
     public class ShopInteractionDto :MapInteractionDto
     {
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string ShopName { get; set; } = string.Empty;
     }
 
     public class TeleporterInteractionDto : MapInteractionDto
     {
-        public string Description { set; get; } = string.Empty;
         public int DestinationMapId {  get; set; }
         public int DestinationLocX { get; set; }
         public int DestinationLocY { get; set; }
