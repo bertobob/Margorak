@@ -1,23 +1,24 @@
 ﻿using Margorak.Api.Dto;
+using Margorak.Api.Interfaces;
 using Margorak.Api.Mapper;
 
 namespace Margorak.Api.Services
 {
     public class CombatantHabitatService
     {
-        private readonly DbAccessService _dbAccessService;
+        private readonly ICombatantRepository _combatantRepository;
 
-        public CombatantHabitatService(DbAccessService dbAccessService)
+        public CombatantHabitatService(ICombatantRepository combatantRepository)
         {
-            _dbAccessService = dbAccessService;
+            _combatantRepository = combatantRepository;
         }
 
         public async Task<List<CombatantHabitatDto>> GetCombatantHabitatsByMapIdAsync(int mapId)
         {
-            var combatHabitants =  await _dbAccessService.GetCombatantHabitatsByMapIdAsync(mapId);
+            var combatantHabitats = await _combatantRepository.GetCombatantHabitatsByMapIdAsync(mapId);
             var combatHabitatDtos = new List<CombatantHabitatDto>();
 
-            foreach(var  combatantHabitat in combatHabitants)
+            foreach(var combatantHabitat in combatantHabitats)
             {
                 combatHabitatDtos.Add(CombatantHabitatMapper.ToDto(combatantHabitat));
             }

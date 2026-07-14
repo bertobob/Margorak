@@ -6,10 +6,10 @@ namespace Margorak.Api.Services
 {
     public class TeleporterInteractionDtoFactory : IMapInteractionDtoFactory
     {
-        private readonly DbAccessService _dbAccessService;
-        public TeleporterInteractionDtoFactory(DbAccessService dbAccessService)
+        private readonly IMapInteractionRepository _mapInteractionRepository;
+        public TeleporterInteractionDtoFactory(IMapInteractionRepository mapInteractionRepository)
         {
-            _dbAccessService = dbAccessService;
+            _mapInteractionRepository = mapInteractionRepository;
         }
         public bool CanHandle(string type)
         {
@@ -18,7 +18,7 @@ namespace Margorak.Api.Services
 
         public async Task<MapInteractionDto> Create(MapInteraction mapInteraction)
         {
-            var teleporter = await _dbAccessService.GetTeleporterInteractionAsync(mapInteraction.Id);
+            var teleporter = await _mapInteractionRepository.GetTeleporterInteractionAsync(mapInteraction.Id);
             return new TeleporterInteractionDto
             {
                 Id = mapInteraction.Id,               

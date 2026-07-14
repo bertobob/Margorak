@@ -6,17 +6,17 @@ namespace Margorak.Api.Services
 {
     public class MapService
     {
-        private readonly DbAccessService _dbAccessService;
+        private readonly IMapRepository _mapRepository;
         private readonly IEnumerable<IMapInteractionDtoFactory> _factories;
-        public MapService(DbAccessService dbAccessService,IEnumerable<IMapInteractionDtoFactory> factories)
+        public MapService(IEnumerable<IMapInteractionDtoFactory> factories, IMapRepository mapRepository)
         {
-            _dbAccessService = dbAccessService;
             _factories = factories;
+            _mapRepository = mapRepository;
         }
 
         public async Task<List<MapDto>> GetMapsAsync()
         {
-            var maps = await _dbAccessService.GetMapsAsync();
+            var maps = await _mapRepository.GetMapsAsync();
 
             var mapList = new List<MapDto>();
 

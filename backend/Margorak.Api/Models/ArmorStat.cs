@@ -8,6 +8,7 @@ namespace Margorak.Api.Models
         public int ItemId { get; set; }
         public Item Item { get; set; } = null!;
         public int ArmorValue {  get; set; }
+        public int EvasionValue { get; set; }
         public int EquipSlotId {  get; set; }
         public EquipSlot EquipSlot { get; set; } = null!;
     }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Margorak.Api.Controllers
 {
+    [ApiController]
+    [Route("api/combatant")]
     public class CombatantController : Controller
     {
         private readonly CombatantHabitatService _combatantHabitatService;

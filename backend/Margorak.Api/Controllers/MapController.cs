@@ -8,7 +8,7 @@ namespace Margorak.Api.Controllers
     [Route("api/map")]
     public class MapController : Controller
     {
-        private MapService _mapService;
+        private readonly MapService _mapService;
 
 
         public MapController(MapService mapService)
