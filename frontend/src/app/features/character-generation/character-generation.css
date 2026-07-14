@@ -1,0 +1,50 @@
+.character-generation h2 {
+  margin-top: 0;
+}
+
+.character-generation form {
+  display: grid;
+  gap: 8px;
+}
+
+.character-generation label:not(:first-child) {
+  margin-top: 8px;
+}
+
+.character-generation input,
+.character-generation select {
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid #4a4a4a;
+  border-radius: 6px;
+  background: #202020;
+  color: #f2f2f2;
+  font: inherit;
+}
+
+.field-error,
+.form-error {
+  color: #e39090;
+}
+
+.form-error {
+  margin: 8px 0 0;
+}
+
+.create-button {
+  min-height: 42px;
+  margin-top: 14px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background: #343434;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.create-button:disabled {
+  border-color: #303030;
+  background: #191919;
+  color: #666;
+  cursor: not-allowed;
+}

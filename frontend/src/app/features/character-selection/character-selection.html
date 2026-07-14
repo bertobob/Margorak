@@ -1,0 +1,25 @@
+<section class="character-management" aria-label="Character management">
+  <section class="character-selection" aria-labelledby="character-selection-title">
+    <h2 id="character-selection-title">Select character</h2>
+
+    @if (characters().length === 0) {
+      <p>No characters available.</p>
+    } @else {
+      <div class="character-list">
+        @for (character of characters(); track character.id) {
+          <button
+            class="character-option"
+            [class.active]="activeCharacter()?.id === character.id"
+            type="button"
+            (click)="selectCharacter(character)"
+          >
+            <strong>{{ character.name }}</strong>
+            <span>Level {{ character.level }} · {{ character.characterClass.name }}</span>
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  <app-character-generation></app-character-generation>
+</section>

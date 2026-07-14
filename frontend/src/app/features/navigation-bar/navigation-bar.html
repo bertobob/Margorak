@@ -1,0 +1,58 @@
+<section class="play-area">
+  <nav class="view-switch" aria-label="Switch view">
+    <button
+      class="view-switch-button"
+      [class.active]="activeView() === 'character-selection'"
+      type="button"
+      (click)="showCharacterSelection()"
+    >
+      Selection
+    </button>
+
+    <button
+      class="view-switch-button"
+      [class.active]="activeView() === 'map'"
+      [disabled]="!gameState.activeCharacter()"
+      type="button"
+      (click)="showMap()"
+    >
+      Map
+    </button>
+
+    <button
+      class="view-switch-button"
+      [class.active]="activeView() === 'inventory'"
+      [disabled]="!gameState.activeCharacter()"
+      type="button"
+      (click)="showInventory()"
+    >
+      Inventory
+    </button>
+
+    <button
+      class="view-switch-button"
+      [class.active]="activeView() === 'character'"
+      [disabled]="!gameState.activeCharacter()"
+      type="button"
+      (click)="showCharacter()"
+    >
+      Character
+    </button>
+  </nav>
+
+  <main class="main-panel">
+    @if (activeView() === 'character-selection') {
+    <app-character-selection></app-character-selection>
+    } @else if (activeView() === 'map') {
+    <app-map></app-map>
+    } @else if (activeView()=== 'inventory') {
+    <app-inventory></app-inventory>
+    } @else if (activeView() === 'character') {
+    <app-character></app-character>
+    }
+  </main>
+
+  <footer class="interaction-bar" aria-label="Actions">
+    <app-interaction-bar></app-interaction-bar>
+  </footer>
+</section>

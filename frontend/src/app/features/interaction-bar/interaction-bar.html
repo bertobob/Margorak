@@ -1,3 +1,5 @@
 @if (interactionText() !== '') {
-<button id="interaction" (click)="handleInteractionClick()">{{ interactionText() }}</button>
+<button id="interaction" class="interaction-action" (click)="handleInteractionClick()">
+  {{ interactionText() }}
+</button>
 }

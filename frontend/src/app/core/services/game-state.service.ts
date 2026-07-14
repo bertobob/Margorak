@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { MapDto } from '../../features/map/dto/map.dto';
 import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
+import { CharacterDto } from '../../features/character/dto/character.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,9 @@ export class GameStateService {
 
   maps = signal<MapDto[]>([]);
   currentMapIndex = signal(0);
+  characters = signal<CharacterDto[]>([]);
+  activeCharacter = signal<CharacterDto | null>(null);
+
   playerPos = signal<[number, number]>([30, 30]);
   combatantHabitats = signal<CombatantHabitatDto[]>([]);
 
@@ -30,6 +34,25 @@ export class GameStateService {
 
   getClientId(): string {
     return this.clientId;
+  }
+
+  setCharacters(characters: CharacterDto[]): void {
+    this.characters.set(characters);
+  }
+
+  addCharacter(character: CharacterDto): void {
+    this.characters.update((characters) => [...characters, character]);
+  }
+
+  setActiveCharacter(character: CharacterDto): void {
+    this.activeCharacter.set(character);
+    this.currentMapIndex.set(
+      Math.max(
+        0,
+        this.maps().findIndex((map) => map.id === character.currentMapId),
+      ),
+    );
+    this.setPlayerPos(character.locX, character.locY);
   }
 
   setMaps(maps: MapDto[]): void {

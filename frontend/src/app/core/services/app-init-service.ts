@@ -15,7 +15,14 @@ export class AppInitService {
     const clientId = this.clientSession.getOrCreateClientId();
     this.gameState.setClientId(clientId);
 
+    this.loadCharacters();
     this.loadMapData();
+  }
+
+  private loadCharacters(): void {
+    this.apiService.loadCharacters().subscribe((characters) => {
+      this.gameState.setCharacters(characters);
+    });
   }
 
   private loadMapData(): void {

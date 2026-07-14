@@ -1,0 +1,43 @@
+<section class="character-generation" aria-labelledby="character-generation-title">
+  <h2 id="character-generation-title">Create character</h2>
+
+  <form [formGroup]="form" (ngSubmit)="createCharacter()">
+    <label for="character-name">Name</label>
+    <input
+      id="character-name"
+      type="text"
+      formControlName="name"
+      autocomplete="off"
+      maxlength="50"
+    />
+    @if (form.controls.name.touched && form.controls.name.invalid) {
+      <span class="field-error">Name is required.</span>
+    }
+
+    <label for="character-race">Race</label>
+    <select id="character-race" formControlName="characterRaceId">
+      @for (race of races(); track race.id) {
+        <option [ngValue]="race.id">{{ race.name }}</option>
+      }
+    </select>
+
+    <label for="character-class">Class</label>
+    <select id="character-class" formControlName="characterClassId">
+      @for (characterClass of classes(); track characterClass.id) {
+        <option [ngValue]="characterClass.id">{{ characterClass.name }}</option>
+      }
+    </select>
+
+    @if (errorMessage()) {
+      <p class="form-error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    <button
+      class="create-button"
+      type="submit"
+      [disabled]="form.invalid || loadingOptions() || creating()"
+    >
+      {{ creating() ? 'Creating…' : 'Create' }}
+    </button>
+  </form>
+</section>

@@ -12,7 +12,7 @@ namespace Margorak.Api.Mapper
                 Id = characterRace.Id,
                 Name = characterRace.Name,
                 StrengthMod = characterRace.StrengthMod,
-                DexterityMod = characterRace.DexteryMod,
+                DexterityMod = characterRace.DexterityMod,
                 VitalityMod = characterRace.VitalityMod,
                 IntelligenceMod = characterRace.IntelligenceMod,
             };
