@@ -1,6 +1,9 @@
-<img width="1605" height="884" alt="grafik" src="https://github.com/user-attachments/assets/cbed1aee-a4c5-482a-9456-7ccc05a80897" />
+
 <img width="725" height="607" alt="grafik" src="https://github.com/user-attachments/assets/d41cb220-74b7-43af-a18b-8645173ba7ee" />
 
+
+
+<img width="1582" height="593" alt="grafik" src="https://github.com/user-attachments/assets/51c346a2-705c-419f-91cd-ca8e05a46974" />
 
 # Margorak
 
@@ -9,6 +12,7 @@ Work-in-progress browser game built with ASP.NET Core, EF Core, SQLite and Angul
 ## Current Features
 - Tile-based map rendering
 - Player movement
+- Character Creation
 - Backend-driven map data
 - DTO-based API communication
 - Enemy encounter registration
@@ -35,3 +39,5 @@ cd frontend
 npm install
 ng serve
 ```
+
+
