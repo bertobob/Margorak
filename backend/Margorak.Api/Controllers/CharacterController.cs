@@ -15,12 +15,7 @@ namespace Margorak.Api.Controllers
         {
             _characterService = characterService;
         }
-        [HttpPut("characterPos/{characterId}")]
-        public async Task<ActionResult> UpdatePlayerPosByIdAsync()
-        {   
-
-        }
-    
+            
 
         [HttpGet("character/{characterId}")]
         public async Task<ActionResult<CharacterDto>> GetCharacterByIdAsync(int characterId)
@@ -64,7 +59,6 @@ namespace Margorak.Api.Controllers
             {
                 var character = await _characterService.SaveCharacterAsync(request);
                 var characterDto = CharacterMapper.ToDto(character);
-
 
                 return CreatedAtAction(
                     nameof(GetCharacterByIdAsync),
