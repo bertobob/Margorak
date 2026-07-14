@@ -1,5 +1,6 @@
 using Margorak.Api.Data;
 using Margorak.Api.Interfaces;
+using Margorak.Api.Repositories;
 using Margorak.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<CharacterService>();
 builder.Services.AddScoped<CombatantHabitatService>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, ShopInteractionDtoFactory>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, TeleporterInteractionDtoFactory>();
-builder.Services.AddScoped<DbAccessService>();
 builder.Services.AddScoped<MapService>();
+builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+builder.Services.AddScoped<ICombatantRepository, CombatantRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IMapInteractionRepository, MapInteractionRepository>();
+builder.Services.AddScoped<IMapRepository, MapRepository>();
 
 builder.Services.AddCors(options =>
 {
