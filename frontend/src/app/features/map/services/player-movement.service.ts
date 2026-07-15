@@ -1,12 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { GameStateService } from '../../../core/services/game-state.service';
 import { CombatantHabitatService } from './combatant-habitat.service';
+import { ApiService } from '../../../core/services/api-service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlayerMovementService {
   private gameState = inject(GameStateService);
+  private apiService = inject(ApiService);
   private combatantHabitatService = inject(CombatantHabitatService);
 
   moveBy(xOffset: number, yOffset: number): void {
@@ -37,6 +40,17 @@ export class PlayerMovementService {
     }
   }
 
+  public savePosition(): Observable<void> | null {
+    const character = this.gameState.activeCharacter();
+    const map = this.gameState.currentMap();
+    const [locX, locY] = this.gameState.playerPos();
+
+    if (!character || !map) {
+      return null;
+    }
+
+    return this.apiService.updateCharacterPosition(character.id, map.id, locX, locY);
+  }
   private clampToMap(x: number, y: number) {
     const map = this.gameState.currentMap();
 

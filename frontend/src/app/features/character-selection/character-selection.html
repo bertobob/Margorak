@@ -10,6 +10,7 @@
       <button
         class="character-option"
         [class.active]="activeCharacter()?.id === character.id"
+        [disabled]="switchingCharacter()"
         type="button"
         (click)="selectCharacter(character)"
       >

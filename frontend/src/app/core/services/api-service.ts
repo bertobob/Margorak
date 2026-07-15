@@ -22,28 +22,39 @@ export class ApiService {
   }
 
   loadCharacters() {
-    return this.http.get<CharacterDto[]>(`${this.apiBaseUrl}/api/character/characters`);
+    return this.http.get<CharacterDto[]>(`${this.apiBaseUrl}/api/characters`);
+  }
+
+  loadCharacter(characterId: number) {
+    return this.http.get<CharacterDto>(`${this.apiBaseUrl}/api/characters/${characterId}`);
   }
 
   loadCharacterRaces() {
-    return this.http.get<CharacterRaceDto[]>(`${this.apiBaseUrl}/api/character/races`);
+    return this.http.get<CharacterRaceDto[]>(`${this.apiBaseUrl}/api/characters/options/races`);
   }
 
   loadCharacterClasses() {
-    return this.http.get<CharacterClassDto[]>(`${this.apiBaseUrl}/api/character/classes`);
+    return this.http.get<CharacterClassDto[]>(`${this.apiBaseUrl}/api/characters/options/classes`);
   }
 
   createCharacter(character: CreateCharacterDto) {
-    return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/character/characters`, character);
+    return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/characters`, character);
+  }
+
+  updateCharacterPosition(characterId: number, mapId: number, locX: number, locY: number) {
+    return this.http.patch<void>(
+      `${this.apiBaseUrl}/api/characters/${characterId}/position`,
+      { mapId, locX, locY }
+    );
   }
 
   loadMapData() {
-    return this.http.get<MapDto[]>(`${this.apiBaseUrl}/api/map/maps`);
+    return this.http.get<MapDto[]>(`${this.apiBaseUrl}/api/maps`);
   }
 
   loadCombatantHabitats(mapId: number) {
     return this.http.get<CombatantHabitatDto[]>(
-      `${this.apiBaseUrl}/api/combatant/combatantHabitats/${mapId}`
+      `${this.apiBaseUrl}/api/maps/${mapId}/combatant-habitats`
     );
   }
 }

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Margorak.Api.Controllers
 {
     [ApiController]
-    [Route("api/character")]
-    public class CharacterController : Controller
+    [Route("api/characters")]
+    public class CharacterController : ControllerBase
     {
         private readonly CharacterService _characterService;
 
@@ -17,7 +17,7 @@ namespace Margorak.Api.Controllers
         }
             
 
-        [HttpGet("character/{characterId:int}", Name = "GetCharacterById")]
+        [HttpGet("{characterId:int}", Name = "GetCharacterById")]
         public async Task<ActionResult<CharacterDto>> GetCharacterByIdAsync(int characterId)
         {
             var result = await _characterService.GetCharacterByIdAsync(characterId);
@@ -27,7 +27,7 @@ namespace Margorak.Api.Controllers
                 : Ok(result);
         }
 
-        [HttpGet("characters")]
+        [HttpGet]
         public async Task<ActionResult<CharacterDto[]>> GetAllCharactersAsync()
         {
             var result = await _characterService.GetAllCharactersAsync();
@@ -35,7 +35,7 @@ namespace Margorak.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("races")]
+        [HttpGet("options/races")]
         public async Task<ActionResult<CharacterRaceDto[]>> GetAvailableRacesAsync()
         {
             var result = await _characterService.GetAvailableRacesAsync();
@@ -43,7 +43,7 @@ namespace Margorak.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("classes")]
+        [HttpGet("options/classes")]
         public async Task<ActionResult<CharacterClassDto[]>> GetAvailableClassesAsync()
         {
             var result = await _characterService.GetAvailabeClassesAsync();
@@ -51,7 +51,7 @@ namespace Margorak.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("characters")]
+        [HttpPost]
         public async Task<ActionResult<CharacterDto>> SaveCharacterAsync(
             [FromBody] CreateCharacterDto request)
         {
@@ -69,6 +69,20 @@ namespace Margorak.Api.Controllers
             {
                 return BadRequest(new { message = exception.Message });
             }
+        }
+
+        [HttpPatch("{characterId:int}/position")]
+        public async Task<IActionResult> UpdateCharacterPositionAsync(
+            int characterId,
+            [FromBody] UpdateCharacterPositionDto request)
+        {
+            await _characterService.UpdateCharacterPositionAsync(
+                characterId,
+                request.MapId,
+                request.LocX,
+                request.LocY);
+
+            return NoContent();
         }
     }
 }

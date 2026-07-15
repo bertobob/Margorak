@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Margorak.Api.Controllers
 {
     [ApiController]
-    [Route("api/combatant")]
-    public class CombatantController : Controller
+    [Route("api/maps/{mapId:int}/combatant-habitats")]
+    public class CombatantController : ControllerBase
     {
         private readonly CombatantHabitatService _combatantHabitatService;
 
@@ -15,7 +15,7 @@ namespace Margorak.Api.Controllers
             _combatantHabitatService = combatantHabitatService;
         }
 
-        [HttpGet("combatantHabitats/{mapId}")]
+        [HttpGet]
         public async Task<ActionResult<List<CombatantHabitatDto>>> GetCombatantHabitatsByMapIdAsync(int mapId)
         {
             var result = await _combatantHabitatService.GetCombatantHabitatsByMapIdAsync(mapId);

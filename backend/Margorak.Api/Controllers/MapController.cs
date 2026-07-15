@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Margorak.Api.Controllers
 {
     [ApiController]
-    [Route("api/map")]
-    public class MapController : Controller
+    [Route("api/maps")]
+    public class MapController : ControllerBase
     {
         private readonly MapService _mapService;
 
@@ -16,7 +16,7 @@ namespace Margorak.Api.Controllers
             _mapService = mapService;
         }
 
-        [HttpGet("maps")]
+        [HttpGet]
         public async Task <ActionResult<List<MapDto>>> GetMaps()
         {
             var result = await _mapService.GetMapsAsync();
