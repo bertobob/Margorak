@@ -21,7 +21,12 @@ namespace Margorak.Api.Services
         public async Task<MapInteractionDto> Create(MapInteraction mapInteraction)
         {
             var shop = await _mapInteractionRepository.GetShopInteractionAsync(mapInteraction.Id);
-            
+
+            if (shop is null)
+            {
+                throw new InvalidOperationException(
+                    $"Shop details for map interaction {mapInteraction.Id} were not found.");
+            }
             return new ShopInteractionDto
             {
                 Id = mapInteraction.Id,

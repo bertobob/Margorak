@@ -17,7 +17,7 @@ namespace Margorak.Api.Controllers
         }
             
 
-        [HttpGet("character/{characterId}")]
+        [HttpGet("character/{characterId:int}", Name = "GetCharacterById")]
         public async Task<ActionResult<CharacterDto>> GetCharacterByIdAsync(int characterId)
         {
             var result = await _characterService.GetCharacterByIdAsync(characterId);
@@ -60,8 +60,8 @@ namespace Margorak.Api.Controllers
                 var character = await _characterService.SaveCharacterAsync(request);
                 var characterDto = CharacterMapper.ToDto(character);
 
-                return CreatedAtAction(
-                    nameof(GetCharacterByIdAsync),
+                return CreatedAtRoute(
+                    "GetCharacterById",
                     new { characterId = character.Id },
                     characterDto);
             }

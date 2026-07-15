@@ -15,7 +15,7 @@ import { GameStateService } from '../../core/services/game-state.service';
 export class NavigationBar {
   protected readonly gameState = inject(GameStateService);
   protected activeView = signal<'character-selection' | 'map' | 'inventory' | 'character'>(
-    'character-selection',
+    'character-selection'
   );
 
   protected showCharacterSelection(): void {

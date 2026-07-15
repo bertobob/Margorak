@@ -34,10 +34,7 @@ export class ApiService {
   }
 
   createCharacter(character: CreateCharacterDto) {
-    return this.http.post<CharacterDto>(
-      `${this.apiBaseUrl}/api/character/characters`,
-      character,
-    );
+    return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/character/characters`, character);
   }
 
   loadMapData() {

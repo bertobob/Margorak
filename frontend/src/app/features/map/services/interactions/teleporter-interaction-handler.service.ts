@@ -17,6 +17,7 @@ export class TeleporterInteractionHandler implements MapInteractionHandler {
       .findIndex((map) => map.id === interaction.destinationMapId);
 
     if (targetMapIndex === -1) {
+      console.error('Couldnt find map $"{map.id}"');
       return;
     }
 

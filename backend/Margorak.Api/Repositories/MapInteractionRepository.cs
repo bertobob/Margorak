@@ -14,18 +14,18 @@ namespace Margorak.Api.Repositories
             _db = db;
         }
 
-        public async Task<ShopInteraction> GetShopInteractionAsync(int id)
+        public async Task<ShopInteraction?> GetShopInteractionAsync(int id)
         {
             var shop = await _db.ShopInteractions
-                .FirstAsync(x => x.MapInteractionId == id);
+                .SingleOrDefaultAsync(x => x.MapInteractionId == id);
 
             return shop;
         }
 
-        public async Task<TeleporterInteraction> GetTeleporterInteractionAsync(int id)
+        public async Task<TeleporterInteraction?> GetTeleporterInteractionAsync(int id)
         {
             var teleporter = await _db.TeleporterInteractions
-                .FirstAsync(x => x.MapInteractionId == id);
+                .SingleOrDefaultAsync(x => x.MapInteractionId == id);
 
             return teleporter;
         }

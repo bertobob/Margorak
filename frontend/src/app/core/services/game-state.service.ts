@@ -11,6 +11,7 @@ export class GameStateService {
 
   maps = signal<MapDto[]>([]);
   currentMapIndex = signal(0);
+  errorMessage = signal<string | null>(null);
   characters = signal<CharacterDto[]>([]);
   activeCharacter = signal<CharacterDto | null>(null);
 
@@ -49,8 +50,8 @@ export class GameStateService {
     this.currentMapIndex.set(
       Math.max(
         0,
-        this.maps().findIndex((map) => map.id === character.currentMapId),
-      ),
+        this.maps().findIndex((map) => map.id === character.currentMapId)
+      )
     );
     this.setPlayerPos(character.locX, character.locY);
   }
@@ -65,5 +66,13 @@ export class GameStateService {
 
   setPlayerPos(x: number, y: number): void {
     this.playerPos.set([x, y]);
+  }
+
+  setErrorMessage(message: string) {
+    this.errorMessage.set(message);
+  }
+
+  clearErrorMessage(): void {
+    this.errorMessage.set(null);
   }
 }

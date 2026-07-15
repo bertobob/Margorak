@@ -1,3 +1,17 @@
+@if (gameState.errorMessage()) {
+<div class="global-error" role="alert">
+  <span>{{ gameState.errorMessage() }}</span>
+
+  <button
+    type="button"
+    (click)="gameState.clearErrorMessage()"
+    aria-label="Fehlermeldung schließen"
+  >
+    ×
+  </button>
+</div>
+}
+
 <section class="play-area">
   <nav class="view-switch" aria-label="Switch view">
     <button

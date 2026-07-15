@@ -3,11 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { forkJoin } from 'rxjs';
 import { ApiService } from '../../core/services/api-service';
 import { GameStateService } from '../../core/services/game-state.service';
-import {
-  CharacterClassDto,
-  CharacterDto,
-  CharacterRaceDto,
-} from '../character/dto/character.dto';
+import { CharacterClassDto, CharacterDto, CharacterRaceDto } from '../character/dto/character.dto';
 import { CreateCharacterDto } from '../character/dto/create-character.dto';
 
 @Component({
@@ -59,10 +55,7 @@ export class CharacterGeneration implements OnInit {
     });
   }
 
-  private setCharacterOptions(
-    races: CharacterRaceDto[],
-    classes: CharacterClassDto[],
-  ): void {
+  private setCharacterOptions(races: CharacterRaceDto[], classes: CharacterClassDto[]): void {
     this.races.set(races);
     this.classes.set(classes);
     this.form.patchValue({
@@ -102,7 +95,15 @@ export class CharacterGeneration implements OnInit {
 
     this.apiService.createCharacter(request).subscribe({
       next: (character) => this.handleCharacterCreated(character),
-      error: () => this.handleCreateError(),
+      error: (error) => {
+        console.error('Create character failed', {
+          status: error.status,
+          body: error.error,
+          message: error.message,
+        });
+
+        this.handleCreateError();
+      },
     });
   }
 

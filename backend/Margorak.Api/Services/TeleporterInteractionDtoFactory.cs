@@ -19,6 +19,13 @@ namespace Margorak.Api.Services
         public async Task<MapInteractionDto> Create(MapInteraction mapInteraction)
         {
             var teleporter = await _mapInteractionRepository.GetTeleporterInteractionAsync(mapInteraction.Id);
+
+            if (teleporter is null)
+            {
+                throw new InvalidOperationException(
+                    $"Teleporter details for map interaction {mapInteraction.Id} were not found.");
+            }
+
             return new TeleporterInteractionDto
             {
                 Id = mapInteraction.Id,               

@@ -8,10 +8,12 @@ namespace Margorak.Api.Services
     public class CharacterService
     {
         private readonly ICharacterRepository _characterRepository;
+        private readonly IMapRepository _mapRepository;
 
-        public CharacterService(ICharacterRepository characterRepository)
+        public CharacterService(ICharacterRepository characterRepository, IMapRepository mapRepository)
         {
             _characterRepository = characterRepository;
+            _mapRepository = mapRepository;
         }
 
         public async Task<List<CharacterDto>> GetAllCharactersAsync()
@@ -84,6 +86,25 @@ namespace Margorak.Api.Services
             await _characterRepository.SaveNewCharacterAsync(character);
 
             return character;
+        }
+
+        public async Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX,int locY)
+        {
+            var isAccessible = await _mapRepository.IsAccessiblePositionAsync(mapId, locX, locY);
+
+            if(!isAccessible)
+            {
+                throw new ArgumentException(
+                    $"Position ({locX}, {locY}) on map {mapId} is invalid.");
+            }
+
+            var updated = await _characterRepository.UpdateCharacterPositionAsync(characterId, mapId, locX, locY);
+
+            if(!updated)
+            {
+                throw new KeyNotFoundException(
+                    $"Character {characterId} was not found.");
+            }
         }
 
     }

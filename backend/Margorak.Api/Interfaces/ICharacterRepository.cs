@@ -5,7 +5,7 @@ namespace Margorak.Api.Interfaces
     public interface ICharacterRepository
     {
         Task<Character?> GetCompleteCharacterAsync(int characterId);
-        Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY);
+        Task<bool> UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY);
         Task<List<CharacterRace>> GetRacesAsync();
         Task<List<CharacterClass>> GetClassesAsync();
         Task<Character?> GetCharacterByIdAsync(int characterId);

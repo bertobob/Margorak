@@ -11,7 +11,7 @@ namespace Margorak.Api.Repositories
     {
         private readonly AppDbContext _db;
         public CharacterRepository(AppDbContext db)
-        {   
+        {            
             _db = db;
         }
 
@@ -36,19 +36,23 @@ namespace Margorak.Api.Repositories
             return character;
         }
 
-        public async Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY)
+        public async Task<bool> UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY)
         {
             var character = await _db.Characters
                 .Where(c => c.Id == characterId)
                 .FirstOrDefaultAsync();
 
-            if (character == null) { return; }
+            if (character == null ) { return false; }
 
             character.CurrentMapId = mapId;
             character.LocX = locX;
             character.LocY = locY;
 
+
+
             await _db.SaveChangesAsync();
+
+            return true;
 
         }
 
