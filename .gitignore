@@ -4,7 +4,7 @@ frontend/dist/
 frontend/.angular/
 
 # .NET / Visual Studio
-backend/.vs/
+**/.vs/
 backend/**/bin/
 backend/**/obj/
 

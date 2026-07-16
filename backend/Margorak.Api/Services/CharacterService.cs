@@ -74,9 +74,17 @@ namespace Margorak.Api.Services
                     $"The character class with ID {request.CharacterClassId} does not exist.");
             }
 
+            var name = request.Name.Trim();
+            
+            if(name=="")
+            {
+                throw new ArgumentException(
+                    $"Name is empty");
+            }
+
             var character = new Character
             {
-                Name = request.Name.Trim(),
+                Name = name,
                 CharacterRaceId = race.Id,
                 CharacterRace = race,
                 CharacterClassId = characterClass.Id,
