@@ -47,8 +47,8 @@ export class CharacterGeneration implements OnInit {
 
   private loadCharacterOptions(): void {
     forkJoin({
-      races: this.apiService.loadCharacterRaces(),
-      classes: this.apiService.loadCharacterClasses(),
+      races: this.apiService.getCharacterRaces(),
+      classes: this.apiService.getCharacterClasses(),
     }).subscribe({
       next: ({ races, classes }) => this.setCharacterOptions(races, classes),
       error: () => this.handleOptionsError(),

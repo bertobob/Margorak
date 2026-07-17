@@ -2,8 +2,6 @@
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Formats.Asn1;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Margorak.Api.Repositories
 {
@@ -108,6 +106,11 @@ namespace Margorak.Api.Repositories
 
         public async Task SaveNewCharacterAsync(Character character)
         {
+            foreach (var ownedItem in character.OwnedItems)
+            {
+                _db.Attach(ownedItem.Item);
+            }
+
             await _db.Characters.AddAsync(character);
             await _db.SaveChangesAsync();
         }

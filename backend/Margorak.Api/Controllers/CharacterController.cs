@@ -10,9 +10,11 @@ namespace Margorak.Api.Controllers
     public class CharacterController : ControllerBase
     {
         private readonly CharacterService _characterService;
+        private readonly ItemService _itemService;
 
-        public CharacterController(CharacterService characterService)
+        public CharacterController(CharacterService characterService, ItemService itemService)
         {
+            _itemService = itemService;
             _characterService = characterService;
         }
             
@@ -52,12 +54,12 @@ namespace Margorak.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CharacterDto>> SaveCharacterAsync(
+        public async Task<ActionResult<CharacterDto>> CreateCharacterAsync(
             [FromBody] CreateCharacterDto request)
         {
             try
             {
-                var character = await _characterService.SaveCharacterAsync(request);
+                var character = await _characterService.CreateCharacterAsync(request);
                 var characterDto = CharacterMapper.ToDto(character);
 
                 return CreatedAtRoute(
@@ -83,6 +85,17 @@ namespace Margorak.Api.Controllers
                 request.LocY);
 
             return NoContent();
+        }
+
+
+        [HttpGet("{characterId:int}/inventory")]
+        public async Task<ActionResult<List<InventoryItemDto>>> GetInventoryItemsByCharacterIdAsync(int characterId)
+        {
+            var result = await _itemService.GetInventoryItemsByCharacterIdAsync(characterId);
+
+            return result is null
+                ? NotFound()
+                : Ok(result);
         }
     }
 }

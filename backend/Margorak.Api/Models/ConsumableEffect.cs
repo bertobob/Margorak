@@ -11,6 +11,6 @@ namespace Margorak.Api.Models
         public EffectType EffectType { get; set; } = null!;
         public int MinValue {  get; set; }
         public int MaxValue { get; set; }
-        public int Duration {  get; set; }
+        public int? Duration { get; set; }
     }
 }

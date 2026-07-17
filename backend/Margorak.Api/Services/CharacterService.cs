@@ -9,11 +9,16 @@ namespace Margorak.Api.Services
     {
         private readonly ICharacterRepository _characterRepository;
         private readonly IMapRepository _mapRepository;
+        private readonly IStartingItemService _startingItemService;
 
-        public CharacterService(ICharacterRepository characterRepository, IMapRepository mapRepository)
+        public CharacterService(
+            ICharacterRepository characterRepository,
+            IMapRepository mapRepository,
+            IStartingItemService startingItemService)
         {
             _characterRepository = characterRepository;
             _mapRepository = mapRepository;
+            _startingItemService = startingItemService;
         }
 
         public async Task<List<CharacterDto>> GetAllCharactersAsync()
@@ -56,7 +61,7 @@ namespace Margorak.Api.Services
             return classes;
         }
 
-        public async Task<Character> SaveCharacterAsync(CreateCharacterDto request)
+        public async Task<Character> CreateCharacterAsync(CreateCharacterDto request)
         {
             var race = await _characterRepository.GetRaceByIdAsync(request.CharacterRaceId);
 
@@ -81,6 +86,8 @@ namespace Margorak.Api.Services
                 throw new ArgumentException(
                     $"Name is empty");
             }
+            var startingItems = await _startingItemService
+                .GetStartingItemsAsync(characterClass.Id);
 
             var character = new Character
             {
@@ -88,14 +95,14 @@ namespace Margorak.Api.Services
                 CharacterRaceId = race.Id,
                 CharacterRace = race,
                 CharacterClassId = characterClass.Id,
-                CharacterClass = characterClass
+                CharacterClass = characterClass,
+                OwnedItems = startingItems
             };
 
             await _characterRepository.SaveNewCharacterAsync(character);
 
             return character;
         }
-
         public async Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX,int locY)
         {
             var isAccessible = await _mapRepository.IsAccessiblePositionAsync(mapId, locX, locY);

@@ -21,7 +21,7 @@ export class AppInitService {
   }
 
   private loadCharacters(): void {
-    this.apiService.loadCharacters().subscribe({
+    this.apiService.getCharacters().subscribe({
       next: (characters) => {
         this.gameState.setCharacters(characters);
       },
@@ -32,7 +32,7 @@ export class AppInitService {
   }
 
   private loadMapData(): void {
-    this.apiService.loadMapData().subscribe({
+    this.apiService.getMapData().subscribe({
       next: (maps) => {
         this.gameState.setMaps(maps);
         this.loadCombatantHabitats();
@@ -49,7 +49,7 @@ export class AppInitService {
     if (!currentMap) {
       return;
     }
-    this.apiService.loadCombatantHabitats(currentMap.id).subscribe({
+    this.apiService.getCombatantHabitatsByMapId(currentMap.id).subscribe({
       next: (combatHabitats) => {
         this.gameState.setCombatantHabitats(combatHabitats);
       },

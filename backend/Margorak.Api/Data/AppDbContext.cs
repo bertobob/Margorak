@@ -8,6 +8,21 @@ namespace Margorak.Api.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ArmorStat>()
+                .HasOne(armorStat => armorStat.Item)
+                .WithMany(item => item.ArmorStat)
+                .HasForeignKey(armorStat => armorStat.ItemId);
+
+            modelBuilder.Entity<WeaponStat>()
+                .HasOne(weaponStat => weaponStat.Item)
+                .WithMany(item => item.WeaponStat)
+                .HasForeignKey(weaponStat => weaponStat.ItemId);
+        }
+
         public DbSet<ArmorStat> ArmorStats => Set<ArmorStat>();
         public DbSet<Attack> Attacks => Set<Attack>();
         public DbSet<AttackDamage> AttackDamages => Set<AttackDamage>();

@@ -1,12 +1,15 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { MapDto } from '../../features/map/dto/map.dto';
 import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 import { CharacterDto } from '../../features/character/dto/character.dto';
+import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
+import { ApiService } from './api-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameStateService {
+  private apiService = inject(ApiService);
   private clientId = '';
 
   maps = signal<MapDto[]>([]);
@@ -14,6 +17,7 @@ export class GameStateService {
   errorMessage = signal<string | null>(null);
   characters = signal<CharacterDto[]>([]);
   activeCharacter = signal<CharacterDto | null>(null);
+  currentInventory = signal<InventoryItemDto[]>([]);
 
   playerPos = signal<[number, number]>([30, 30]);
   combatantHabitats = signal<CombatantHabitatDto[]>([]);
@@ -29,6 +33,22 @@ export class GameStateService {
 
   interactionText = computed(() => this.activeMapInteraction()?.description ?? '');
 
+  loadCurrentInventory(): void {
+    const character = this.activeCharacter();
+
+    if (!character) {
+      this.currentInventory.set([]);
+      return;
+    }
+
+    this.apiService.getItemsByCharacterId(character.id).subscribe({
+      next: (items) => this.currentInventory.set(items),
+      error: () => {
+        this.errorMessage.set("Couldn't load inventory.");
+        this.currentInventory.set([]);
+      },
+    });
+  }
   setClientId(clientId: string): void {
     this.clientId = clientId;
   }
@@ -54,6 +74,7 @@ export class GameStateService {
       )
     );
     this.setPlayerPos(character.locX, character.locY);
+    this.loadCurrentInventory();
   }
 
   setMaps(maps: MapDto[]): void {

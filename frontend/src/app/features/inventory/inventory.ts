@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { GameStateService } from '../../core/services/game-state.service';
 
 @Component({
   selector: 'app-inventory',
@@ -6,4 +7,8 @@ import { Component } from '@angular/core';
   templateUrl: './inventory.html',
   styleUrl: './inventory.css',
 })
-export class Inventory {}
+export class Inventory {
+  private gameState = inject(GameStateService);
+
+  protected inventory = this.gameState.currentInventory;
+}

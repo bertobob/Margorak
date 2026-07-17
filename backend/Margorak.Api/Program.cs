@@ -1,4 +1,5 @@
 using Margorak.Api.Data;
+using Margorak.Api.Configuration;
 using Margorak.Api.ExceptionHandling;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Repositories;
@@ -7,16 +8,25 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile(
+    "starting-items.json",
+    optional: false,
+    reloadOnChange: true);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.Configure<StartingItemOptions>(
+    builder.Configuration.GetSection(StartingItemOptions.SectionName));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<CharacterService>();
+builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped<IStartingItemService, StartingItemService>();
 builder.Services.AddScoped<CombatantHabitatService>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, ShopInteractionDtoFactory>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, TeleporterInteractionDtoFactory>();

@@ -1,0 +1,15 @@
+{
+  "StartingItems": {
+    "Default": [
+      {
+        "ItemId": 1,
+        "Quantity": 1
+      },
+      {
+        "ItemId": 7,
+        "Quantity": 5
+      }
+    ],
+    "ByClass": {}
+  }
+}

@@ -31,19 +31,17 @@ export class CharacterSelection {
 
     const saveRequest = this.playerMovement.savePosition();
     const loadCharacterRequest = saveRequest
-      ? saveRequest.pipe(switchMap(() => this.apiService.loadCharacter(character.id)))
-      : this.apiService.loadCharacter(character.id);
+      ? saveRequest.pipe(switchMap(() => this.apiService.getCharacterById(character.id)))
+      : this.apiService.getCharacterById(character.id);
 
-    loadCharacterRequest
-      .pipe(finalize(() => this.switchingCharacter.set(false)))
-      .subscribe({
-        next: (freshCharacter) => this.gameState.setActiveCharacter(freshCharacter),
-        error: (error) => {
-          console.error('Character could not be switched.', error);
-          this.gameState.setErrorMessage(
-            'The current position could not be saved or the character could not be loaded.'
-          );
-        },
-      });
+    loadCharacterRequest.pipe(finalize(() => this.switchingCharacter.set(false))).subscribe({
+      next: (freshCharacter) => this.gameState.setActiveCharacter(freshCharacter),
+      error: (error) => {
+        console.error('Character could not be switched.', error);
+        this.gameState.setErrorMessage(
+          'The current position could not be saved or the character could not be loaded.'
+        );
+      },
+    });
   }
 }

@@ -16,6 +16,7 @@ namespace Margorak.Api.Tests.Services
     {
         private Mock<ICharacterRepository> _characterRepositoryMock = null!;
         private Mock<IMapRepository> _mapRepositoryMock = null!;
+        private Mock<IStartingItemService> _startingItemServiceMock = null!;
         private CharacterService _characterService = null! ;
 
 
@@ -24,7 +25,11 @@ namespace Margorak.Api.Tests.Services
         {
             _characterRepositoryMock = new Mock<ICharacterRepository>();
             _mapRepositoryMock = new Mock<IMapRepository>();
-            _characterService = new CharacterService(_characterRepositoryMock.Object, _mapRepositoryMock.Object);            
+            _startingItemServiceMock = new Mock<IStartingItemService>();
+            _characterService = new CharacterService(
+                _characterRepositoryMock.Object,
+                _mapRepositoryMock.Object,
+                _startingItemServiceMock.Object);
 
         }
 
@@ -59,8 +64,12 @@ namespace Margorak.Api.Tests.Services
             _characterRepositoryMock
                 .Setup(repository => repository.GetClassByIdAsync(1))
                 .ReturnsAsync(characterClass);
+
+            _startingItemServiceMock
+                .Setup(service => service.GetStartingItemsAsync(characterClass.Id))
+                .ReturnsAsync([]);
             // Act
-            var result = await _characterService.SaveCharacterAsync(request);
+            var result = await _characterService.CreateCharacterAsync(request);
 
             // Assert
             Assert.AreEqual("bert",result.Name,"Charactername Trim didnt work");
@@ -99,7 +108,7 @@ namespace Margorak.Api.Tests.Services
                 .ReturnsAsync((CharacterClass?)null);
             // Act
             await Assert.ThrowsExceptionAsync<ArgumentException>(
-                () => _characterService.SaveCharacterAsync(requestNoClass));
+                () => _characterService.CreateCharacterAsync(requestNoClass));
 
             // Assert
             _characterRepositoryMock.Verify(
@@ -125,7 +134,7 @@ namespace Margorak.Api.Tests.Services
 
             // Act
             await Assert.ThrowsExceptionAsync<ArgumentException>(
-                () => _characterService.SaveCharacterAsync(requestNoRace));
+                () => _characterService.CreateCharacterAsync(requestNoRace));
 
             // Assert
             _characterRepositoryMock.Verify(
