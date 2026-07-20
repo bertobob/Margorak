@@ -9,6 +9,7 @@
         public string Description { get; set; } = string.Empty;
         public int Value { get; set; }
         public int Weight { get; set; }
+        public int AttackRating { get; set; }
         public ICollection<ItemDamage> ItemDamages { get; set; } = [];
         public ICollection<ItemRequirement> ItemRequirements{ get; set; } = [];
         public ICollection<ItemResistance> ItemResistances{ get; set; } = [];

@@ -12,6 +12,7 @@ export interface ItemDto {
   description: string;
   value: number;
   weight: number;
+  attackRating: number;
 }
 
 export interface ItemCategoryDto {

@@ -17,5 +17,6 @@ namespace Margorak.Api.Dto
         public string Description {  get; set; } = string.Empty;
         public int Value {  get; set; }
         public int Weight {  get; set; }
+        public int AttackRating { get; set; }
     }
 }

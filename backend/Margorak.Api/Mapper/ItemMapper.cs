@@ -25,7 +25,8 @@ namespace Margorak.Api.Mapper
                 ItemBonuses = item.ItemBonuses.Select(ItemBonusMapper.ToDto).ToList(),
                 Description = item.Description,
                 Value = item.Value,
-                Weight = item.Weight
+                Weight = item.Weight,
+                AttackRating = item.AttackRating
             };
         }
     }

@@ -16,4 +16,5 @@ Thumbs.db
 .DS_Store
 *.db-shm
 *.db-wal
+*backup.db
 *.csproj.user
