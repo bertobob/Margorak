@@ -1,8 +1,6 @@
-import { ItemCategoryDto } from './item.dto';
+import { ItemDto } from './item.dto';
 
 export interface InventoryItemDto {
-  itemId: number;
-  name: string;
-  category: ItemCategoryDto;
+  item: ItemDto;
   quantity: number;
 }

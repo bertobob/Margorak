@@ -1,5 +1,4 @@
 using Margorak.Api.Data;
-using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ namespace Margorak.Api.Repositories
             _db = db;
         }
 
-        public async Task<List<InventoryItemDto>?> GetInventoryItemsByCharacterIdAsync(int characterId)
+        public async Task<List<OwnedItem>?> GetInventoryItemsByCharacterIdAsync(int characterId)
         {
             var characterExists = await _db.Characters
                 .AnyAsync(c => c.Id == characterId);
@@ -24,20 +23,33 @@ namespace Margorak.Api.Repositories
             {
                 return null;
             }
-            return await _db.OwnedItems
+
+            return  await _db.OwnedItems
                 .Where(ownedItem => ownedItem.CharacterId == characterId)
-                .Select(ownedItem => new InventoryItemDto
-                {
-                    ItemId = ownedItem.ItemId,
-                    Name = ownedItem.Item.Name,
-                    Category = new ItemCategoryDto
-                    {
-                        Id = ownedItem.Item.ItemCategory.Id,
-                        Name = ownedItem.Item.ItemCategory.Name
-                    },
-                    Quantity = ownedItem.Quantity
-                })
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemCategory)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemDamages)
+                        .ThenInclude(itemDamage => itemDamage.DamageType)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemRequirements)
+                        .ThenInclude(requirement => requirement.RequirementType)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemResistances)
+                        .ThenInclude(resistance => resistance.ResistanceType)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ArmorStat)
+                        .ThenInclude(armorStat => armorStat.EquipSlot)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ConsumableEffect)
+                        .ThenInclude(effect => effect.EffectType)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.WeaponStat)
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemBonuses)
+                        .ThenInclude(bonus => bonus.BonusType)
                 .AsNoTracking()
+                .AsSplitQuery()
                 .ToListAsync();
         }
 

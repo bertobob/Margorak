@@ -2,15 +2,15 @@
   <h2>Inventory</h2>
 
   @if (inventory().length === 0) {
-    <p>No items in inventory.</p>
+  <p>No items in inventory.</p>
   } @else {
-    <ul>
-      @for (item of inventory(); track item.itemId) {
-        <li>
-          <span>{{ item.name }}</span>
-          <span>Quantity: {{ item.quantity }}</span>
-        </li>
-      }
-    </ul>
+  <ul>
+    @for (item of inventory(); track item.item.id) {
+    <li>
+      <span>{{ item.item.name }}</span>
+      <span>Quantity: {{ item.quantity }}</span>
+    </li>
+    }
+  </ul>
   }
 </section>

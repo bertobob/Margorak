@@ -7,7 +7,7 @@ namespace Margorak.Api.Interfaces
     {
         Task<Item?> GetItemByIdAsync(int itemId);
         Task<List<Item>> GetItemsByIdsAsync(List<int> itemIds);
-        Task<List<InventoryItemDto>?> GetInventoryItemsByCharacterIdAsync(int characterId);
+        Task<List<OwnedItem>?> GetInventoryItemsByCharacterIdAsync(int characterId);
 
     }
 }
