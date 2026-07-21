@@ -82,7 +82,6 @@ namespace Margorak.Api.Repositories
                 .Include(c => c.ItemCategory)
                     .ThenInclude(itemCategory => itemCategory.EquipSlot)
                 .Where(x => itemIds.Contains(x.Id))
-                .AsNoTracking()
                 .ToListAsync();
 
             return itemList;

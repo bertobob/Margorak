@@ -106,11 +106,6 @@ namespace Margorak.Api.Repositories
 
         public async Task SaveNewCharacterAsync(Character character)
         {
-            foreach (var ownedItem in character.OwnedItems)
-            {
-                _db.Attach(ownedItem.Item);
-            }
-
             await _db.Characters.AddAsync(character);
             await _db.SaveChangesAsync();
         }
