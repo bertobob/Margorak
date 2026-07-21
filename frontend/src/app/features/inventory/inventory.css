@@ -5,7 +5,7 @@
 
 .inventory__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 32rem;
+  grid-template-columns: minmax(24rem, 1fr) 32rem;
   gap: 1rem;
   align-items: start;
   height: 100%;
@@ -19,12 +19,16 @@
 }
 
 .inventory__list li {
-  display: block;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.inventory__list button {
+.inventory__item-button {
   display: flex;
   justify-content: space-between;
+  flex: 1;
   width: 100%;
   gap: 1rem;
   padding: 0.8rem 1rem;
@@ -36,10 +40,42 @@
   cursor: pointer;
 }
 
-.inventory__list button:hover,
-.inventory__list button.is-selected {
+.inventory__item-button:hover,
+.inventory__item-button.is-selected {
   background: #1e293b;
   border-color: #60a5fa;
+}
+
+.inventory__equip-button {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: #dbeafe;
+  font-weight: 700;
+  background: #1d4ed8;
+  border: 1px solid #3b82f6;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.inventory__equip-button:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #60a5fa;
+}
+
+.inventory__equip-button:disabled {
+  color: #64748b;
+  background: #1e293b;
+  border-color: #334155;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.inventory__equip-space {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .inventory__quantity,

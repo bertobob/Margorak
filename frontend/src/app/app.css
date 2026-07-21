@@ -8,47 +8,9 @@
   color: #f2f2f2;
 }
 
-.equipment-panel {
-  min-height: 0;
-  overflow: auto;
-  border-right: 1px solid #353535;
-  padding: 16px;
-  background: #202020;
-}
-
-.panel-header h2 {
-  margin: 0 0 16px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.equipment-slots {
-  display: grid;
-  gap: 10px;
-}
-
-.equipment-slot {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  border: 1px solid #3e3e3e;
-  border-radius: 6px;
-  background: #181818;
-}
-
 @media (max-width: 760px) {
   .game-layout {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .equipment-panel {
-    border-right: 0;
-    border-bottom: 1px solid #353535;
-  }
-
-  .equipment-slots {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

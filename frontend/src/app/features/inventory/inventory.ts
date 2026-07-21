@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
 import { ItemDto, ItemRequirementDto } from '../../shared/dto/item.dto';
-import { requirementChecks } from '../../shared/utils/requirement-checks';
+import { allRequirementsMet, requirementChecks } from '../../shared/utils/requirement-checks';
 
 @Component({
   selector: 'app-inventory',
@@ -31,5 +31,14 @@ export class Inventory {
     const check = requirementChecks[requirement.requirementType.name];
 
     return check(requirement.value, character);
+  }
+
+  protected isAllRequirementsMet(itemRequirements: ItemRequirementDto[]): boolean {
+    const character = this.gameState.activeCharacter();
+
+    if (!character) {
+      return false;
+    }
+    return allRequirementsMet(itemRequirements, character);
   }
 }

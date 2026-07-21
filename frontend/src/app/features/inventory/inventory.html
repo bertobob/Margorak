@@ -8,7 +8,25 @@
       <ul>
         @for (item of inventory(); track item.ownedItemId) {
         <li>
+          <span class="inventory__equip-space">
+            @if (item.item.itemCategory.equipSlot) {
+            <button
+              class="inventory__equip-button"
+              type="button"
+              [disabled]="!isAllRequirementsMet(item.item.itemRequirements)"
+              [attr.title]="
+                isAllRequirementsMet(item.item.itemRequirements)
+                  ? 'Equip ' + item.item.name
+                  : 'Requirements not met'
+              "
+              [attr.aria-label]="'Equip ' + item.item.name"
+            >
+              E
+            </button>
+            }
+          </span>
           <button
+            class="inventory__item-button"
             type="button"
             [class.is-selected]="selectedItemStats()?.id === item.item.id"
             (click)="onItemClick(item.item)"
