@@ -21,6 +21,11 @@ namespace Margorak.Api.Data
                 .HasOne(weaponStat => weaponStat.Item)
                 .WithMany(item => item.WeaponStat)
                 .HasForeignKey(weaponStat => weaponStat.ItemId);
+
+            modelBuilder.Entity<ItemCategory>()
+                .HasOne(itemCategory => itemCategory.EquipSlot)
+                .WithMany(equipSlot => equipSlot.ItemCategories)
+                .HasForeignKey(itemCategory => itemCategory.EquipSlotId);
         }
 
         public DbSet<ArmorStat> ArmorStats => Set<ArmorStat>();

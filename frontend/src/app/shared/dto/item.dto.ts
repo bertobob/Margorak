@@ -18,6 +18,7 @@ export interface ItemDto {
 export interface ItemCategoryDto {
   id: number;
   name: string;
+  equipSlot: EquipSlotDto | null;
 }
 
 export interface ItemDamageDto {
@@ -51,7 +52,6 @@ export interface ResistanceTypeDto {
 export interface ArmorStatDto {
   armorValue: number;
   evasionValue: number;
-  equipSlot: EquipSlotDto;
 }
 
 export interface EquipSlotDto {

@@ -28,6 +28,7 @@ namespace Margorak.Api.Repositories
                 .Where(ownedItem => ownedItem.CharacterId == characterId)
                 .Include(ownedItem => ownedItem.Item)
                     .ThenInclude(item => item.ItemCategory)
+                        .ThenInclude(itemCategory => itemCategory.EquipSlot)
                 .Include(ownedItem => ownedItem.Item)
                     .ThenInclude(item => item.ItemDamages)
                         .ThenInclude(itemDamage => itemDamage.DamageType)
@@ -39,7 +40,6 @@ namespace Margorak.Api.Repositories
                         .ThenInclude(resistance => resistance.ResistanceType)
                 .Include(ownedItem => ownedItem.Item)
                     .ThenInclude(item => item.ArmorStat)
-                        .ThenInclude(armorStat => armorStat.EquipSlot)
                 .Include(ownedItem => ownedItem.Item)
                     .ThenInclude(item => item.ConsumableEffect)
                         .ThenInclude(effect => effect.EffectType)
@@ -57,6 +57,7 @@ namespace Margorak.Api.Repositories
         {
             return await _db.Items
                     .Include(i => i.ItemCategory)
+                        .ThenInclude(itemCategory => itemCategory.EquipSlot)
                     .Include(i => i.ItemDamages)
                         .ThenInclude(id => id.DamageType)
                     .Include(i => i.ItemRequirements)
@@ -64,7 +65,6 @@ namespace Margorak.Api.Repositories
                     .Include(i => i.ItemResistances)
                         .ThenInclude(ir => ir.ResistanceType)
                     .Include(i => i.ArmorStat)
-                        .ThenInclude(a => a.EquipSlot)
                     .Include(i => i.ConsumableEffect)
                         .ThenInclude(ce => ce.EffectType)
                     .Include(i => i.WeaponStat)
@@ -80,6 +80,7 @@ namespace Margorak.Api.Repositories
         {
             var itemList = await _db.Items
                 .Include(c => c.ItemCategory)
+                    .ThenInclude(itemCategory => itemCategory.EquipSlot)
                 .Where(x => itemIds.Contains(x.Id))
                 .AsNoTracking()
                 .ToListAsync();

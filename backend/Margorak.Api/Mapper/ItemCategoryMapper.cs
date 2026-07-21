@@ -11,6 +11,9 @@ namespace Margorak.Api.Mapper
             {
                 Id = itemCategory.Id,
                 Name = itemCategory.Name,
+                EquipSlot = itemCategory.EquipSlot is null
+                    ? null
+                    : EquipSlotMapper.ToDto(itemCategory.EquipSlot)
             };
         }
     }

@@ -10,8 +10,7 @@ namespace Margorak.Api.Mapper
             return new ArmorStatDto
             {
                 ArmorValue = armorStat.ArmorValue,
-                EvasionValue = armorStat.EvasionValue,
-                EquipSlot = EquipSlotMapper.ToDto(armorStat.EquipSlot)
+                EvasionValue = armorStat.EvasionValue
             };
         }
     }
