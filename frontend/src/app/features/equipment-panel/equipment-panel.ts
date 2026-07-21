@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { EquipmentService } from './services/equipment-service';
 
 @Component({
   selector: 'app-equipment-panel',
@@ -6,4 +7,8 @@ import { Component } from '@angular/core';
   templateUrl: './equipment-panel.html',
   styleUrl: './equipment-panel.css',
 })
-export class EquipmentPanel {}
+export class EquipmentPanel {
+  private readonly equipmentService = inject(EquipmentService);
+
+  protected readonly equipment = this.equipmentService.equipment;
+}

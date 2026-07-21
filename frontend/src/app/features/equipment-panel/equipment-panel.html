@@ -1,14 +1,40 @@
 <aside class="equipment-panel" aria-label="Equipment">
-  <header class="panel-header">
-    <h2>Equipment</h2>
-  </header>
-
   <section class="equipment-slots">
-    <div class="equipment-slot">Head</div>
-    <div class="equipment-slot">Chest</div>
-    <div class="equipment-slot">Weapon</div>
-    <div class="equipment-slot">Shield</div>
-    <div class="equipment-slot">Ring</div>
-    <div class="equipment-slot">Boots</div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/helmet.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Helmet?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/chest.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Chest?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/legs.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Legs?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/gloves.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Gloves?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/boots.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Boots?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/weapon.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Weapon?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/shield.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Shield?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/ring.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Ring?.name ?? 'empty' }}</div>
+    </div>
+    <div class="equipment-slot-row">
+      <img class="equipment-slot-icon" src="icons/equipment/amulet.svg" alt="" />
+      <div class="equipment-slot">{{ equipment().Amulet?.name ?? 'empty' }}</div>
+    </div>
   </section>
 </aside>

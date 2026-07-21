@@ -25,6 +25,23 @@
   gap: 10px;
 }
 
+.equipment-slot-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.equipment-slot-icon {
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  background: #181818;
+  border: 1px solid #4b4332;
+  border-radius: 6px;
+}
+
 .equipment-slot {
   display: flex;
   align-items: center;
