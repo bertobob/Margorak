@@ -1,3 +1,5 @@
+import { CharacterDto } from '../../features/character/dto/character.dto';
+
 export interface ItemDto {
   id: number;
   name: string;
@@ -37,8 +39,12 @@ export interface ItemRequirementDto {
 }
 
 export interface RequirementTypeDto {
-  name: string;
+  name: RequirementType;
 }
+export type RequirementType =
+  'Level' | 'Strength' | 'Dexterity' | 'Intelligence' | 'Race' | 'Class';
+
+export type RequirementCheck = (requiredValue: number, character: CharacterDto) => boolean;
 
 export interface ItemResistanceDto {
   resistanceType: ResistanceTypeDto;

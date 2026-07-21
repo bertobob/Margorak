@@ -1,16 +1,156 @@
 <section class="inventory">
   <h2>Inventory</h2>
+  <div class="inventory__layout">
+    <div class="inventory__list">
+      @if (inventory().length === 0) {
+      <p>No items in inventory.</p>
+      } @else {
+      <ul>
+        @for (item of inventory(); track item.ownedItemId) {
+        <li>
+          <button
+            type="button"
+            [class.is-selected]="selectedItemStats()?.id === item.item.id"
+            (click)="onItemClick(item.item)"
+          >
+            <span>{{ item.item.name }}</span>
+            <span class="inventory__quantity">× {{ item.quantity }}</span>
+          </button>
+        </li>
+        }
+      </ul>
+      }
+    </div>
 
-  @if (inventory().length === 0) {
-  <p>No items in inventory.</p>
-  } @else {
-  <ul>
-    @for (item of inventory(); track item.item.id) {
-    <li>
-      <span>{{ item.item.name }}</span>
-      <span>Quantity: {{ item.quantity }}</span>
-    </li>
-    }
-  </ul>
-  }
+    <div class="inventory__details">
+      @if (selectedItemStats(); as item) {
+      <article class="stat-card">
+        <header class="stat-card__header">
+          <div>
+            <p class="stat-card__category">{{ item.itemCategory.name }}</p>
+            <h3>{{ item.name }}</h3>
+          </div>
+          @if (item.itemCategory.equipSlot; as slot) {
+          <span class="stat-card__slot">{{ slot.name }}</span>
+          }
+        </header>
+
+        @if (item.description) {
+        <p class="stat-card__description">{{ item.description }}</p>
+        }
+
+        <dl class="stat-grid">
+          @if (hasValue(item.attackRating)) {
+          <div>
+            <dt>Attack rating</dt>
+            <dd>{{ item.attackRating }}</dd>
+          </div>
+          } @if (hasValue(item.weight)) {
+          <div>
+            <dt>Weight</dt>
+            <dd>{{ item.weight }}</dd>
+          </div>
+          } @if (hasValue(item.armorStat?.armorValue)) {
+          <div>
+            <dt>Armor</dt>
+            <dd>{{ item.armorStat?.armorValue }}</dd>
+          </div>
+          } @if (hasValue(item.armorStat?.evasionValue)) {
+          <div>
+            <dt>Evasion</dt>
+            <dd>{{ item.armorStat?.evasionValue }}</dd>
+          </div>
+          } @if (hasValue(item.weaponStat?.attackSpeed)) {
+          <div>
+            <dt>Attack speed</dt>
+            <dd>{{ item.weaponStat?.attackSpeed }}</dd>
+          </div>
+          } @if (hasValue(item.weaponStat?.attackRange)) {
+          <div>
+            <dt>Attack range</dt>
+            <dd>{{ item.weaponStat?.attackRange }}</dd>
+          </div>
+          }
+        </dl>
+
+        @if (item.itemDamages.length) {
+        <section class="stat-group">
+          <h4>Damage</h4>
+          <dl class="stat-list">
+            @for (damage of item.itemDamages; track damage.damageType.name) { @if
+            (hasValue(damage.minDamage) || hasValue(damage.maxDamage)) {
+            <div>
+              <dt>{{ damage.damageType.name }}</dt>
+              <dd>{{ damage.minDamage }}–{{ damage.maxDamage }}</dd>
+            </div>
+            } }
+          </dl>
+        </section>
+        } @if (item.itemRequirements.length) {
+        <section class="stat-group">
+          <h4>Requirements</h4>
+          <dl class="stat-list">
+            @for (requirement of item.itemRequirements; track requirement.requirementType.name) {
+            @if (hasValue(requirement.value)) {
+            <div [class.requirement-not-met]="!isRequirementMet(requirement)">
+              <dt>{{ requirement.requirementType.name }}</dt>
+              <dd>{{ requirement.value }}</dd>
+            </div>
+            } }
+          </dl>
+        </section>
+        } @if (item.itemResistances.length) {
+        <section class="stat-group">
+          <h4>Resistances</h4>
+          <dl class="stat-list">
+            @for (resistance of item.itemResistances; track resistance.resistanceType.name) { @if
+            (hasValue(resistance.value)) {
+            <div>
+              <dt>{{ resistance.resistanceType.name }}</dt>
+              <dd>{{ resistance.value }}</dd>
+            </div>
+            } }
+          </dl>
+        </section>
+        } @if (item.itemBonuses.length) {
+        <section class="stat-group">
+          <h4>Bonuses</h4>
+          <dl class="stat-list">
+            @for (bonus of item.itemBonuses; track bonus.bonusType.name) { @if
+            (hasValue(bonus.value)) {
+            <div>
+              <dt>{{ bonus.bonusType.name }}</dt>
+              <dd>{{ bonus.value }}</dd>
+            </div>
+            } }
+          </dl>
+        </section>
+        } @if (item.consumableEffects.length) {
+        <section class="stat-group">
+          <h4>Effects</h4>
+          <dl class="stat-list">
+            @for (effect of item.consumableEffects; track effect.effectType.name) { @if
+            (hasValue(effect.minValue) || hasValue(effect.maxValue) || hasValue(effect.duration)) {
+            <div>
+              <dt>{{ effect.effectType.name }}</dt>
+              <dd>
+                {{ effect.minValue }}–{{ effect.maxValue }}@if (hasValue(effect.duration)) { · {{
+                effect.duration }}s }
+              </dd>
+            </div>
+            } }
+          </dl>
+        </section>
+        } @if (hasValue(item.value)) {
+        <div class="stat-card__value">
+          <span>Value</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+        }
+      </article>
+      } @else {
+      <div class="inventory__placeholder">Select an item to view its stats.</div>
+      }
+    </div>
+  </div>
 </section>

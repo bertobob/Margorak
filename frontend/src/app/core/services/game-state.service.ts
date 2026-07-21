@@ -42,7 +42,9 @@ export class GameStateService {
     }
 
     this.apiService.getItemsByCharacterId(character.id).subscribe({
-      next: (items) => this.currentInventory.set(items),
+      next: (items) => {
+        this.currentInventory.set(items);
+      },
       error: () => {
         this.errorMessage.set("Couldn't load inventory.");
         this.currentInventory.set([]);

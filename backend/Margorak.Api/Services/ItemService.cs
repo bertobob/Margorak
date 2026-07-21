@@ -32,6 +32,7 @@ namespace Margorak.Api.Services
                 .Select(ownedItem => new InventoryItemDto
                 {
                     Item = ItemMapper.ToDto(ownedItem.Item),
+                    OwnedItemId = ownedItem.Id,
                     Quantity = ownedItem.Quantity
 
                 })
