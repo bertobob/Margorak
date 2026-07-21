@@ -5,7 +5,7 @@
 
 .inventory__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 32rem;
   gap: 1rem;
   align-items: start;
   height: 100%;
@@ -55,10 +55,20 @@
 
 .stat-card,
 .inventory__placeholder {
+  box-sizing: border-box;
+  width: 100%;
+  height: clamp(24rem, 65vh, 36rem);
   padding: 1.25rem;
+  overflow-y: auto;
+  scrollbar-width: none;
   background: #0f172a;
   border: 1px solid #334155;
   border-radius: 0.75rem;
+}
+
+.stat-card::-webkit-scrollbar,
+.inventory__placeholder::-webkit-scrollbar {
+  display: none;
 }
 
 .stat-card__header {
@@ -93,19 +103,21 @@
 }
 
 .stat-card__description {
+  max-width: 40ch;
   margin-top: 1rem !important;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
   margin-top: 1rem !important;
 }
 
 .stat-grid > div {
-  padding: 0.75rem;
+  padding: 0.55rem 0.65rem;
   background: #1e293b;
   border-radius: 0.5rem;
 }
@@ -117,9 +129,9 @@
 }
 
 .stat-grid dd {
-  margin: 0.2rem 0 0;
+  margin: 0.1rem 0 0;
   color: #f8fafc;
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -149,13 +161,16 @@
 }
 
 .stat-card__value {
+  position: sticky;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-top: 1.25rem;
-  padding-top: 0.85rem;
+  padding: 0.85rem 0 0.75rem;
   color: #fbbf24;
+  background: #0f172a;
   border-top: 1px solid #78350f;
 }
 
