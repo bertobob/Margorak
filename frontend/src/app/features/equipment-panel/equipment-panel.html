@@ -2,7 +2,14 @@
   <section class="equipment-slots">
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/helmet.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Helmet?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Helmet"
+        (click)="onItemClick(equipment().Helmet!.item)"
+      >
+        {{ equipment().Helmet?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -14,7 +21,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/chest.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Chest?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Chest"
+        (click)="onItemClick(equipment().Chest!.item)"
+      >
+        {{ equipment().Chest?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -26,7 +40,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/legs.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Legs?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Legs"
+        (click)="onItemClick(equipment().Legs!.item)"
+      >
+        {{ equipment().Legs?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -38,7 +59,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/gloves.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Gloves?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Gloves"
+        (click)="onItemClick(equipment().Gloves!.item)"
+      >
+        {{ equipment().Gloves?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -50,7 +78,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/boots.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Boots?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Boots"
+        (click)="onItemClick(equipment().Boots!.item)"
+      >
+        {{ equipment().Boots?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -62,7 +97,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/weapon.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Weapon?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Weapon"
+        (click)="onItemClick(equipment().Weapon!.item)"
+      >
+        {{ equipment().Weapon?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -74,7 +116,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/shield.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Shield?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Shield"
+        (click)="onItemClick(equipment().Shield!.item)"
+      >
+        {{ equipment().Shield?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -86,7 +135,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/ring.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Ring?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Ring"
+        (click)="onItemClick(equipment().Ring!.item)"
+      >
+        {{ equipment().Ring?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -98,7 +154,14 @@
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/amulet.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Amulet?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-slot"
+        type="button"
+        [disabled]="!equipment().Amulet"
+        (click)="onItemClick(equipment().Amulet!.item)"
+      >
+        {{ equipment().Amulet?.item?.name ?? 'empty' }}
+      </button>
       <button
         class="equipment-unequip-button"
         type="button"
@@ -109,4 +172,5 @@
       </button>
     </div>
   </section>
+  <app-equipment-stats></app-equipment-stats>
 </aside>

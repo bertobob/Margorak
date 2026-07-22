@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
 import { ItemDto, ItemRequirementDto } from '../../shared/dto/item.dto';
 import { allRequirementsMet, requirementChecks } from '../../shared/utils/requirement-checks';
@@ -14,11 +14,11 @@ import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
 export class Inventory {
   private gameState = inject(GameStateService);
   private equipmentService = inject(EquipmentService);
-  protected selectedItemStats = signal<ItemDto | null>(null);
+  protected selectedItemStats = this.equipmentService.selectedItemStats;
   protected inventory = this.gameState.currentInventory;
 
   protected onItemClick(item: ItemDto): void {
-    this.selectedItemStats.set(item);
+    this.equipmentService.selectItem(item);
   }
 
   protected onEquipClicked(inventoryItem: InventoryItemDto): void {

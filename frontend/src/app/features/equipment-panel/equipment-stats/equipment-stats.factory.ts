@@ -1,0 +1,36 @@
+import { AggregatedEquipmentStats } from './equipment-stats.model';
+
+export function createEmptyEquipmentStats(): AggregatedEquipmentStats {
+  return {
+    attackRating: 0,
+    weight: 0,
+    armorValue: 0,
+    evasionValue: 0,
+    attackSpeed: 0,
+    attackRange: 0,
+    physicalMinDamage: 0,
+    physicalMaxDamage: 0,
+    fireMinDamage: 0,
+    fireMaxDamage: 0,
+    iceMinDamage: 0,
+    iceMaxDamage: 0,
+    lightMinDamage: 0,
+    lightMaxDamage: 0,
+    poisonMinDamage: 0,
+    poisonMaxDamage: 0,
+    lifeLeechMinDamage: 0,
+    lifeLeechMaxDamage: 0,
+    poisonDurationMinDamage: 0,
+    poisonDurationMaxDamage: 0,
+    physicalResistance: 0,
+    fireResistance: 0,
+    iceResistance: 0,
+    lightResistance: 0,
+    poisonResistance: 0,
+    strengthBonus: 0,
+    dexterityBonus: 0,
+    vitalityBonus: 0,
+    intelligenceBonus: 0,
+    evasionBonus: 0,
+  };
+}

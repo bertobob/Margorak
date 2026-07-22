@@ -50,6 +50,13 @@
   background: #181818;
   border: 1px solid #3e3e3e;
   border-radius: 6px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.equipment-slot:disabled {
+  cursor: default;
 }
 
 .equipment-unequip-button {
