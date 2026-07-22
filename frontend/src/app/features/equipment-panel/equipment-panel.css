@@ -22,14 +22,14 @@
 
 .equipment-slots {
   display: grid;
-  gap: 10px;
+  gap: 6px;
 }
 
 .equipment-slot-row {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 
 .equipment-slot-icon {
@@ -45,11 +45,30 @@
 .equipment-slot {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0 12px;
+  min-height: 36px;
+  padding: 0 8px;
   background: #181818;
   border: 1px solid #3e3e3e;
   border-radius: 6px;
+}
+
+.equipment-unequip-button {
+  min-height: 32px;
+  padding: 0 8px;
+  color: #ddd;
+  background: #2b2b2b;
+  border: 1px solid #4a4a4a;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.equipment-unequip-button:hover:not(:disabled) {
+  background: #383838;
+}
+
+.equipment-unequip-button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 @media (max-width: 760px) {

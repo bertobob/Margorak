@@ -1,6 +1,6 @@
-import { ItemDto } from '../../../shared/dto/item.dto';
+import { InventoryItemDto } from '../../../shared/dto/inventory-item.dto';
 
 export type EquipmentSlot =
   'Helmet' | 'Chest' | 'Legs' | 'Gloves' | 'Boots' | 'Weapon' | 'Shield' | 'Ring' | 'Amulet';
 
-export type Equipment = Record<EquipmentSlot, ItemDto | null>;
+export type Equipment = Record<EquipmentSlot, InventoryItemDto | null>;

@@ -2,39 +2,111 @@
   <section class="equipment-slots">
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/helmet.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Helmet?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Helmet?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Helmet"
+        (click)="onUnequipClicked('Helmet')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/chest.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Chest?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Chest?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Chest"
+        (click)="onUnequipClicked('Chest')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/legs.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Legs?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Legs?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Legs"
+        (click)="onUnequipClicked('Legs')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/gloves.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Gloves?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Gloves?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Gloves"
+        (click)="onUnequipClicked('Gloves')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/boots.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Boots?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Boots?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Boots"
+        (click)="onUnequipClicked('Boots')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/weapon.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Weapon?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Weapon?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Weapon"
+        (click)="onUnequipClicked('Weapon')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/shield.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Shield?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Shield?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Shield"
+        (click)="onUnequipClicked('Shield')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/ring.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Ring?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Ring?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Ring"
+        (click)="onUnequipClicked('Ring')"
+      >
+        Unequip
+      </button>
     </div>
     <div class="equipment-slot-row">
       <img class="equipment-slot-icon" src="icons/equipment/amulet.svg" alt="" />
-      <div class="equipment-slot">{{ equipment().Amulet?.name ?? 'empty' }}</div>
+      <div class="equipment-slot">{{ equipment().Amulet?.item?.name ?? 'empty' }}</div>
+      <button
+        class="equipment-unequip-button"
+        type="button"
+        [disabled]="!equipment().Amulet"
+        (click)="onUnequipClicked('Amulet')"
+      >
+        Unequip
+      </button>
     </div>
   </section>
 </aside>

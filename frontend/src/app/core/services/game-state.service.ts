@@ -4,6 +4,7 @@ import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 import { CharacterDto } from '../../features/character/dto/character.dto';
 import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
 import { ApiService } from './api-service';
+import { ItemDto } from '../../shared/dto/item.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -97,5 +98,15 @@ export class GameStateService {
 
   clearErrorMessage(): void {
     this.errorMessage.set(null);
+  }
+
+  removeInventoryItem(ownedItemID: number) {
+    this.currentInventory.update((items) =>
+      items.filter((item) => item.ownedItemId !== ownedItemID)
+    );
+  }
+
+  addInventoryItem(inventoryItem: InventoryItemDto): void {
+    this.currentInventory.update((items) => [...items, inventoryItem]);
   }
 }

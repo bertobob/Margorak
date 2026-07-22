@@ -20,6 +20,7 @@
                   : 'Requirements not met'
               "
               [attr.aria-label]="'Equip ' + item.item.name"
+              (click)="onEquipClicked(item)"
             >
               E
             </button>
