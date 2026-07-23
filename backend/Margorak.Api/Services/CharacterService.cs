@@ -10,15 +10,18 @@ namespace Margorak.Api.Services
         private readonly ICharacterRepository _characterRepository;
         private readonly IMapRepository _mapRepository;
         private readonly IStartingItemService _startingItemService;
+        private readonly IItemRepository _itemRepository;
 
         public CharacterService(
             ICharacterRepository characterRepository,
             IMapRepository mapRepository,
-            IStartingItemService startingItemService)
+            IStartingItemService startingItemService,
+            IItemRepository itemRepository)
         {
             _characterRepository = characterRepository;
             _mapRepository = mapRepository;
             _startingItemService = startingItemService;
+            _itemRepository = itemRepository;
         }
 
         public async Task<List<CharacterDto>> GetAllCharactersAsync()
@@ -28,15 +31,6 @@ namespace Margorak.Api.Services
             return characters
                 .Select(CharacterMapper.ToDto)
                 .ToList();
-        }
-
-        public async Task<CharacterDto?> GetCharacterByIdAsync(int id)
-        {
-            var character = await _characterRepository.GetCharacterByIdAsync(id);
-
-            return character is null
-                ? null
-                : CharacterMapper.ToDto(character);
         }
 
         public async Task<List<CharacterRaceDto>> GetAvailableRacesAsync()
@@ -103,11 +97,83 @@ namespace Margorak.Api.Services
 
             return character;
         }
-        public async Task UpdateCharacterPositionAsync(int characterId, int mapId, int locX,int locY)
+        public async Task<LoadCharacterDto?> LoadCharacterAsync(int characterId)
         {
+            var character = await _characterRepository.GetCompleteCharacterAsync(characterId);
+            if (character is null)
+            {
+                return null;
+            }
+
+            var ownedItems =
+                await _itemRepository.GetInventoryItemsByCharacterIdAsync(characterId) ?? [];
+
+            return new LoadCharacterDto
+            {
+                Character = CharacterMapper.ToDto(character),
+                InventoryItems = ownedItems
+                    .Select(ownedItem => new InventoryItemDto
+                    {
+                        Item = ItemMapper.ToDto(ownedItem.Item),
+                        OwnedItemId = ownedItem.Id,
+                        Quantity = ownedItem.Quantity
+                    })
+                    .ToList(),
+                EquippedItems = character.CharacterEquipment
+                    .Select(equipment => new EquippedItemDto
+                    {
+                        OwnedItemId = equipment.OwnedItemId,
+                        EquipSlotId = equipment.EquipSlotId
+                    })
+                    .ToArray()
+            };
+        }
+
+        public async Task SaveCharacterAsync(int characterId,SaveCharacterDto request)
+        {
+            await UpdateCharacterPositionAsync(characterId,request.Location);
+            await SaveEquipmentAsync(characterId, request.EquippedItems);
+        }
+
+        private async Task SaveEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
+        {
+            var ownedItemIds = equippedItems.Select(item => item.OwnedItemId);
+            var ownedItems = await _itemRepository.GetOwnedItemsByIdsAsync(characterId, ownedItemIds);
+
+            var equippedOwnedItems = equippedItems
+                .Select(equippedItem => new
+                {
+                    equippedItem.EquipSlotId,
+                    OwnedItem = ownedItems.FirstOrDefault(ownedItem =>
+                        ownedItem.Id == equippedItem.OwnedItemId)
+                });
+
+            var allItemsOwned = equippedOwnedItems
+                .All(equippedItem => equippedItem.OwnedItem is not null);
+
+            if (!allItemsOwned)
+            {
+                throw new InvalidOperationException(
+                    "At least one item does not belong to the character.");
+            }
+
+            var allSlotsValid = equippedOwnedItems
+                .All(equippedItem => equippedItem.EquipSlotId == equippedItem.OwnedItem!.Item.ItemCategory.EquipSlotId);
+
+            if(!allSlotsValid)
+            {
+                throw new InvalidOperationException("Equippement Configuration not valid");
+            }
+
+            await _itemRepository.SaveEquipmentAsync(characterId, equippedItems);
+        }
+
+        private async Task UpdateCharacterPositionAsync(int characterId, LocationDto location)
+        {
+            var (mapId,locX,locY) = (location.MapId,location.LocX,location.LocY);
             var isAccessible = await _mapRepository.IsAccessiblePositionAsync(mapId, locX, locY);
 
-            if(!isAccessible)
+            if (!isAccessible)
             {
                 throw new ArgumentException(
                     $"Position ({locX}, {locY}) on map {mapId} is invalid.");
@@ -115,7 +181,7 @@ namespace Margorak.Api.Services
 
             var updated = await _characterRepository.UpdateCharacterPositionAsync(characterId, mapId, locX, locY);
 
-            if(!updated)
+            if (!updated)
             {
                 throw new KeyNotFoundException(
                     $"Character {characterId} was not found.");

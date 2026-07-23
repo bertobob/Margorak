@@ -17,6 +17,7 @@ namespace Margorak.Api.Tests.Services
         private Mock<ICharacterRepository> _characterRepositoryMock = null!;
         private Mock<IMapRepository> _mapRepositoryMock = null!;
         private Mock<IStartingItemService> _startingItemServiceMock = null!;
+        private Mock<IItemRepository> _itemRepositoryMock = null!;
         private CharacterService _characterService = null! ;
 
 
@@ -26,10 +27,12 @@ namespace Margorak.Api.Tests.Services
             _characterRepositoryMock = new Mock<ICharacterRepository>();
             _mapRepositoryMock = new Mock<IMapRepository>();
             _startingItemServiceMock = new Mock<IStartingItemService>();
+            _itemRepositoryMock = new Mock<IItemRepository>();
             _characterService = new CharacterService(
                 _characterRepositoryMock.Object,
                 _mapRepositoryMock.Object,
-                _startingItemServiceMock.Object);
+                _startingItemServiceMock.Object,
+                _itemRepositoryMock.Object);
 
         }
 
@@ -145,7 +148,7 @@ namespace Margorak.Api.Tests.Services
 
         [TestMethod]
 
-        public async  Task GetCharacterByIdAsync_WithExistingCharacter_ReturnsCharacterDto()
+        public async Task LoadCharacterAsync_WithExistingCharacter_ReturnsCompleteCharacter()
         {
             // Arrange
             var character = new Character
@@ -195,80 +198,41 @@ namespace Margorak.Api.Tests.Services
             };
 
             _characterRepositoryMock
-                .Setup(repository => repository.GetCharacterByIdAsync(1))
+                .Setup(repository => repository.GetCompleteCharacterAsync(1))
                 .ReturnsAsync(character);
+            _itemRepositoryMock
+                .Setup(repository => repository.GetInventoryItemsByCharacterIdAsync(1))
+                .ReturnsAsync([]);
 
             // Act
-            var result = await _characterService.GetCharacterByIdAsync(1);
+            var result = await _characterService.LoadCharacterAsync(1);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(character.Id, result.Id);
-            Assert.AreEqual(character.Name, result.Name);
-            Assert.AreEqual(character.CharacterRace.Id, result.CharacterRace.Id);
-            Assert.AreEqual(character.CharacterClass.Id, result.CharacterClass.Id);
+            Assert.AreEqual(character.Id, result.Character.Id);
+            Assert.AreEqual(character.Name, result.Character.Name);
+            Assert.AreEqual(character.CharacterRace.Id, result.Character.CharacterRace.Id);
+            Assert.AreEqual(character.CharacterClass.Id, result.Character.CharacterClass.Id);
+            Assert.AreEqual(0, result.InventoryItems.Count);
+            Assert.AreEqual(0, result.EquippedItems.Length);
         }
 
         [TestMethod]
-        public async Task GetCharacterByIdAsync_WithoutExistingCharacter_ReturnsNull()
+        public async Task LoadCharacterAsync_WithoutExistingCharacter_ReturnsNull()
         {
             // Arrange
             _characterRepositoryMock
-                .Setup(repository => repository.GetCharacterByIdAsync(2))
+                .Setup(repository => repository.GetCompleteCharacterAsync(2))
                 .ReturnsAsync((Character?)null);
+            _itemRepositoryMock
+                .Setup(repository => repository.GetInventoryItemsByCharacterIdAsync(2))
+                .ReturnsAsync((List<OwnedItem>?)null);
 
             // Act
-            var result = await _characterService.GetCharacterByIdAsync(2);
+            var result = await _characterService.LoadCharacterAsync(2);
 
             // Assert
             Assert.IsNull(result);
-        }
-
-        [TestMethod]
-        public async Task UpdateCharacterPositionAsync_WithValidPosition_UpdatesPosition()
-        {
-            // Arrange
-            _mapRepositoryMock
-                .Setup(repository =>
-                    repository.IsAccessiblePositionAsync(1, 1, 1))
-                .ReturnsAsync(true);
-
-            _characterRepositoryMock
-                .Setup(repository =>
-                    repository.UpdateCharacterPositionAsync(1, 1, 1, 1))
-                .ReturnsAsync(true);
-
-            // Act
-            await _characterService.UpdateCharacterPositionAsync(1, 1, 1, 1);
-
-            // Assert
-            _characterRepositoryMock.Verify(
-                repository =>
-                    repository.UpdateCharacterPositionAsync(1, 1, 1, 1),
-                Times.Once);
-        }
-
-        [TestMethod]
-        public async Task UpdateCharacterPositionAsync_WithInvalidPosition_DoesNotUpdatePosition()
-        {
-            // Arrange
-            _mapRepositoryMock
-                .Setup(repository =>
-                    repository.IsAccessiblePositionAsync(1, 1, 1))
-                .ReturnsAsync(false);
-
-            // Act
-            await Assert.ThrowsExceptionAsync<ArgumentException>(
-                () => _characterService.UpdateCharacterPositionAsync(1, 1, 1, 1));
-
-            // Assert
-            _characterRepositoryMock.Verify(
-                repository => repository.UpdateCharacterPositionAsync(
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>()),
-                Times.Never);
         }
 
     }

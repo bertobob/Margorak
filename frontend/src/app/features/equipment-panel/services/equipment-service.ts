@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Equipment, EquipmentSlot } from '../dto/equipment-panel.dto';
+import { EquipmentSlot } from '../dto/equipment-panel.dto';
 import { GameStateService } from '../../../core/services/game-state.service';
 import { InventoryItemDto } from '../../../shared/dto/inventory-item.dto';
 import { ItemDto } from '../../../shared/dto/item.dto';
@@ -38,17 +38,7 @@ const bonusFields = {
 export class EquipmentService {
   gameStateService = inject(GameStateService);
   selectedItemStats = signal<ItemDto | null>(null);
-  equipment = signal<Equipment>({
-    Helmet: null,
-    Chest: null,
-    Legs: null,
-    Gloves: null,
-    Boots: null,
-    Weapon: null,
-    Shield: null,
-    Ring: null,
-    Amulet: null,
-  });
+  equipment = this.gameStateService.equipment;
 
   equipmentStats = computed<AggregatedEquipmentStats>(() => {
     const stats = createEmptyEquipmentStats();

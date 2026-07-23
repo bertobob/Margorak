@@ -1,7 +1,9 @@
 using Margorak.Api.Data;
+using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Margorak.Api.Repositories
 {
@@ -85,6 +87,40 @@ namespace Margorak.Api.Repositories
                 .ToListAsync();
 
             return itemList;
+        }
+
+        public async Task<List<OwnedItem>> GetOwnedItemsByIdsAsync(
+            int characterId,
+            IEnumerable<int> ownedItemIds)
+        {
+            return await _db.OwnedItems
+                .Where(ownedItem =>
+                    ownedItem.CharacterId == characterId &&
+                    ownedItemIds.Contains(ownedItem.Id))
+                .Include(ownedItem => ownedItem.Item)
+                    .ThenInclude(item => item.ItemCategory)
+                .ToListAsync();
+        }
+
+        public async Task SaveEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
+        {
+            var currentEquipment = await _db.CharacterEquipment
+                .Where(equipment => equipment.CharacterId == characterId)
+                .ToListAsync();
+
+            _db.CharacterEquipment.RemoveRange(currentEquipment);
+
+            var newEquipment = equippedItems
+                .Select(equippedItem => new CharacterEquipment
+                {
+                    CharacterId = characterId,
+                    OwnedItemId = equippedItem.OwnedItemId,
+                    EquipSlotId = equippedItem.EquipSlotId
+                });
+
+            _db.CharacterEquipment.AddRange(newEquipment);
+
+            await _db.SaveChangesAsync();
         }
     }
 }

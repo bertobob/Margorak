@@ -1,4 +1,5 @@
 ﻿using Margorak.Api.Data;
+using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ namespace Margorak.Api.Repositories
             return character;
         }
 
+
         public async Task<bool> UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY)
         {
             var character = await _db.Characters
@@ -46,12 +48,9 @@ namespace Margorak.Api.Repositories
             character.LocX = locX;
             character.LocY = locY;
 
-
-
             await _db.SaveChangesAsync();
 
             return true;
-
         }
 
         public async Task<List<CharacterRace>> GetRacesAsync()
@@ -69,18 +68,6 @@ namespace Margorak.Api.Repositories
 
             return classes;
         }
-
-        public async Task<Character?> GetCharacterByIdAsync(int characterId)
-        {
-            var character = await _db.Characters
-                .Where(c => c.Id == characterId)
-                .Include(c => c.CharacterClass)
-                .Include(c => c.CharacterRace)
-                .FirstOrDefaultAsync();
-
-            return character;
-        }
-
 
         public async Task<List<Character>> GetAllCharactersAsync()
         {
@@ -109,5 +96,6 @@ namespace Margorak.Api.Repositories
             await _db.Characters.AddAsync(character);
             await _db.SaveChangesAsync();
         }
+
     }
 }

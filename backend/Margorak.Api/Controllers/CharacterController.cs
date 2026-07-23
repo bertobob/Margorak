@@ -2,6 +2,7 @@
 using Margorak.Api.Mapper;
 using Margorak.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace Margorak.Api.Controllers
 {
@@ -10,19 +11,16 @@ namespace Margorak.Api.Controllers
     public class CharacterController : ControllerBase
     {
         private readonly CharacterService _characterService;
-        private readonly ItemService _itemService;
-
-        public CharacterController(CharacterService characterService, ItemService itemService)
+        public CharacterController(CharacterService characterService)
         {
-            _itemService = itemService;
             _characterService = characterService;
         }
             
 
-        [HttpGet("{characterId:int}", Name = "GetCharacterById")]
-        public async Task<ActionResult<CharacterDto>> GetCharacterByIdAsync(int characterId)
+        [HttpGet("{characterId:int}/load", Name = "LoadCharacter")]
+        public async Task<ActionResult<LoadCharacterDto>> LoadCharacterAsync(int characterId)
         {
-            var result = await _characterService.GetCharacterByIdAsync(characterId);
+            var result = await _characterService.LoadCharacterAsync(characterId);
 
             return result is null
                 ? NotFound()
@@ -63,7 +61,7 @@ namespace Margorak.Api.Controllers
                 var characterDto = CharacterMapper.ToDto(character);
 
                 return CreatedAtRoute(
-                    "GetCharacterById",
+                    "LoadCharacter",
                     new { characterId = character.Id },
                     characterDto);
             }
@@ -73,29 +71,14 @@ namespace Margorak.Api.Controllers
             }
         }
 
-        [HttpPatch("{characterId:int}/position")]
-        public async Task<IActionResult> UpdateCharacterPositionAsync(
-            int characterId,
-            [FromBody] UpdateCharacterPositionDto request)
+        [HttpPut("{characterId:int}/save")]
+        public async Task<ActionResult> SaveCharacterAsync
+            (int characterId,
+            [FromBody] SaveCharacterDto request)
         {
-            await _characterService.UpdateCharacterPositionAsync(
-                characterId,
-                request.MapId,
-                request.LocX,
-                request.LocY);
+            await _characterService.SaveCharacterAsync(characterId,request);
 
             return NoContent();
-        }
-
-
-        [HttpGet("{characterId:int}/inventory")]
-        public async Task<ActionResult<List<InventoryItemDto>>> GetInventoryItemsByCharacterIdAsync(int characterId)
-        {
-            var result = await _itemService.GetInventoryItemsByCharacterIdAsync(characterId);
-
-            return result is null
-                ? NotFound()
-                : Ok(result);
         }
     }
 }

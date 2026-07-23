@@ -4,7 +4,6 @@ import { GameStateService } from '../../core/services/game-state.service';
 import { ApiService } from '../../core/services/api-service';
 import { CharacterDto } from '../character/dto/character.dto';
 import { CharacterGeneration } from '../character-generation/character-generation';
-import { PlayerMovementService } from '../map/services/player-movement.service';
 
 @Component({
   selector: 'app-character-selection',
@@ -15,7 +14,6 @@ import { PlayerMovementService } from '../map/services/player-movement.service';
 export class CharacterSelection {
   private readonly gameState = inject(GameStateService);
   private readonly apiService = inject(ApiService);
-  private readonly playerMovement = inject(PlayerMovementService);
 
   public readonly characters = this.gameState.characters.asReadonly();
   public readonly activeCharacter = this.gameState.activeCharacter.asReadonly();
@@ -29,13 +27,14 @@ export class CharacterSelection {
     this.switchingCharacter.set(true);
     this.gameState.clearErrorMessage();
 
-    const saveRequest = this.playerMovement.savePosition();
+    const saveRequest = this.gameState.saveCharacter();
+    const loadCharacter = () => this.apiService.loadCharacter(character.id);
     const loadCharacterRequest = saveRequest
-      ? saveRequest.pipe(switchMap(() => this.apiService.getCharacterById(character.id)))
-      : this.apiService.getCharacterById(character.id);
+      ? saveRequest.pipe(switchMap(loadCharacter))
+      : loadCharacter();
 
     loadCharacterRequest.pipe(finalize(() => this.switchingCharacter.set(false))).subscribe({
-      next: (freshCharacter) => this.gameState.setActiveCharacter(freshCharacter),
+      next: (loadedCharacter) => this.gameState.setLoadedCharacter(loadedCharacter),
       error: (error) => {
         console.error('Character could not be switched.', error);
         this.gameState.setErrorMessage(

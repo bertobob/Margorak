@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin, switchMap } from 'rxjs';
 import { ApiService } from '../../core/services/api-service';
 import { GameStateService } from '../../core/services/game-state.service';
 import { CharacterClassDto, CharacterDto, CharacterRaceDto } from '../character/dto/character.dto';
 import { CreateCharacterDto } from '../character/dto/create-character.dto';
+import { LoadCharacterDto } from '../character/dto/load-character.dto';
 
 @Component({
   selector: 'app-character-generation',
@@ -93,29 +94,33 @@ export class CharacterGeneration implements OnInit {
     this.creating.set(true);
     this.errorMessage.set('');
 
-    this.apiService.createCharacter(request).subscribe({
-      next: (character) => this.handleCharacterCreated(character),
-      error: (error) => {
-        console.error('Create character failed', {
-          status: error.status,
-          body: error.error,
-          message: error.message,
-        });
+    this.apiService
+      .createCharacter(request)
+      .pipe(
+        switchMap((character) => this.apiService.loadCharacter(character.id)),
+        finalize(() => this.creating.set(false))
+      )
+      .subscribe({
+        next: (loadedCharacter) => this.handleCharacterCreated(loadedCharacter),
+        error: (error) => {
+          console.error('Create character failed', {
+            status: error.status,
+            body: error.error,
+            message: error.message,
+          });
 
-        this.handleCreateError();
-      },
-    });
+          this.handleCreateError();
+        },
+      });
   }
 
-  private handleCharacterCreated(character: CharacterDto): void {
-    this.gameState.addCharacter(character);
-    this.gameState.setActiveCharacter(character);
+  private handleCharacterCreated(loadedCharacter: LoadCharacterDto): void {
+    this.gameState.addCharacter(loadedCharacter.character);
+    this.gameState.setLoadedCharacter(loadedCharacter);
     this.form.controls.name.reset('');
-    this.creating.set(false);
   }
 
   private handleCreateError(): void {
     this.errorMessage.set('The character could not be created.');
-    this.creating.set(false);
   }
 }

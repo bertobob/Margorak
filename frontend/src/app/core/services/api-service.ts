@@ -9,8 +9,9 @@ import {
   CharacterRaceDto,
 } from '../../features/character/dto/character.dto';
 import { CreateCharacterDto } from '../../features/character/dto/create-character.dto';
-import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
 import { ItemDto } from '../../shared/dto/item.dto';
+import { SaveCharacterDto } from '../../features/character/dto/save-character.dto';
+import { LoadCharacterDto } from '../../features/character/dto/load-character.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -19,16 +20,19 @@ export class ApiService {
   private http = inject(HttpClient);
   private apiBaseUrl = environment.apiBaseUrl;
 
-  saveUser(clientId: string) {
-    //return this.http.post<void>(`${this.apiBaseUrl}/api/client-data/user`,{clientId})
+  saveCharacter(characterId: number, saveCharacterDto: SaveCharacterDto) {
+    return this.http.put<void>(
+      `${this.apiBaseUrl}/api/characters/${characterId}/save`,
+      saveCharacterDto
+    );
   }
 
   getCharacters() {
     return this.http.get<CharacterDto[]>(`${this.apiBaseUrl}/api/characters`);
   }
 
-  getCharacterById(characterId: number) {
-    return this.http.get<CharacterDto>(`${this.apiBaseUrl}/api/characters/${characterId}`);
+  loadCharacter(characterId: number) {
+    return this.http.get<LoadCharacterDto>(`${this.apiBaseUrl}/api/characters/${characterId}/load`);
   }
 
   getCharacterRaces() {
@@ -43,14 +47,6 @@ export class ApiService {
     return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/characters`, character);
   }
 
-  updateCharacterPosition(characterId: number, mapId: number, locX: number, locY: number) {
-    return this.http.patch<void>(`${this.apiBaseUrl}/api/characters/${characterId}/position`, {
-      mapId,
-      locX,
-      locY,
-    });
-  }
-
   getMapData() {
     return this.http.get<MapDto[]>(`${this.apiBaseUrl}/api/maps`);
   }
@@ -63,11 +59,5 @@ export class ApiService {
 
   getItemById(itemId: number) {
     return this.http.get<ItemDto>(`${this.apiBaseUrl}/api/items/${itemId}`);
-  }
-
-  getItemsByCharacterId(characterId: number) {
-    return this.http.get<InventoryItemDto[]>(
-      `${this.apiBaseUrl}/api/characters/${characterId}/inventory`
-    );
   }
 }

@@ -14,43 +14,54 @@
 
 <section class="play-area">
   <nav class="view-switch" aria-label="Switch view">
-    <button
-      class="view-switch-button"
-      [class.active]="activeView() === 'character-selection'"
-      type="button"
-      (click)="showCharacterSelection()"
-    >
-      Selection
-    </button>
+    <div class="view-switch-buttons">
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'character-selection'"
+        type="button"
+        (click)="showCharacterSelection()"
+      >
+        Selection
+      </button>
+
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'map'"
+        [disabled]="!gameState.activeCharacter()"
+        type="button"
+        (click)="showMap()"
+      >
+        Map
+      </button>
+
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'inventory'"
+        [disabled]="!gameState.activeCharacter()"
+        type="button"
+        (click)="showInventory()"
+      >
+        Inventory
+      </button>
+
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'character'"
+        [disabled]="!gameState.activeCharacter()"
+        type="button"
+        (click)="showCharacter()"
+      >
+        Character
+      </button>
+    </div>
 
     <button
-      class="view-switch-button"
-      [class.active]="activeView() === 'map'"
+      class="save-character-button"
       [disabled]="!gameState.activeCharacter()"
       type="button"
-      (click)="showMap()"
+      (click)="gameState.saveCharacter()"
     >
-      Map
-    </button>
-
-    <button
-      class="view-switch-button"
-      [class.active]="activeView() === 'inventory'"
-      [disabled]="!gameState.activeCharacter()"
-      type="button"
-      (click)="showInventory()"
-    >
-      Inventory
-    </button>
-
-    <button
-      class="view-switch-button"
-      [class.active]="activeView() === 'character'"
-      [disabled]="!gameState.activeCharacter()"
-      type="button"
-      (click)="showCharacter()"
-    >
-      Character
+      Save
     </button>
   </nav>
 

@@ -4,7 +4,12 @@ import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 import { CharacterDto } from '../../features/character/dto/character.dto';
 import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
 import { ApiService } from './api-service';
-import { ItemDto } from '../../shared/dto/item.dto';
+import { Equipment, EquipmentSlot } from '../../features/equipment-panel/dto/equipment-panel.dto';
+import { SaveCharacterDto } from '../../features/character/dto/save-character.dto';
+import { LocationDto } from '../../features/character/dto/location.dto';
+import { EquippedItemDto } from '../../features/character/dto/equipped-item.dto';
+import { Observable } from 'rxjs';
+import { LoadCharacterDto } from '../../features/character/dto/load-character.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +24,17 @@ export class GameStateService {
   characters = signal<CharacterDto[]>([]);
   activeCharacter = signal<CharacterDto | null>(null);
   currentInventory = signal<InventoryItemDto[]>([]);
+  equipment = signal<Equipment>({
+    Helmet: null,
+    Chest: null,
+    Legs: null,
+    Gloves: null,
+    Boots: null,
+    Weapon: null,
+    Shield: null,
+    Ring: null,
+    Amulet: null,
+  });
 
   playerPos = signal<[number, number]>([30, 30]);
   combatantHabitats = signal<CombatantHabitatDto[]>([]);
@@ -34,23 +50,75 @@ export class GameStateService {
 
   interactionText = computed(() => this.activeMapInteraction()?.description ?? '');
 
-  loadCurrentInventory(): void {
-    const character = this.activeCharacter();
+  public saveCharacter(): Observable<void> | null {
+    const activeCharacter = this.activeCharacter();
+    const currentMap = this.currentMap();
 
-    if (!character) {
-      this.currentInventory.set([]);
-      return;
+    if (!activeCharacter || !currentMap) {
+      return null;
     }
 
-    this.apiService.getItemsByCharacterId(character.id).subscribe({
-      next: (items) => {
-        this.currentInventory.set(items);
-      },
-      error: () => {
-        this.errorMessage.set("Couldn't load inventory.");
-        this.currentInventory.set([]);
-      },
+    const location: LocationDto = {
+      mapId: currentMap.id,
+      locX: this.playerPos()[0],
+      locY: this.playerPos()[1],
+    };
+
+    const equippedItems: EquippedItemDto[] = [];
+
+    Object.values(this.equipment()).forEach((item) => {
+      const equipSlotId = item?.item.itemCategory.equipSlot?.id;
+
+      if (item !== null && equipSlotId !== undefined) {
+        equippedItems.push({
+          ownedItemId: item.ownedItemId,
+          equipSlotId,
+        });
+      }
     });
+
+    const character: SaveCharacterDto = {
+      location: location,
+      inventoryItems: this.currentInventory(),
+      equippedItems: equippedItems,
+    };
+    return this.apiService.saveCharacter(activeCharacter.id, character);
+  }
+
+  private setInventoryAndEquipment(
+    ownedItems: InventoryItemDto[],
+    equippedItems: EquippedItemDto[]
+  ): void {
+    const equippedIds = new Set(equippedItems.map((item) => item.ownedItemId));
+    const equipment = this.createEmptyEquipment();
+
+    for (const equippedItem of equippedItems) {
+      const inventoryItem = ownedItems.find(
+        (item) => item.ownedItemId === equippedItem.ownedItemId
+      );
+      const slot = inventoryItem?.item.itemCategory.equipSlot?.name as EquipmentSlot | undefined;
+
+      if (inventoryItem && slot && slot in equipment) {
+        equipment[slot] = inventoryItem;
+      }
+    }
+
+    this.equipment.set(equipment);
+    this.currentInventory.set(ownedItems.filter((item) => !equippedIds.has(item.ownedItemId)));
+  }
+
+  private createEmptyEquipment(): Equipment {
+    return {
+      Helmet: null,
+      Chest: null,
+      Legs: null,
+      Gloves: null,
+      Boots: null,
+      Weapon: null,
+      Shield: null,
+      Ring: null,
+      Amulet: null,
+    };
   }
   setClientId(clientId: string): void {
     this.clientId = clientId;
@@ -68,7 +136,8 @@ export class GameStateService {
     this.characters.update((characters) => [...characters, character]);
   }
 
-  setActiveCharacter(character: CharacterDto): void {
+  setLoadedCharacter(loadedCharacter: LoadCharacterDto): void {
+    const character = loadedCharacter.character;
     this.activeCharacter.set(character);
     this.currentMapIndex.set(
       Math.max(
@@ -77,7 +146,7 @@ export class GameStateService {
       )
     );
     this.setPlayerPos(character.locX, character.locY);
-    this.loadCurrentInventory();
+    this.setInventoryAndEquipment(loadedCharacter.inventoryItems, loadedCharacter.equippedItems);
   }
 
   setMaps(maps: MapDto[]): void {

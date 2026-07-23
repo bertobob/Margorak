@@ -23,23 +23,5 @@ namespace Margorak.Api.Services
 
         }
 
-        public async Task<List<InventoryItemDto>?> GetInventoryItemsByCharacterIdAsync(int characterId)
-        {
-            var ownedItems = await _itemRepository
-                .GetInventoryItemsByCharacterIdAsync(characterId);
-
-            var inventoryItems = ownedItems?
-                .Select(ownedItem => new InventoryItemDto
-                {
-                    Item = ItemMapper.ToDto(ownedItem.Item),
-                    OwnedItemId = ownedItem.Id,
-                    Quantity = ownedItem.Quantity
-
-                })
-                .ToList();
-
-            return inventoryItems;
-
-        }
     }
 }
