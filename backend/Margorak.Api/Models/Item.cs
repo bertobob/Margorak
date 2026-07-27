@@ -19,6 +19,7 @@
         public ICollection<WeaponStat> WeaponStat { get; set; } = [];
         public ICollection<OwnedItem> OwnedItems { get; set; } = [];
         public ICollection<ItemBonus> ItemBonuses { get; set; } = [];
+        public ICollection<ShopItem> ShopItems { get; set; } = [];
 
     }
 }

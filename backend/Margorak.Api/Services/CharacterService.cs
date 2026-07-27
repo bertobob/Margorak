@@ -90,7 +90,11 @@ namespace Margorak.Api.Services
                 CharacterRace = race,
                 CharacterClassId = characterClass.Id,
                 CharacterClass = characterClass,
-                OwnedItems = startingItems
+                OwnedItems = startingItems,
+                Gold = 1000,
+                LocX = 3,
+                LocY =31,
+                CurrentMapId =1
             };
 
             await _characterRepository.SaveNewCharacterAsync(character);

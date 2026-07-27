@@ -1,9 +1,9 @@
 using Margorak.Api.Data;
+using Margorak.Api.Data.QueryExtensions;
 using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Margorak.Api.Repositories
 {
@@ -15,6 +15,18 @@ namespace Margorak.Api.Repositories
         {
             _db = db;
         }
+
+        public void AddOwnedItem(OwnedItem item)
+        {
+            _db.OwnedItems.Add(item);
+        }
+
+        public void RemoveOwnedItem(OwnedItem item)
+        {
+            _db.OwnedItems
+                .Remove(item);
+        }
+
 
         public async Task<List<OwnedItem>?> GetInventoryItemsByCharacterIdAsync(int characterId)
         {
@@ -28,28 +40,20 @@ namespace Margorak.Api.Repositories
 
             return  await _db.OwnedItems
                 .Where(ownedItem => ownedItem.CharacterId == characterId)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ItemCategory)
-                        .ThenInclude(itemCategory => itemCategory.EquipSlot)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ItemDamages)
-                        .ThenInclude(itemDamage => itemDamage.DamageType)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ItemRequirements)
-                        .ThenInclude(requirement => requirement.RequirementType)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ItemResistances)
-                        .ThenInclude(resistance => resistance.ResistanceType)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ArmorStat)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ConsumableEffect)
-                        .ThenInclude(effect => effect.EffectType)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.WeaponStat)
-                .Include(ownedItem => ownedItem.Item)
-                    .ThenInclude(item => item.ItemBonuses)
-                        .ThenInclude(bonus => bonus.BonusType)
+                .IncludeFullItemGraph()
+                .AsNoTracking()
+                .AsSplitQuery()
+                .ToListAsync();
+        }
+
+        public async Task<List<OwnedItem>> GetUnequippedInventoryItemsByCharacterIdAsync(
+            int characterId)
+        {
+            return await _db.OwnedItems
+                .Where(ownedItem =>
+                    ownedItem.CharacterId == characterId &&
+                    !ownedItem.CharacterEquipment.Any())
+                .IncludeFullItemGraph()
                 .AsNoTracking()
                 .AsSplitQuery()
                 .ToListAsync();
@@ -58,20 +62,7 @@ namespace Margorak.Api.Repositories
         public async Task<Item?> GetItemByIdAsync(int itemId)
         {
             return await _db.Items
-                    .Include(i => i.ItemCategory)
-                        .ThenInclude(itemCategory => itemCategory.EquipSlot)
-                    .Include(i => i.ItemDamages)
-                        .ThenInclude(id => id.DamageType)
-                    .Include(i => i.ItemRequirements)
-                        .ThenInclude(ir => ir.RequirementType)
-                    .Include(i => i.ItemResistances)
-                        .ThenInclude(ir => ir.ResistanceType)
-                    .Include(i => i.ArmorStat)
-                    .Include(i => i.ConsumableEffect)
-                        .ThenInclude(ce => ce.EffectType)
-                    .Include(i => i.WeaponStat)
-                    .Include(i => i.ItemBonuses)
-                        .ThenInclude(ib => ib.BonusType)
+                    .IncludeFullItemGraph()
                     .AsNoTracking()
                     .AsSplitQuery()
                     .FirstOrDefaultAsync(x => x.Id == itemId);
@@ -87,6 +78,13 @@ namespace Margorak.Api.Repositories
                 .ToListAsync();
 
             return itemList;
+        }
+
+        public Task<OwnedItem?> GetOwnedItemAsync(int characterId, int itemId)
+        {
+            return _db.OwnedItems
+                .FirstOrDefaultAsync(
+                    ownedItem => ownedItem.CharacterId == characterId && ownedItem.ItemId == itemId);
         }
 
         public async Task<List<OwnedItem>> GetOwnedItemsByIdsAsync(

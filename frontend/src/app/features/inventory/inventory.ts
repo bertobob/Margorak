@@ -1,43 +1,47 @@
 import { Component, inject } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
 import { ItemDto, ItemRequirementDto } from '../../shared/dto/item.dto';
-import { allRequirementsMet, requirementChecks } from '../../shared/utils/requirement-checks';
-import { EquipmentService } from '../equipment-panel/services/equipment-service';
+import { allRequirementsMet } from '../../shared/utils/requirement-checks';
+import { EquipmentService } from '../../core/services/equipment.service';
 import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
+import { ItemDetails } from '../../shared/components/item-details/item-details';
+import { ItemListEntry } from '../../shared/components/item-list-entry/item-list-entry';
+import { TradeItemRequestDto } from '../shop/dto/shop.dto';
+import { ApiService } from '../../core/services/api-service';
 
 @Component({
   selector: 'app-inventory',
-  imports: [],
+  imports: [ItemDetails, ItemListEntry],
   templateUrl: './inventory.html',
   styleUrl: './inventory.css',
 })
 export class Inventory {
   private gameState = inject(GameStateService);
   private equipmentService = inject(EquipmentService);
-  protected selectedItemStats = this.equipmentService.selectedItemStats;
+  private api = inject(ApiService);
   protected inventory = this.gameState.currentInventory;
-
-  protected onItemClick(item: ItemDto): void {
-    this.equipmentService.selectItem(item);
-  }
+  protected wealth = this.gameState.wealth;
+  protected activeShop = this.gameState.activeShop;
+  private activeShopInteractionId = this.gameState.activeShopInteractionId;
+  protected shopActive = this.gameState.shopActive;
 
   protected onEquipClicked(inventoryItem: InventoryItemDto): void {
     this.equipmentService.onEquipClicked(inventoryItem);
   }
 
-  protected hasValue(value: number | null | undefined): value is number {
-    return value !== null && value !== undefined && value !== 0;
-  }
-  protected isRequirementMet(requirement: ItemRequirementDto): boolean {
-    const character = this.gameState.activeCharacter();
+  getSellPrice(item: ItemDto): number {
+    const shop = this.activeShop();
 
-    if (!character) {
-      return false;
+    if (shop === null || shop.greed <= 0) {
+      return 0;
     }
 
-    const check = requirementChecks[requirement.requirementType.name];
+    return Math.trunc(item.value / shop.greed);
+  }
 
-    return check(requirement.value, character);
+  protected canSell(): boolean {
+    const shop = this.activeShop();
+    return shop !== null && shop.greed > 0;
   }
 
   protected isAllRequirementsMet(itemRequirements: ItemRequirementDto[]): boolean {
@@ -47,5 +51,27 @@ export class Inventory {
       return false;
     }
     return allRequirementsMet(itemRequirements, character);
+  }
+
+  onSellClicked(item: ItemDto) {
+    const character = this.gameState.activeCharacter();
+    const shopInteractionId = this.activeShopInteractionId();
+
+    if (character === null || shopInteractionId === null) {
+      return;
+    }
+    const request: TradeItemRequestDto = {
+      characterId: character.id,
+      itemId: item.id,
+    };
+
+    this.api.sell(request, shopInteractionId).subscribe({
+      next: (response) => {
+        this.gameState.activeCharacter.update((currentCharacter) =>
+          currentCharacter ? { ...currentCharacter, gold: response.remainingGold } : null
+        );
+        this.gameState.currentInventory.set(response.inventoryItems);
+      },
+    });
   }
 }

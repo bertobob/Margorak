@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { EquipmentService } from './services/equipment-service';
+import { EquipmentService } from '../../core/services/equipment.service';
 import { EquipmentSlot } from './dto/equipment-panel.dto';
 import { ItemDto } from '../../shared/dto/item.dto';
 import { EquipmentStats } from './equipment-stats/equipment-stats';

@@ -26,6 +26,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<CharacterService>();
 builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped<ShopService>();
 builder.Services.AddScoped<IStartingItemService, StartingItemService>();
 builder.Services.AddScoped<CombatantHabitatService>();
 builder.Services.AddScoped<IMapInteractionDtoFactory, ShopInteractionDtoFactory>();
@@ -34,8 +35,10 @@ builder.Services.AddScoped<MapService>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICombatantRepository, CombatantRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
 builder.Services.AddScoped<IMapInteractionRepository, MapInteractionRepository>();
 builder.Services.AddScoped<IMapRepository, MapRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddCors(options =>
 {

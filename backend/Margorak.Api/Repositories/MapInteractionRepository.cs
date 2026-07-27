@@ -1,4 +1,4 @@
-using Margorak.Api.Data;
+    using Margorak.Api.Data;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -29,5 +29,14 @@ namespace Margorak.Api.Repositories
 
             return teleporter;
         }
+
+        public async Task<ShopInteraction?> GetMapInteractionAsync(int mapInteractionId)
+        {
+            return await _db.ShopInteractions
+                .Include(x => x.ShopItems)
+            .FirstOrDefaultAsync(interaction => interaction.MapInteractionId == mapInteractionId);
+        }
+
+
     }
 }

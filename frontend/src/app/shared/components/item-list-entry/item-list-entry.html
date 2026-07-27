@@ -1,0 +1,15 @@
+<span class="item-list-entry__action">
+  <ng-content />
+</span>
+
+<button
+  class="item-list-entry__select"
+  type="button"
+  [class.is-selected]="selectedItemStats()?.id === item().id"
+  (click)="selectItem()"
+>
+  <span>{{ item().name }}</span>
+  @if (quantity() !== null) {
+  <span class="item-list-entry__quantity">&times; {{ quantity() }}</span>
+  }
+</button>

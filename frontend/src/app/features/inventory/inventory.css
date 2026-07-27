@@ -18,44 +18,44 @@
   list-style: none;
 }
 
-.inventory__list li {
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.inventory__item-button {
+.inventory__actions {
   display: flex;
-  justify-content: space-between;
-  flex: 1;
-  width: 100%;
-  gap: 1rem;
-  padding: 0.8rem 1rem;
-  color: inherit;
-  text-align: left;
-  background: transparent;
-  border: 1px solid #475569;
-  border-radius: 0.5rem;
-  cursor: pointer;
+  gap: 0.35rem;
 }
 
-.inventory__item-button:hover,
-.inventory__item-button.is-selected {
-  background: #1e293b;
-  border-color: #60a5fa;
-}
-
+.inventory__sell-button,
 .inventory__equip-button {
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  color: #dbeafe;
   font-weight: 700;
-  background: #1d4ed8;
-  border: 1px solid #3b82f6;
   border-radius: 0.5rem;
   cursor: pointer;
+}
+
+.inventory__sell-button {
+  color: #fef3c7;
+  background: #b45309;
+  border: 1px solid #f59e0b;
+}
+
+.inventory__sell-button:hover {
+  background: #d97706;
+  border-color: #fbbf24;
+}
+
+.inventory__sell-button:disabled {
+  color: #94a3b8;
+  background: #334155;
+  border-color: #475569;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.inventory__equip-button {
+  color: #dbeafe;
+  background: #1d4ed8;
+  border: 1px solid #3b82f6;
 }
 
 .inventory__equip-button:hover:not(:disabled) {
@@ -69,154 +69,6 @@
   border-color: #334155;
   cursor: not-allowed;
   opacity: 0.7;
-}
-
-.inventory__equip-space {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-}
-
-.inventory__quantity,
-.stat-card__category,
-.stat-card__description,
-.inventory__placeholder {
-  color: #94a3b8;
-}
-
-.inventory__details {
-  min-width: 0;
-}
-
-.stat-card,
-.inventory__placeholder {
-  box-sizing: border-box;
-  width: 100%;
-  height: clamp(24rem, 65vh, 36rem);
-  padding: 1.25rem;
-  overflow-y: auto;
-  scrollbar-width: none;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 0.75rem;
-}
-
-.stat-card::-webkit-scrollbar,
-.inventory__placeholder::-webkit-scrollbar {
-  display: none;
-}
-
-.stat-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #334155;
-}
-
-.stat-card h3,
-.stat-card h4,
-.stat-card p,
-.stat-card dl {
-  margin: 0;
-}
-
-.stat-card__category {
-  margin-bottom: 0.25rem !important;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.stat-card__slot {
-  padding: 0.25rem 0.55rem;
-  color: #bfdbfe;
-  font-size: 0.8rem;
-  background: #1e3a5f;
-  border-radius: 999px;
-}
-
-.stat-card__description {
-  max-width: 40ch;
-  margin-top: 1rem !important;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin-top: 1rem !important;
-}
-
-.stat-grid > div {
-  padding: 0.55rem 0.65rem;
-  background: #1e293b;
-  border-radius: 0.5rem;
-}
-
-.stat-grid dt,
-.stat-list dt {
-  color: #94a3b8;
-  font-size: 0.8rem;
-}
-
-.stat-grid dd {
-  margin: 0.1rem 0 0;
-  color: #f8fafc;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.stat-group {
-  margin-top: 1.25rem;
-}
-
-.stat-group h4 {
-  margin-bottom: 0.55rem;
-  color: #cbd5e1;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.stat-list > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid #1e293b;
-}
-
-.stat-list dd {
-  margin: 0;
-  font-weight: 600;
-}
-
-.stat-card__value {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.25rem;
-  padding: 0.85rem 0 0.75rem;
-  color: #fbbf24;
-  background: #0f172a;
-  border-top: 1px solid #78350f;
-}
-
-.stat-card__value strong {
-  font-size: 1.1rem;
-}
-
-.stat-list > div.requirement-not-met dt,
-.stat-list > div.requirement-not-met dd {
-  color: #ef4444;
 }
 
 @media (max-width: 700px) {

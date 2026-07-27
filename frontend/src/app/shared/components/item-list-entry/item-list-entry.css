@@ -1,0 +1,37 @@
+:host {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-list-entry__action {
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.item-list-entry__select {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.item-list-entry__select:hover,
+.item-list-entry__select.is-selected {
+  background: #1e293b;
+  border-color: #60a5fa;
+}
+
+.item-list-entry__quantity {
+  color: #94a3b8;
+}

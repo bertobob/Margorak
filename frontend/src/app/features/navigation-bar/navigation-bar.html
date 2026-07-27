@@ -53,6 +53,18 @@
       >
         Character
       </button>
+      @if(gameState.shopActive()){
+
+      <button
+        class="view-switch-button"
+        [class.active]="activeView() === 'shop'"
+        [disabled]="!gameState.activeCharacter() || !gameState.shopActive()"
+        type="button"
+        (click)="showShop()"
+      >
+        Shop
+      </button>
+      }
     </div>
 
     <button
@@ -74,10 +86,13 @@
     <app-inventory></app-inventory>
     } @else if (activeView() === 'character') {
     <app-character></app-character>
+    } @else if (activeView()=== 'shop'){
+    <app-shop></app-shop>
     }
   </main>
-
+  @if(activeView()==='map'){
   <footer class="interaction-bar" aria-label="Actions">
     <app-interaction-bar></app-interaction-bar>
   </footer>
+  }
 </section>

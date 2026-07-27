@@ -1,10 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { EquipmentSlot } from '../dto/equipment-panel.dto';
-import { GameStateService } from '../../../core/services/game-state.service';
-import { InventoryItemDto } from '../../../shared/dto/inventory-item.dto';
-import { ItemDto } from '../../../shared/dto/item.dto';
-import { createEmptyEquipmentStats } from '../equipment-stats/equipment-stats.factory';
-import { AggregatedEquipmentStats } from '../equipment-stats/equipment-stats.model';
+import { EquipmentSlot } from '../../features/equipment-panel/dto/equipment-panel.dto';
+import { GameStateService } from './game-state.service';
+import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
+import { ItemDto } from '../../shared/dto/item.dto';
+import { createEmptyEquipmentStats } from '../../features/equipment-panel/equipment-stats/equipment-stats.factory';
+import { AggregatedEquipmentStats } from '../../features/equipment-panel/equipment-stats/equipment-stats.model';
 
 const damageFields = {
   Physical: ['physicalMinDamage', 'physicalMaxDamage'],

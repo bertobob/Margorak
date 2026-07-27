@@ -22,7 +22,6 @@ export class PlayerMovementService {
     if (!this.isAccessible(nextPos.x, nextPos.y)) {
       return;
     }
-
     this.gameState.setPlayerPos(nextPos.x, nextPos.y);
 
     const terrainTypeId = map.tiles[nextPos.y][nextPos.x].terrainTypeId;
@@ -33,7 +32,6 @@ export class PlayerMovementService {
     );
 
     if (habitat) {
-      console.log('habitat found ', habitat);
     }
   }
 

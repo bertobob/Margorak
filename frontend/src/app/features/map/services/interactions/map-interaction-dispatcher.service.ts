@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { TeleporterInteractionHandler } from './teleporter-interaction-handler.service';
 import { MapInteractionDto } from '../../dto/map-interaction.dto';
-import { GameStateService } from '../../../../core/services/game-state.service';
+import { ShopInteractionHandlerService } from './shop-interaction-handler.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapInteractionDispatcherService {
-  private gameState = inject(GameStateService);
   private teleporterHandler = inject(TeleporterInteractionHandler);
+  private shopHandler = inject(ShopInteractionHandlerService);
 
-  private handlers = [this.teleporterHandler];
+  private handlers = [this.teleporterHandler, this.shopHandler];
 
   handle(interaction: MapInteractionDto): void {
     const handler = this.handlers.find((handler) => handler.type == interaction.type);

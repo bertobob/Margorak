@@ -6,5 +6,6 @@ namespace Margorak.Api.Interfaces
     {
         Task<ShopInteraction?> GetShopInteractionAsync(int id);
         Task<TeleporterInteraction?> GetTeleporterInteractionAsync(int id);
+        Task<ShopInteraction?> GetMapInteractionAsync(int mapInteractionId);
     }
 }

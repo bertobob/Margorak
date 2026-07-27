@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { EquipmentService } from '../services/equipment-service';
+import { EquipmentService } from '../../../core/services/equipment.service';
 
 @Component({
   selector: 'app-equipment-stats',

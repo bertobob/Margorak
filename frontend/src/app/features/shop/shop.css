@@ -1,0 +1,44 @@
+.shop__layout {
+  display: grid;
+  grid-template-columns: minmax(24rem, 1fr) 32rem;
+  gap: 1rem;
+  align-items: start;
+}
+
+.shop__list ul {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.shop__buy-button {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: #dcfce7;
+  font-weight: 700;
+  background: #15803d;
+  border: 1px solid #22c55e;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.shop__buy-button:hover {
+  background: #16a34a;
+  border-color: #4ade80;
+}
+
+.shop__buy-button:disabled {
+  color: #94a3b8;
+  background: #334155;
+  border-color: #475569;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 700px) {
+  .shop__layout {
+    grid-template-columns: 1fr;
+  }
+}

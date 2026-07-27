@@ -1,0 +1,21 @@
+<div class="shop__layout">
+  <div class="shop__list">
+    Wealth : {{wealth()}}
+    <ul>
+      @for (item of activeShop()?.shopItems; track item.id) {
+      <li app-item-list-entry [item]="item">
+        <button
+          [disabled]="!isAffordable(item)"
+          class="shop__buy-button"
+          type="button"
+          (click)="buy(item)"
+        >
+          {{ getBuyPrice(item) }}
+        </button>
+      </li>
+      }
+    </ul>
+  </div>
+
+  <app-item-details />
+</div>

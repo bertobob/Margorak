@@ -65,5 +65,6 @@ namespace Margorak.Api.Data
         public DbSet<TeleporterInteraction> TeleporterInteractions => Set<TeleporterInteraction>();
         public DbSet<Terrain> Terrains => Set<Terrain>();
         public DbSet<WeaponStat> WeaponStats => Set<WeaponStat>();
+        public DbSet<ShopItem> ShopItems => Set<ShopItem>();
     }
 }

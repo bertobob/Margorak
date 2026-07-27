@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { MapDto } from '../../features/map/dto/map.dto';
 import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
 import { CharacterDto } from '../../features/character/dto/character.dto';
@@ -10,6 +10,7 @@ import { LocationDto } from '../../features/character/dto/location.dto';
 import { EquippedItemDto } from '../../features/character/dto/equipped-item.dto';
 import { Observable } from 'rxjs';
 import { LoadCharacterDto } from '../../features/character/dto/load-character.dto';
+import { ShopDto } from '../../features/shop/dto/shop.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,8 @@ export class GameStateService {
   characters = signal<CharacterDto[]>([]);
   activeCharacter = signal<CharacterDto | null>(null);
   currentInventory = signal<InventoryItemDto[]>([]);
+  wealth = computed(() => this.activeCharacter()?.gold ?? 0);
+
   equipment = signal<Equipment>({
     Helmet: null,
     Chest: null,
@@ -35,6 +38,9 @@ export class GameStateService {
     Ring: null,
     Amulet: null,
   });
+  activeShop = signal<ShopDto | null>(null);
+  activeShopInteractionId = signal<number | null>(null);
+  shopActive = computed(() => this.activeShop() !== null);
 
   playerPos = signal<[number, number]>([30, 30]);
   combatantHabitats = signal<CombatantHabitatDto[]>([]);
@@ -49,6 +55,21 @@ export class GameStateService {
   });
 
   interactionText = computed(() => this.activeMapInteraction()?.description ?? '');
+
+  constructor() {
+    effect(() => {
+      const currentInteraction = this.activeMapInteraction();
+      const activeShopInteractionId = this.activeShopInteractionId();
+
+      if (
+        activeShopInteractionId !== null &&
+        (currentInteraction?.type !== 'shop' || currentInteraction.id !== activeShopInteractionId)
+      ) {
+        this.activeShop.set(null);
+        this.activeShopInteractionId.set(null);
+      }
+    });
+  }
 
   public saveCharacter(): Observable<void> | null {
     const activeCharacter = this.activeCharacter();
@@ -147,6 +168,7 @@ export class GameStateService {
     );
     this.setPlayerPos(character.locX, character.locY);
     this.setInventoryAndEquipment(loadedCharacter.inventoryItems, loadedCharacter.equippedItems);
+    this.activeShop.set(null);
   }
 
   setMaps(maps: MapDto[]): void {
@@ -177,5 +199,9 @@ export class GameStateService {
 
   addInventoryItem(inventoryItem: InventoryItemDto): void {
     this.currentInventory.update((items) => [...items, inventoryItem]);
+  }
+
+  loadShop(shopInteractionId: number) {
+    return this.apiService.loadShop(shopInteractionId);
   }
 }

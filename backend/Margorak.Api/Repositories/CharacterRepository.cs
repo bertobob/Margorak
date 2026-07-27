@@ -35,6 +35,12 @@ namespace Margorak.Api.Repositories
             return character;
         }
 
+        public async Task<Character?> GetCharacterForUpdateAsync(int characterId)
+        {
+            return await _db.Characters
+                .FirstOrDefaultAsync(character => character.Id == characterId);
+        }
+
 
         public async Task<bool> UpdateCharacterPositionAsync(int characterId, int mapId, int locX, int locY)
         {

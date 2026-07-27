@@ -12,6 +12,11 @@ import { CreateCharacterDto } from '../../features/character/dto/create-characte
 import { ItemDto } from '../../shared/dto/item.dto';
 import { SaveCharacterDto } from '../../features/character/dto/save-character.dto';
 import { LoadCharacterDto } from '../../features/character/dto/load-character.dto';
+import {
+  ShopDto,
+  TradeItemRequestDto,
+  TradeItemResponseDto,
+} from '../../features/shop/dto/shop.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -56,8 +61,25 @@ export class ApiService {
       `${this.apiBaseUrl}/api/maps/${mapId}/combatant-habitats`
     );
   }
-
   getItemById(itemId: number) {
     return this.http.get<ItemDto>(`${this.apiBaseUrl}/api/items/${itemId}`);
+  }
+
+  loadShop(shopInteractionId: number) {
+    return this.http.get<ShopDto>(`${this.apiBaseUrl}/api/shops/${shopInteractionId}`);
+  }
+
+  buy(item: TradeItemRequestDto, shopInteractionId: number) {
+    return this.http.post<TradeItemResponseDto>(
+      `${this.apiBaseUrl}/api/shops/${shopInteractionId}/buy`,
+      item
+    );
+  }
+
+  sell(item: TradeItemRequestDto, shopInteractionId: number) {
+    return this.http.post<TradeItemResponseDto>(
+      `${this.apiBaseUrl}/api/shops/${shopInteractionId}/sell`,
+      item
+    );
   }
 }
