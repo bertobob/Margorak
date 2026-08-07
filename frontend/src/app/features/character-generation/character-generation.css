@@ -15,16 +15,16 @@
 .character-generation select {
   min-height: 40px;
   padding: 0 10px;
-  border: 1px solid #4a4a4a;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #202020;
-  color: #f2f2f2;
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
 }
 
 .field-error,
 .form-error {
-  color: #e39090;
+  color: var(--color-danger);
 }
 
 .form-error {
@@ -34,17 +34,4 @@
 .create-button {
   min-height: 42px;
   margin-top: 14px;
-  border: 1px solid #666;
-  border-radius: 6px;
-  background: #343434;
-  color: #fff;
-  font: inherit;
-  cursor: pointer;
-}
-
-.create-button:disabled {
-  border-color: #303030;
-  background: #191919;
-  color: #666;
-  cursor: not-allowed;
 }

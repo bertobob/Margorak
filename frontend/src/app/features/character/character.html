@@ -1,1 +1,83 @@
-<p>character works!</p>
+<section class="character">
+  @if (editedCharacter(); as edited) {
+  <div class="character__overview">
+    <p>{{ edited.name }}, the {{edited.characterRace.name}} {{edited.characterClass.name}}</p>
+    <p>Level: {{ edited.level }}</p>
+    <p>Experience: {{ edited.experience }}</p>
+  </div>
+
+  <div class="character__stats">
+    {{edited.statusPoints}} Statuspoints available
+
+    <div class="character__stat-row">
+      <span>Dexterity</span>
+      <span>{{edited.dexterity}}</span>
+      <button
+        type="button"
+        class="button button--primary character__stat-add-button"
+        [disabled]="!hasAvailableStatPoints()"
+        (click)="increaseStat('dexterity')"
+      >
+        +
+      </button>
+    </div>
+    <div class="character__stat-row">
+      <span>Strength</span>
+      <span>{{edited.strength}}</span>
+      <button
+        type="button"
+        class="button button--primary character__stat-add-button"
+        [disabled]="!hasAvailableStatPoints()"
+        (click)="increaseStat('strength')"
+      >
+        +
+      </button>
+    </div>
+    <div class="character__stat-row">
+      <span>Intelligence</span>
+      <span>{{edited.intelligence}}</span>
+      <button
+        type="button"
+        class="button button--primary character__stat-add-button"
+        [disabled]="!hasAvailableStatPoints()"
+        (click)="increaseStat('intelligence')"
+      >
+        +
+      </button>
+    </div>
+    <div class="character__stat-row">
+      <span>Vitality</span>
+      <span>{{edited.vitality}}</span>
+      <button
+        type="button"
+        class="button button--primary character__stat-add-button"
+        [disabled]="!hasAvailableStatPoints()"
+        (click)="increaseStat('vitality')"
+      >
+        +
+      </button>
+    </div>
+    <div class="character__stat-actions">
+      <button
+        type="button"
+        class="button button--success"
+        [disabled]="!characterEdited()"
+        (click)="saveChanges()"
+      >
+        Save
+      </button>
+      <button
+        type="button"
+        class="button button--danger"
+        [disabled]="!characterEdited()"
+        (click)="resetChanges()"
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+
+  } @else {
+  <p>No character selected.</p>
+  }
+</section>

@@ -10,8 +10,8 @@
   min-height: 0;
   padding: 16px;
   overflow: auto;
-  background: #202020;
-  border-right: 1px solid #353535;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
 }
 
 .panel-header h2 {
@@ -37,8 +37,8 @@
   width: 32px;
   height: 32px;
   padding: 5px;
-  background: #181818;
-  border: 1px solid #4b4332;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
 }
 
@@ -47,8 +47,8 @@
   align-items: center;
   min-height: 36px;
   padding: 0 8px;
-  background: #181818;
-  border: 1px solid #3e3e3e;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   color: inherit;
   text-align: left;
@@ -62,15 +62,6 @@
 .equipment-unequip-button {
   min-height: 32px;
   padding: 0 8px;
-  color: #ddd;
-  background: #2b2b2b;
-  border: 1px solid #4a4a4a;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.equipment-unequip-button:hover:not(:disabled) {
-  background: #383838;
 }
 
 .equipment-unequip-button:disabled {
@@ -81,7 +72,7 @@
 @media (max-width: 760px) {
   .equipment-panel {
     border-right: 0;
-    border-bottom: 1px solid #353535;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .equipment-slots {

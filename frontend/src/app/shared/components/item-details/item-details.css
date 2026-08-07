@@ -6,7 +6,7 @@
 .stat-card__category,
 .stat-card__description,
 .inventory__placeholder {
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 .inventory__details {
@@ -21,8 +21,8 @@
   padding: 1.25rem;
   overflow-y: auto;
   scrollbar-width: none;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
 }
 
@@ -37,7 +37,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .stat-card h3,
@@ -56,9 +56,9 @@
 
 .stat-card__slot {
   padding: 0.25rem 0.55rem;
-  color: #bfdbfe;
+  color: var(--color-text);
   font-size: 0.8rem;
-  background: #1e3a5f;
+  background: var(--color-primary);
   border-radius: 999px;
 }
 
@@ -78,19 +78,19 @@
 
 .stat-grid > div {
   padding: 0.55rem 0.65rem;
-  background: #1e293b;
+  background: var(--color-surface);
   border-radius: 0.5rem;
 }
 
 .stat-grid dt,
 .stat-list dt {
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-size: 0.8rem;
 }
 
 .stat-grid dd {
   margin: 0.1rem 0 0;
-  color: #f8fafc;
+  color: var(--color-text);
   font-size: 1rem;
   font-weight: 700;
 }
@@ -101,7 +101,7 @@
 
 .stat-group h4 {
   margin-bottom: 0.55rem;
-  color: #cbd5e1;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -112,7 +112,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.45rem 0;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .stat-list dd {
@@ -129,9 +129,9 @@
   gap: 1rem;
   margin-top: 1.25rem;
   padding: 0.85rem 0 0.75rem;
-  color: #fbbf24;
-  background: #0f172a;
-  border-top: 1px solid #78350f;
+  color: var(--color-gold);
+  background: var(--color-background);
+  border-top: 1px solid var(--color-warning);
 }
 
 .stat-card__value strong {
@@ -140,5 +140,5 @@
 
 .stat-list > div.requirement-not-met dt,
 .stat-list > div.requirement-not-met dd {
-  color: #ef4444;
+  color: var(--color-danger);
 }

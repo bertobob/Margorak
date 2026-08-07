@@ -21,17 +21,17 @@
   color: inherit;
   text-align: left;
   background: transparent;
-  border: 1px solid #475569;
+  border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   cursor: pointer;
 }
 
 .item-list-entry__select:hover,
 .item-list-entry__select.is-selected {
-  background: #1e293b;
-  border-color: #60a5fa;
+  background: var(--color-surface-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .item-list-entry__quantity {
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }

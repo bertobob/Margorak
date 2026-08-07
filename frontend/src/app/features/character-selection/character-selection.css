@@ -7,7 +7,7 @@
 
 .character-selection {
   padding-right: 32px;
-  border-right: 1px solid #3a3a3a;
+  border-right: 1px solid var(--color-border);
 }
 
 .character-selection h2 {
@@ -24,18 +24,18 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px 16px;
-  border: 1px solid #4a4a4a;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #202020;
-  color: #d8d8d8;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   font: inherit;
   cursor: pointer;
 }
 
 .character-option.active {
-  border-color: #888;
-  background: #343434;
-  color: #fff;
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
 }
 
 @media (max-width: 760px) {
@@ -47,6 +47,6 @@
     padding-right: 0;
     padding-bottom: 28px;
     border-right: 0;
-    border-bottom: 1px solid #3a3a3a;
+    border-bottom: 1px solid var(--color-border);
   }
 }

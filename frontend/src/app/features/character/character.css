@@ -1,0 +1,36 @@
+.character {
+  width: 100%;
+  height: 100%;
+}
+
+.character__overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.character__stats {
+  display: grid;
+  gap: 0.5rem;
+}
+.character__stat-row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 10rem 2rem 2rem;
+}
+
+.character__stat-add-button {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-size: 1.25rem;
+}
+
+.character__stat-actions {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}

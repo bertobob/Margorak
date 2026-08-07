@@ -11,7 +11,7 @@
           <div class="inventory__actions">
             @if (shopActive()) {
             <button
-              class="inventory__sell-button"
+              class="button button--gold button--square"
               type="button"
               [disabled]="!canSell()"
               [attr.title]="'Sell ' + item.item.name"
@@ -22,7 +22,7 @@
             </button>
             } @if (item.item.itemCategory.equipSlot) {
             <button
-              class="inventory__equip-button"
+              class="button button--primary button--square"
               type="button"
               [disabled]="!isAllRequirementsMet(item.item.itemRequirements)"
               [attr.title]="

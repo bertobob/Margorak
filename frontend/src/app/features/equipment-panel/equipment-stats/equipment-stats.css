@@ -1,7 +1,7 @@
 .equipment-stats {
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid #3e3e3e;
+  border-top: 1px solid var(--color-border);
 }
 
 .equipment-stats dl {
@@ -21,7 +21,7 @@
 }
 
 .equipment-stats dt {
-  color: #aaa;
+  color: var(--color-text-muted);
 }
 
 .equipment-stats dd {

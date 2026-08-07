@@ -41,3 +41,5 @@ export interface CharacterClassDto {
   id: number;
   name: string;
 }
+
+export type CharacterStat = 'dexterity' | 'strength' | 'intelligence' | 'vitality';

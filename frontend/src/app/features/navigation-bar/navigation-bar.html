@@ -16,7 +16,7 @@
   <nav class="view-switch" aria-label="Switch view">
     <div class="view-switch-buttons">
       <button
-        class="view-switch-button"
+        class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'character-selection'"
         type="button"
         (click)="showCharacterSelection()"
@@ -25,7 +25,7 @@
       </button>
 
       <button
-        class="view-switch-button"
+        class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'map'"
         [disabled]="!gameState.activeCharacter()"
         type="button"
@@ -35,7 +35,7 @@
       </button>
 
       <button
-        class="view-switch-button"
+        class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'inventory'"
         [disabled]="!gameState.activeCharacter()"
         type="button"
@@ -45,7 +45,7 @@
       </button>
 
       <button
-        class="view-switch-button"
+        class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'character'"
         [disabled]="!gameState.activeCharacter()"
         type="button"
@@ -56,7 +56,7 @@
       @if(gameState.shopActive()){
 
       <button
-        class="view-switch-button"
+        class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'shop'"
         [disabled]="!gameState.activeCharacter() || !gameState.shopActive()"
         type="button"
@@ -68,7 +68,7 @@
     </div>
 
     <button
-      class="save-character-button"
+      class="button button--success save-character-button"
       [disabled]="!gameState.activeCharacter()"
       type="button"
       (click)="gameState.saveCharacter()"

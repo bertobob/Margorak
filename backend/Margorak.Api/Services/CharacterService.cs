@@ -94,7 +94,8 @@ namespace Margorak.Api.Services
                 Gold = 1000,
                 LocX = 3,
                 LocY =31,
-                CurrentMapId =1
+                CurrentMapId =1,
+                StatusPoints=10
             };
 
             await _characterRepository.SaveNewCharacterAsync(character);

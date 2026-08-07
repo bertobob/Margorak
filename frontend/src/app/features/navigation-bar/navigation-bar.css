@@ -21,50 +21,19 @@
 
 .view-switch-button {
   min-width: 110px;
-  min-height: 36px;
-  border: 1px solid #4a4a4a;
-  border-radius: 6px;
-  background: #202020;
-  color: #d8d8d8;
-  font: inherit;
-  cursor: pointer;
+  color: var(--color-text-muted);
 }
 
 .view-switch-button.active {
-  border-color: #777;
-  background: #343434;
-  color: #fff;
-}
-
-.view-switch-button:disabled {
-  border-color: #303030;
-  background: #191919;
-  color: #666;
-  cursor: not-allowed;
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
 }
 
 .save-character-button {
   grid-column: 3;
   justify-self: end;
   min-width: 90px;
-  min-height: 36px;
-  border: 1px solid #5f795f;
-  border-radius: 6px;
-  background: #263b29;
-  color: #e3f0e3;
-  font: inherit;
-  cursor: pointer;
-}
-
-.save-character-button:hover:not(:disabled) {
-  background: #315036;
-}
-
-.save-character-button:disabled {
-  border-color: #303030;
-  background: #191919;
-  color: #666;
-  cursor: not-allowed;
 }
 
 .main-panel {

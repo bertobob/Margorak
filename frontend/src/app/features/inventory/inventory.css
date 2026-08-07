@@ -23,54 +23,6 @@
   gap: 0.35rem;
 }
 
-.inventory__sell-button,
-.inventory__equip-button {
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  font-weight: 700;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-
-.inventory__sell-button {
-  color: #fef3c7;
-  background: #b45309;
-  border: 1px solid #f59e0b;
-}
-
-.inventory__sell-button:hover {
-  background: #d97706;
-  border-color: #fbbf24;
-}
-
-.inventory__sell-button:disabled {
-  color: #94a3b8;
-  background: #334155;
-  border-color: #475569;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.inventory__equip-button {
-  color: #dbeafe;
-  background: #1d4ed8;
-  border: 1px solid #3b82f6;
-}
-
-.inventory__equip-button:hover:not(:disabled) {
-  background: #2563eb;
-  border-color: #60a5fa;
-}
-
-.inventory__equip-button:disabled {
-  color: #64748b;
-  background: #1e293b;
-  border-color: #334155;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 @media (max-width: 700px) {
   .inventory__layout {
     grid-template-columns: 1fr;

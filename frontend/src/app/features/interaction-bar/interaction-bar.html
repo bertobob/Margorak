@@ -1,5 +1,9 @@
 @if (interactionText() !== '') {
-<button id="interaction" class="interaction-action" (click)="handleInteractionClick()">
+<button
+  id="interaction"
+  class="button button--neutral interaction-action"
+  (click)="handleInteractionClick()"
+>
   {{ interactionText() }}
 </button>
 }
