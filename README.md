@@ -34,6 +34,19 @@ DTOs define the API boundary between frontend and backend. Services contain game
 
 The frontend uses Angular Signals for shared game state and dedicated handlers for different map interaction types.
 
+## Project Scope
+
+Margorak is currently designed as a local single-player prototype.
+
+The API does not implement user accounts, authentication, or character ownership.
+Character IDs are therefore treated as local game state rather than protected
+user data.
+
+The application is intended to run locally with a local SQLite database and
+should not be exposed as a public production service in its current state.
+Authentication and authorization would be required before supporting multiple
+users or a public deployment.
+
 ## Project Structure
 
     backend/
@@ -45,6 +58,13 @@ The frontend uses Angular Signals for shared game state and dedicated handlers f
         core/
         features/
         shared/
+
+## Development
+
+AI-assisted tools were used during development, primarily for CSS styling,
+HTML templates, code review, and refactoring. Architecture, feature design,
+integration, and final implementation decisions were made and validated by
+the project author.
 
 ## Run Locally
 
