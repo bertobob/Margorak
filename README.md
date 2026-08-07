@@ -1,41 +1,77 @@
 
-<img width="725" height="607" alt="grafik" src="https://github.com/user-attachments/assets/d41cb220-74b7-43af-a18b-8645173ba7ee" />
-<img width="1038" height="719" alt="grafik" src="https://github.com/user-attachments/assets/eb2536a9-9ef4-48ce-bc58-e83a8618f4bc" />
-
-
 # Margorak
 
-Work-in-progress browser game built with ASP.NET Core, EF Core, SQLite and Angular.
+Margorak is a work-in-progress browser RPG built with ASP.NET Core, Entity Framework Core, SQLite, and Angular.
+| World Map  | Character and Inventory |
+|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/82c5ff2a-32f3-4f47-96f6-15503017163e" alt="Character and inventory view" width="400"> | <img src="https://github.com/user-attachments/assets/b2c908cd-3d3d-4881-85e0-a0901ac58cac" alt="World map view" width="400"> |
 
-## Current Features
-- Tile-based map rendering
-- Player movement
-- Character Creation
-- Backend-driven map data
-- DTO-based API communication
-- Enemy encounter registration
-- Repository/service structure
+
+
+## Features
+
+- Tile-based map exploration and movement
+- Character creation, saving, and loading
+- Inventory with item quantities and requirements
+- Equipment management and aggregated stats
+- Teleporter and shop interactions
+- Buying and selling items
+- Persistent character position, gold, inventory, and equipment
 
 ## Tech Stack
-- Backend: ASP.NET Core, EF Core, SQLite
-- Frontend: Angular, TypeScript
 
-## How to run
+- Backend: .NET 8, ASP.NET Core, Entity Framework Core, SQLite
+- Frontend: Angular, TypeScript, Angular Signals, RxJS
+- Tests: MSTest and Vitest
+
+## Architecture
+
+The application uses a layered structure:
+
+Angular UI → API Controllers → Application Services → Repositories and Unit of Work → Entity Framework Core / SQLite
+
+DTOs define the API boundary between frontend and backend. Services contain gameplay workflows, while repositories hide persistence details.
+
+The frontend uses Angular Signals for shared game state and dedicated handlers for different map interaction types.
+
+## Project Structure
+
+    backend/
+      Margorak.Api/
+      Margorak.Api.Tests/
+
+    frontend/
+      src/app/
+        core/
+        features/
+        shared/
+
+## Run Locally
 
 ### Backend
 
-```bash
-cd backend
-dotnet restore
-dotnet run
-```
+    cd backend
+    dotnet restore
+    dotnet run --project Margorak.Api
 
 ### Frontend
 
-```bash
-cd frontend
-npm install
-ng serve
-```
+    cd frontend
+    npm install
+    npm start
+
+The frontend is available at `http://localhost:4200`.
+
+## Planned Features
+
+- Combat system
+- Experience and level progression
+- Loot and consumable items
+- Additional maps and interactions
+- Expanded automated tests
+
+## Status
+
+Margorak is under active development.
 
 
