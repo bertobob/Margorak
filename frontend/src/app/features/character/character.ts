@@ -41,6 +41,7 @@ export class Character {
     const editedCharacter = this.editedCharacter();
     this.character.set(editedCharacter ? { ...editedCharacter } : null);
     this.characterEdited.set(false);
+    this.gameState.saveCharacter()?.subscribe();
   }
 
   resetChanges(): void {

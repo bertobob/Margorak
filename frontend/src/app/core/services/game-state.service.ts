@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { MapDto } from '../../features/map/dto/map.dto';
 import { CombatantHabitatDto } from '../../shared/dto/combatant-habitat.dto';
-import { CharacterDto } from '../../features/character/dto/character.dto';
+import { CharacterDto, CharacterStatsDto } from '../../features/character/dto/character.dto';
 import { InventoryItemDto } from '../../shared/dto/inventory-item.dto';
 import { ApiService } from './api-service';
 import { Equipment, EquipmentSlot } from '../../features/equipment-panel/dto/equipment-panel.dto';
@@ -98,10 +98,20 @@ export class GameStateService {
       }
     });
 
+    const characterStats: CharacterStatsDto = {
+      strength: activeCharacter.strength,
+      dexterity: activeCharacter.dexterity,
+      intelligence: activeCharacter.intelligence,
+      vitality: activeCharacter.vitality,
+      statusPoints: activeCharacter.statusPoints,
+      currentHp: activeCharacter.currentHp,
+    };
+
     const character: SaveCharacterDto = {
       location: location,
       inventoryItems: this.currentInventory(),
       equippedItems: equippedItems,
+      characterStats: characterStats,
     };
     return this.apiService.saveCharacter(activeCharacter.id, character);
   }
