@@ -11,17 +11,20 @@ namespace Margorak.Api.Services
         private readonly IMapRepository _mapRepository;
         private readonly IStartingItemService _startingItemService;
         private readonly IItemRepository _itemRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CharacterService(
             ICharacterRepository characterRepository,
             IMapRepository mapRepository,
             IStartingItemService startingItemService,
-            IItemRepository itemRepository)
+            IItemRepository itemRepository,
+            IUnitOfWork unitOfWork)
         {
             _characterRepository = characterRepository;
             _mapRepository = mapRepository;
             _startingItemService = startingItemService;
             _itemRepository = itemRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<CharacterDto>> GetAllCharactersAsync()
@@ -98,7 +101,8 @@ namespace Margorak.Api.Services
                 StatusPoints=10
             };
 
-            await _characterRepository.SaveNewCharacterAsync(character);
+            await _characterRepository.AddCharacterAsync(character);
+            await _unitOfWork.SaveChangesAsync();
 
             return character;
         }
@@ -137,10 +141,37 @@ namespace Margorak.Api.Services
         public async Task SaveCharacterAsync(int characterId,SaveCharacterDto request)
         {
             await UpdateCharacterPositionAsync(characterId,request.Location);
-            await SaveEquipmentAsync(characterId, request.EquippedItems);
+            await ReplaceEquipmentAsync(characterId, request.EquippedItems);
+            await UpdateCharacterStatsAsync(characterId, request.CharacterStats);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        private async Task SaveEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
+        private async Task UpdateCharacterStatsAsync(int characterId, CharacterStatsDto characterStats)
+        {
+            var character =await _characterRepository.GetCharacterForUpdateAsync(characterId);
+
+            var oldSummedStatpoints = character?.StatusPoints
+                + character?.Dexterity
+                + character?.Intelligence
+                + character?.Vitality
+                + character?.Strength;
+            var newSummedStatPoints = characterStats?.StatusPoints
+                + characterStats?.Dexterity
+                + characterStats?.Intelligence
+                + characterStats?.Vitality
+                + characterStats?.Strength;
+
+            if(oldSummedStatpoints != newSummedStatPoints)
+            {
+                throw new InvalidOperationException(
+                    "The sum of old and new Statpoints is invalid");
+            }
+
+            await _characterRepository.UpdateCharacterStatsAsync(characterId,characterStats!);
+
+        }
+
+        private async Task ReplaceEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
         {
             var ownedItemIds = equippedItems.Select(item => item.OwnedItemId);
             var ownedItems = await _itemRepository.GetOwnedItemsByIdsAsync(characterId, ownedItemIds);
@@ -170,7 +201,7 @@ namespace Margorak.Api.Services
                 throw new InvalidOperationException("Equippement Configuration not valid");
             }
 
-            await _itemRepository.SaveEquipmentAsync(characterId, equippedItems);
+            await _itemRepository.ReplaceEquipmentAsync(characterId, equippedItems);
         }
 
         private async Task UpdateCharacterPositionAsync(int characterId, LocationDto location)

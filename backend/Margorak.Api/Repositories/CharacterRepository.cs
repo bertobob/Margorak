@@ -54,8 +54,6 @@ namespace Margorak.Api.Repositories
             character.LocX = locX;
             character.LocY = locY;
 
-            await _db.SaveChangesAsync();
-
             return true;
         }
 
@@ -97,11 +95,25 @@ namespace Margorak.Api.Repositories
                 .FindAsync(classId);
         }
 
-        public async Task SaveNewCharacterAsync(Character character)
+        public async Task AddCharacterAsync(Character character)
         {
             await _db.Characters.AddAsync(character);
-            await _db.SaveChangesAsync();
         }
 
+        public async Task UpdateCharacterStatsAsync(int characterId, CharacterStatsDto characterStats)
+        {
+            var character =  await _db.Characters
+                .Where(character => character.Id == characterId)
+                .FirstOrDefaultAsync();
+
+            character!.Dexterity = characterStats.Dexterity;
+            character!.Intelligence = characterStats.Intelligence;
+            character!.Strength = characterStats.Strength;
+            character!.Vitality = characterStats.Vitality;
+            character!.StatusPoints = characterStats.StatusPoints;
+            character!.CurrentHp = characterStats.CurrentHp;
+            character!.CurrentMp = characterStats.CurrentMp;
+
+        }
     }
 }

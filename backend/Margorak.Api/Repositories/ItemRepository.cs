@@ -100,7 +100,7 @@ namespace Margorak.Api.Repositories
                 .ToListAsync();
         }
 
-        public async Task SaveEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
+        public async Task ReplaceEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
         {
             var currentEquipment = await _db.CharacterEquipment
                 .Where(equipment => equipment.CharacterId == characterId)
@@ -117,8 +117,6 @@ namespace Margorak.Api.Repositories
                 });
 
             _db.CharacterEquipment.AddRange(newEquipment);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

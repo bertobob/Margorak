@@ -5,5 +5,6 @@
         public LocationDto Location { get; set; } = null!;
         public EquippedItemDto[] EquippedItems { get; set; } = [];
         public InventoryItemDto[] InventoryItems { get; set; } = [];
+        public CharacterStatsDto CharacterStats { get; set; } = null!;
     }
 }

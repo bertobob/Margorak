@@ -18,6 +18,7 @@ namespace Margorak.Api.Tests.Services
         private Mock<IMapRepository> _mapRepositoryMock = null!;
         private Mock<IStartingItemService> _startingItemServiceMock = null!;
         private Mock<IItemRepository> _itemRepositoryMock = null!;
+        private Mock<IUnitOfWork> _unitOfWorkMock = null!;
         private CharacterService _characterService = null! ;
 
 
@@ -28,11 +29,13 @@ namespace Margorak.Api.Tests.Services
             _mapRepositoryMock = new Mock<IMapRepository>();
             _startingItemServiceMock = new Mock<IStartingItemService>();
             _itemRepositoryMock = new Mock<IItemRepository>();
+            _unitOfWorkMock = new Mock<IUnitOfWork>();
             _characterService = new CharacterService(
                 _characterRepositoryMock.Object,
                 _mapRepositoryMock.Object,
                 _startingItemServiceMock.Object,
-                _itemRepositoryMock.Object);
+                _itemRepositoryMock.Object,
+                _unitOfWorkMock.Object);
 
         }
 
@@ -80,7 +83,7 @@ namespace Margorak.Api.Tests.Services
             Assert.AreEqual(2,result.CharacterRaceId,"CharacterRaceId missmatch");
 
             _characterRepositoryMock.Verify(
-                repository => repository.SaveNewCharacterAsync(result),
+                repository => repository.AddCharacterAsync(result),
                 Times.Once);
 
 
@@ -115,7 +118,7 @@ namespace Margorak.Api.Tests.Services
 
             // Assert
             _characterRepositoryMock.Verify(
-                repository => repository.SaveNewCharacterAsync(
+                repository => repository.AddCharacterAsync(
                     It.IsAny<Character>()),
                 Times.Never);
         }
@@ -141,7 +144,7 @@ namespace Margorak.Api.Tests.Services
 
             // Assert
             _characterRepositoryMock.Verify(
-                repository => repository.SaveNewCharacterAsync(
+                repository => repository.AddCharacterAsync(
                     It.IsAny<Character>()),
                 Times.Never);
         }
