@@ -11,6 +11,8 @@
         public int Weight { get; set; }
         public int AttackRating { get; set; }
         public ICollection<ItemDamage> ItemDamages { get; set; } = [];
+        public ICollection<ItemEffect> ItemEffects { get; set; } = [];
+        public ICollection<ItemStatusEffect> ItemStatusEffects { get; set; } = [];
         public ICollection<ItemRequirement> ItemRequirements{ get; set; } = [];
         public ICollection<ItemResistance> ItemResistances{ get; set; } = [];
         public ICollection<CombatantLoot> CombatantLoots { get; set; } = [];

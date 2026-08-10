@@ -31,6 +31,8 @@ namespace Margorak.Api.Data
         public DbSet<ArmorStat> ArmorStats => Set<ArmorStat>();
         public DbSet<Attack> Attacks => Set<Attack>();
         public DbSet<AttackDamage> AttackDamages => Set<AttackDamage>();
+        public DbSet<AttackEffect> AttackEffects => Set<AttackEffect>();
+        public DbSet<AttackStatusEffect> AttackStatusEffects => Set<AttackStatusEffect>();
         public DbSet<BonusType> BonusTypes => Set<BonusType>();
         public DbSet<Character> Characters => Set<Character>();
         public DbSet<CharacterClass> CharacterClasses => Set<CharacterClass>();
@@ -51,6 +53,8 @@ namespace Margorak.Api.Data
         public DbSet<ItemBonus> ItemBonuses => Set<ItemBonus>();
         public DbSet<ItemCategory> ItemCategories => Set<ItemCategory>();
         public DbSet<ItemDamage> ItemDamages => Set<ItemDamage>();
+        public DbSet<ItemEffect> ItemEffects => Set<ItemEffect>();
+        public DbSet<ItemStatusEffect> ItemStatusEffects => Set<ItemStatusEffect>();
         public DbSet<ItemRequirement> ItemRequirements => Set<ItemRequirement>();
         public DbSet<ItemResistance> ItemResistances => Set<ItemResistance>();
         public DbSet<Level> Levels => Set<Level>();
@@ -66,5 +70,9 @@ namespace Margorak.Api.Data
         public DbSet<Terrain> Terrains => Set<Terrain>();
         public DbSet<WeaponStat> WeaponStats => Set<WeaponStat>();
         public DbSet<ShopItem> ShopItems => Set<ShopItem>();
+        public DbSet<ActiveCombat> ActiveCombats => Set<ActiveCombat>();
+        public DbSet<ActiveCombatStatusEffect> ActiveCombatStatusEffects => Set<ActiveCombatStatusEffect>();
+        public DbSet<StatusEffect> StatusEffects => Set<StatusEffect>();
+        public DbSet<ActiveCombatCombatant> ActiveCombatCombatants  =>Set<ActiveCombatCombatant>();
     }
 }

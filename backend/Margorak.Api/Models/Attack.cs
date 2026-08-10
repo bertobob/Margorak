@@ -10,6 +10,8 @@
         public int AttackRange {  get; set; }
 
         public ICollection<AttackDamage> AttackDamages { get; set; } = [];
+        public ICollection<AttackEffect> AttackEffects { get; set; } = [];
+        public ICollection<AttackStatusEffect> AttackStatusEffects { get; set; } = [];
         public ICollection<CombatantAttack> CombatantAttacks { get; set; } = [];
     }
 }

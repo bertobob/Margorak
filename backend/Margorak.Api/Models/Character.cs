@@ -40,5 +40,6 @@
 
         public ICollection<OwnedItem> OwnedItems { get; set; } = [];
         public ICollection<CharacterEquipment> CharacterEquipment { get; set; } = [];
+        public ActiveCombat? ActiveCombat { get; set; }
     }
 }

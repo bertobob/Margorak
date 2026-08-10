@@ -15,5 +15,6 @@
         public ICollection<CombatantHabitat> CombatantHabitats { get; set; } = [];
         public ICollection<CombatantLoot> CombatantLoots{ get; set; } = []; 
         public ICollection<CombatantResistance> CombatantResistances { get; set; } = [];
+        public ICollection<ActiveCombatCombatant> ActiveCombatCombatants { get; set; } = [];
     }
 }
