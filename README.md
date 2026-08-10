@@ -34,6 +34,8 @@ DTOs define the API boundary between frontend and backend. Services contain game
 
 The frontend uses Angular Signals for shared game state and dedicated handlers for different map interaction types.
 
+The repository currently includes a pre-populated SQLite demo database.
+
 ## Project Scope
 
 Margorak is currently designed as a local single-player prototype.
