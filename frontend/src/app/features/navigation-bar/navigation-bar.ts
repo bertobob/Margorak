@@ -6,22 +6,34 @@ import { Character } from '../character/character';
 import { CharacterSelection } from '../character-selection/character-selection';
 import { GameStateService } from '../../core/services/game-state.service';
 import { Shop } from '../shop/shop';
+import { Combat } from '../combat/combat';
 
 @Component({
   selector: 'app-navigation-bar',
-  imports: [InteractionBar, Inventory, Map, Character, CharacterSelection, Shop],
+  imports: [InteractionBar, Inventory, Map, Character, CharacterSelection, Shop, Combat],
   templateUrl: './navigation-bar.html',
   styleUrl: './navigation-bar.css',
 })
 export class NavigationBar {
   protected readonly gameState = inject(GameStateService);
-  protected shopActive = this.gameState.shopActive;
-  protected activeView = signal<'character-selection' | 'map' | 'inventory' | 'character' | 'shop'>(
-    'character-selection'
-  );
+  protected activeView = signal<
+    'character-selection' | 'map' | 'inventory' | 'character' | 'shop' | 'combat'
+  >('character-selection');
 
   constructor() {
     effect(() => {
+      const activeCombat = this.gameState.activeCombat();
+
+      if (activeCombat !== null) {
+        this.activeView.set('combat');
+        return;
+      }
+
+      if (this.activeView() === 'combat') {
+        this.activeView.set('map');
+        return;
+      }
+
       if (this.gameState.activeShop()) {
         this.activeView.set('shop');
       }

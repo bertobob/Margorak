@@ -18,6 +18,7 @@ namespace Margorak.Api.Repositories
         {
             return await _db.CombatantHabitats
                 .Include(ch => ch.TerrainType)
+                .Include(ch => ch.Combatant)
                 .AsNoTracking()
                 .Where(ch => ch.MapId == mapId)
                 .ToListAsync();

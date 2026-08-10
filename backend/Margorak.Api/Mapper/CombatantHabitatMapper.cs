@@ -6,11 +6,12 @@ namespace Margorak.Api.Mapper
     public static class CombatantHabitatMapper
     {
         public static CombatantHabitatDto ToDto(CombatantHabitat combatantHabitat)
-        {            
+        {
             var habitatTerrainTypeId = combatantHabitat.TerrainTypeId;
             return new CombatantHabitatDto
             {
                 CombatantId = combatantHabitat.CombatantId,
+                CombatantName = combatantHabitat.Combatant.Name,
                 TerrainTypeId = habitatTerrainTypeId,
                 LocX1=combatantHabitat.LocX1,
                 LocX2=combatantHabitat.LocX2,

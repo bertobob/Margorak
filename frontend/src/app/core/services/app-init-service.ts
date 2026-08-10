@@ -35,26 +35,9 @@ export class AppInitService {
     this.apiService.getMapData().subscribe({
       next: (maps) => {
         this.gameState.setMaps(maps);
-        this.loadCombatantHabitats();
       },
       error: (error: HttpErrorResponse) => {
         this.gameState.setErrorMessage('couldnt load map data' + error);
-      },
-    });
-  }
-
-  private loadCombatantHabitats(): void {
-    const currentMap = this.gameState.currentMap();
-
-    if (!currentMap) {
-      return;
-    }
-    this.apiService.getCombatantHabitatsByMapId(currentMap.id).subscribe({
-      next: (combatHabitats) => {
-        this.gameState.setCombatantHabitats(combatHabitats);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.gameState.setErrorMessage('couldnt load combatantHabitats ' + error);
       },
     });
   }

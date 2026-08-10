@@ -9,6 +9,9 @@ export interface ShopInteractionDto extends BaseInteractionDto {
   shopName: string;
 }
 
+export interface EncounterInteractionDto extends BaseInteractionDto {
+  type: 'encounter';
+}
 export interface TeleporterInteractionDto extends BaseInteractionDto {
   type: 'teleporter';
   destinationMapId: number;
@@ -16,7 +19,8 @@ export interface TeleporterInteractionDto extends BaseInteractionDto {
   destinationLocY: number;
 }
 
-export type MapInteractionDto = ShopInteractionDto | TeleporterInteractionDto;
+export type MapInteractionDto =
+  ShopInteractionDto | TeleporterInteractionDto | EncounterInteractionDto;
 
 export interface MapInteractionHandler {
   type: MapInteractionDto['type'];

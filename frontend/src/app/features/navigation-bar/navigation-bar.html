@@ -27,7 +27,7 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'map'"
-        [disabled]="!gameState.activeCharacter()"
+        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
         type="button"
         (click)="showMap()"
       >
@@ -37,7 +37,7 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'inventory'"
-        [disabled]="!gameState.activeCharacter()"
+        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
         type="button"
         (click)="showInventory()"
       >
@@ -47,7 +47,7 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'character'"
-        [disabled]="!gameState.activeCharacter()"
+        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
         type="button"
         (click)="showCharacter()"
       >
@@ -88,6 +88,8 @@
     <app-character></app-character>
     } @else if (activeView()=== 'shop'){
     <app-shop></app-shop>
+    } @else if (activeView() === 'combat'){
+    <app-combat></app-combat>
     }
   </main>
   @if(activeView()==='map'){

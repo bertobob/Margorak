@@ -6,6 +6,7 @@ namespace Margorak.Api.Dto
     {
         
         public int CombatantId { get; set; }
+        public string CombatantName { get; set; } = string.Empty;
         public int TerrainTypeId { get; set; } 
         public int LocX1 {  get; set; }
         public int LocY1 { get; set; }

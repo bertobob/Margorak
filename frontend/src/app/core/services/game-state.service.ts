@@ -11,6 +11,8 @@ import { EquippedItemDto } from '../../features/character/dto/equipped-item.dto'
 import { Observable } from 'rxjs';
 import { LoadCharacterDto } from '../../features/character/dto/load-character.dto';
 import { ShopDto } from '../../features/shop/dto/shop.dto';
+import { MapInteractionDto } from '../../features/map/dto/map-interaction.dto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +26,8 @@ export class GameStateService {
   errorMessage = signal<string | null>(null);
   characters = signal<CharacterDto[]>([]);
   activeCharacter = signal<CharacterDto | null>(null);
+  activeCombat = signal<number | null>(null);
+  activeEncounter = signal<CombatantHabitatDto | null>(null);
   currentInventory = signal<InventoryItemDto[]>([]);
   wealth = computed(() => this.activeCharacter()?.gold ?? 0);
 
@@ -50,8 +54,22 @@ export class GameStateService {
   activeMapInteraction = computed(() => {
     const map = this.currentMap();
     const [x, y] = this.playerPos();
+    const tileInteraction = map?.tiles[y]?.[x]?.mapInteraction ?? null;
 
-    return map?.tiles[y]?.[x]?.mapInteraction ?? null;
+    if (tileInteraction !== null) {
+      return tileInteraction;
+    }
+    const activeEncounter = this.activeEncounter();
+    if (activeEncounter !== null) {
+      const encounterInteraction: MapInteractionDto = {
+        type: 'encounter',
+        description: 'attack ' + activeEncounter.combatantName,
+        id: activeEncounter.combatantId,
+      };
+
+      return encounterInteraction;
+    }
+    return null;
   });
 
   interactionText = computed(() => this.activeMapInteraction()?.description ?? '');
@@ -213,5 +231,25 @@ export class GameStateService {
 
   loadShop(shopInteractionId: number) {
     return this.apiService.loadShop(shopInteractionId);
+  }
+
+  endCombat(): void {
+    this.activeCombat.set(null);
+  }
+
+  loadCombatantHabitats(): void {
+    const currentMap = this.currentMap();
+
+    if (!currentMap) {
+      return;
+    }
+    this.apiService.getCombatantHabitatsByMapId(currentMap.id).subscribe({
+      next: (combatHabitats) => {
+        this.setCombatantHabitats(combatHabitats);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.setErrorMessage('couldnt load combatantHabitats ' + error);
+      },
+    });
   }
 }

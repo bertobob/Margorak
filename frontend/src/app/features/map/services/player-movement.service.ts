@@ -25,14 +25,13 @@ export class PlayerMovementService {
     this.gameState.setPlayerPos(nextPos.x, nextPos.y);
 
     const terrainTypeId = map.tiles[nextPos.y][nextPos.x].terrainTypeId;
-    const habitat = this.combatantHabitatService.findHabitatAt(
+    const habitat = this.combatantHabitatService.checkForEncounter(
       this.gameState.playerPos(),
       terrainTypeId,
       this.gameState.combatantHabitats()
     );
 
-    if (habitat) {
-    }
+    this.gameState.activeEncounter.set(habitat);
   }
 
   private clampToMap(x: number, y: number) {

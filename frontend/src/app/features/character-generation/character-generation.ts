@@ -117,6 +117,7 @@ export class CharacterGeneration implements OnInit {
   private handleCharacterCreated(loadedCharacter: LoadCharacterDto): void {
     this.gameState.addCharacter(loadedCharacter.character);
     this.gameState.setLoadedCharacter(loadedCharacter);
+    this.gameState.loadCombatantHabitats();
     this.form.controls.name.reset('');
   }
 

@@ -26,6 +26,7 @@ export class CharacterSelection {
 
     this.switchingCharacter.set(true);
     this.gameState.clearErrorMessage();
+    this.gameState.activeEncounter.set(null);
 
     const saveRequest = this.gameState.saveCharacter();
     const loadCharacter = () => this.apiService.loadCharacter(character.id);
@@ -34,7 +35,10 @@ export class CharacterSelection {
       : loadCharacter();
 
     loadCharacterRequest.pipe(finalize(() => this.switchingCharacter.set(false))).subscribe({
-      next: (loadedCharacter) => this.gameState.setLoadedCharacter(loadedCharacter),
+      next: (loadedCharacter) => {
+        this.gameState.setLoadedCharacter(loadedCharacter);
+        this.gameState.loadCombatantHabitats();
+      },
       error: (error) => {
         console.error('Character could not be switched.', error);
         this.gameState.setErrorMessage(

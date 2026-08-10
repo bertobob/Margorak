@@ -23,5 +23,6 @@ export class TeleporterInteractionHandler implements MapInteractionHandler {
 
     this.gameStateService.currentMapIndex.set(targetMapIndex);
     this.gameStateService.setPlayerPos(interaction.destinationLocX, interaction.destinationLocY);
+    this.gameStateService.loadCombatantHabitats();
   }
 }
