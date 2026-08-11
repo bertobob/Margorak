@@ -18,6 +18,7 @@ namespace Margorak.Api.Tests.Services
         private Mock<IMapRepository> _mapRepositoryMock = null!;
         private Mock<IStartingItemService> _startingItemServiceMock = null!;
         private Mock<IItemRepository> _itemRepositoryMock = null!;
+        private Mock<ICombatantRepository> _combatantRepositoryMock = null!;
         private Mock<IUnitOfWork> _unitOfWorkMock = null!;
         private CharacterService _characterService = null! ;
 
@@ -29,12 +30,14 @@ namespace Margorak.Api.Tests.Services
             _mapRepositoryMock = new Mock<IMapRepository>();
             _startingItemServiceMock = new Mock<IStartingItemService>();
             _itemRepositoryMock = new Mock<IItemRepository>();
+            _combatantRepositoryMock = new Mock<ICombatantRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _characterService = new CharacterService(
                 _characterRepositoryMock.Object,
                 _mapRepositoryMock.Object,
                 _startingItemServiceMock.Object,
                 _itemRepositoryMock.Object,
+                _combatantRepositoryMock.Object,
                 _unitOfWorkMock.Object);
 
         }
@@ -236,6 +239,71 @@ namespace Margorak.Api.Tests.Services
 
             // Assert
             Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public async Task StartCombat_WithExistingCombatant_StartsCombatAndSavesChanges()
+        {
+            // Arrange
+            const int characterId = 3;
+            const int combatantId = 7;
+            var combatant = new Combatant
+            {
+                Id = combatantId,
+                Name = "Dog",
+                BaseHp = 20
+            };
+            var character = new Character
+            {
+                Id = characterId,
+                Name = "Bert",
+                CurrentHp = 100
+            };
+
+            _combatantRepositoryMock
+                .Setup(repository => repository.GetCombatantForBattleAsync(combatantId))
+                .ReturnsAsync(combatant);
+            _characterRepositoryMock
+                .Setup(repository => repository.GetCharacterAsync(characterId))
+                .ReturnsAsync(character);
+
+            // Act
+            await _characterService.StartCombat(characterId, combatantId);
+
+            // Assert
+            _characterRepositoryMock.Verify(
+                repository => repository.StartCombat(characterId, combatant),
+                Times.Once);
+            _unitOfWorkMock.Verify(
+                unitOfWork => unitOfWork.SaveChangesAsync(),
+                Times.Once);
+        }
+
+        [TestMethod]
+        public async Task StartCombat_WithUnknownCombatant_DoesNotStartOrSaveCombat()
+        {
+            // Arrange
+            const int characterId = 3;
+            const int combatantId = 999;
+
+            _combatantRepositoryMock
+                .Setup(repository => repository.GetCombatantForBattleAsync(combatantId))
+                .ReturnsAsync((Combatant?)null);
+
+            // Act
+            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
+                () => _characterService.StartCombat(characterId, combatantId));
+
+            // Assert
+            StringAssert.Contains(exception.Message, combatantId.ToString());
+            _characterRepositoryMock.Verify(
+                repository => repository.StartCombat(
+                    It.IsAny<int>(),
+                    It.IsAny<Combatant>()),
+                Times.Never);
+            _unitOfWorkMock.Verify(
+                unitOfWork => unitOfWork.SaveChangesAsync(),
+                Times.Never);
         }
 
     }

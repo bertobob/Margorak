@@ -47,7 +47,7 @@ namespace Margorak.Api.Services
         public async Task<TradeItemResponseDto?> SellItemAsync(int mapInteractionId, TradeItemRequestDto tradeItem)
         {
             var mapInteraction = await _interactionRepository.GetMapInteractionAsync(mapInteractionId);
-            var character = await _characterRepository.GetCharacterForUpdateAsync(tradeItem.CharacterId);
+            var character = await _characterRepository.GetCharacterAsync(tradeItem.CharacterId);
             var item = await _itemRepository.GetItemByIdAsync(tradeItem.ItemId);
 
             if (mapInteraction == null || character == null || item == null)
@@ -92,7 +92,7 @@ namespace Margorak.Api.Services
         public async Task<TradeItemResponseDto?> BuyItemAsync(int mapInteractionId, TradeItemRequestDto buyItemDto)
         {
             var mapInteraction = await _interactionRepository.GetMapInteractionAsync(mapInteractionId);
-            var character = await _characterRepository.GetCharacterForUpdateAsync(buyItemDto.CharacterId);
+            var character = await _characterRepository.GetCharacterAsync(buyItemDto.CharacterId);
             var item = await _itemRepository.GetItemByIdAsync(buyItemDto.ItemId);
 
             if(mapInteraction == null || character == null || item == null)

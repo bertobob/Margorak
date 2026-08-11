@@ -1,3 +1,46 @@
-<button class="button button--neutral" (click)="endCombat()">
-  End Combat (feature not implemented yet)
-</button>
+@if (activeCombat(); as combat) {
+<section class="combat-screen">
+  <header class="combat-header">
+    <span>{{ character()?.name }}</span>
+    <strong>Versus</strong>
+    <span>{{ combat.combatantName }}</span>
+  </header>
+
+  <div class="combat-arena">
+    <div class="combat-side">
+      <div class="health-bar">
+        <div
+          class="health-bar__fill"
+          [style.width.%]="hpPercent(combat.currentCharacterHp, character()?.maxHp ?? 0)"
+        ></div>
+        <span class="health-bar__text">
+          {{ combat.currentCharacterHp }} / {{ character()?.maxHp ?? 0 }}
+        </span>
+      </div>
+    </div>
+
+    <div class="combat-side combat-side--right">
+      <div class="health-bar">
+        <div
+          class="health-bar__fill"
+          [style.width.%]="hpPercent(combat.currentCombatantHp, combat.combatantMaxHp)"
+        ></div>
+        <span class="health-bar__text">
+          {{ combat.currentCombatantHp }} / {{ combat.combatantMaxHp }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="combat-actions">
+    <button class="button button--neutral" (click)="endCombat()">Flee</button>
+    <button class="button button--neutral" (click)="endCombat()">Flee</button>
+  </div>
+
+  <div class="combat-log">
+    @for (entry of combat.combatLogs; track $index) {
+    <p>{{ entry }}</p>
+    }
+  </div>
+</section>
+}

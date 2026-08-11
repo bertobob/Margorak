@@ -27,12 +27,30 @@ namespace Margorak.Api.Repositories
         public async Task<Combatant?> GetCombatantForBattleAsync(int combatantId)
         {
             return await _db.Combatants
+                .Include(c => c.CombatantRace)
+
                 .Include(c => c.CombatantAttacks)
+                    .ThenInclude(ca => ca.Attack)
+                        .ThenInclude(a => a.AttackDamages)
+                            .ThenInclude(ad => ad.DamageType)
+
+                .Include(c => c.CombatantAttacks)
+                    .ThenInclude(ca => ca.Attack)
+                        .ThenInclude(a => a.AttackEffects)
+                            .ThenInclude(ae => ae.EffectType)
+
+                .Include(c => c.CombatantAttacks)
+                    .ThenInclude(ca => ca.Attack)
+                        .ThenInclude(a => a.AttackStatusEffects)
+                            .ThenInclude(ase => ase.StatusEffect)
+
+                .Include(c => c.CombatantResistances)
+                    .ThenInclude(cr => cr.ResistanceType)
+
                 .Include(c => c.CombatantLoots)
                     .ThenInclude(cl => cl.Item)
                         .ThenInclude(i => i.ItemCategory)
-                .Include(c => c.CombatantResistances)
-                    .ThenInclude(cr => cr.ResistanceType)
+
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(c => c.Id == combatantId);

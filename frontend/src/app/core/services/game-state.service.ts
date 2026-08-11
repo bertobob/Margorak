@@ -13,12 +13,14 @@ import { LoadCharacterDto } from '../../features/character/dto/load-character.dt
 import { ShopDto } from '../../features/shop/dto/shop.dto';
 import { MapInteractionDto } from '../../features/map/dto/map-interaction.dto';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CombatService } from './combat.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameStateService {
   private apiService = inject(ApiService);
+  private combatService = inject(CombatService);
   private clientId = '';
 
   maps = signal<MapDto[]>([]);
@@ -235,6 +237,7 @@ export class GameStateService {
 
   endCombat(): void {
     this.activeCombat.set(null);
+    this.apiService.endCombat(this.activeCharacter()!.id).subscribe();
   }
 
   loadCombatantHabitats(): void {
@@ -251,5 +254,10 @@ export class GameStateService {
         this.setErrorMessage('couldnt load combatantHabitats ' + error);
       },
     });
+  }
+
+  startCombat(combatantId: number): void {
+    this.activeCombat.set(combatantId);
+    this.combatService.loadCombatData(this.activeCharacter()!.id, combatantId);
   }
 }

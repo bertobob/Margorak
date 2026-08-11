@@ -2,6 +2,8 @@
 using Margorak.Api.Interfaces;
 using Margorak.Api.Mapper;
 using Margorak.Api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Runtime.CompilerServices;
 
 namespace Margorak.Api.Services
 {
@@ -9,6 +11,7 @@ namespace Margorak.Api.Services
     {
         private readonly ICharacterRepository _characterRepository;
         private readonly IMapRepository _mapRepository;
+        private readonly ICombatantRepository _combatantRepository;
         private readonly IStartingItemService _startingItemService;
         private readonly IItemRepository _itemRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -18,12 +21,14 @@ namespace Margorak.Api.Services
             IMapRepository mapRepository,
             IStartingItemService startingItemService,
             IItemRepository itemRepository,
+            ICombatantRepository combatantRepository,
             IUnitOfWork unitOfWork)
         {
             _characterRepository = characterRepository;
             _mapRepository = mapRepository;
             _startingItemService = startingItemService;
             _itemRepository = itemRepository;
+            _combatantRepository = combatantRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -77,7 +82,7 @@ namespace Margorak.Api.Services
             }
 
             var name = request.Name.Trim();
-            
+
             if(name=="")
             {
                 throw new ArgumentException(
@@ -98,6 +103,8 @@ namespace Margorak.Api.Services
                 LocX = 3,
                 LocY =31,
                 CurrentMapId =1,
+                CurrentHp = 20,
+                MaxHp  =20,
                 StatusPoints=10
             };
 
@@ -145,10 +152,48 @@ namespace Margorak.Api.Services
             await UpdateCharacterStatsAsync(characterId, request.CharacterStats);
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task StopCombat(int characterId)
+        {
+            _characterRepository.StopCombat(characterId);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        public async Task<ActiveCombatDto> StartCombat(int characterId, int combatantId)
+        {
+            var combatant = await _combatantRepository.GetCombatantForBattleAsync(combatantId);
+            var character  = await _characterRepository.GetCharacterAsync(characterId);
+
+            if(combatant == null)
+            {
+                throw new ArgumentException(
+                    $"Combatant {combatantId} does not exist.");
+            }
+
+            if(character == null)
+            {
+                throw new ArgumentException(
+                    $"Character {characterId} does not exist.");
+            }
+
+            _characterRepository.StartCombat(characterId,combatant);
+            await _unitOfWork.SaveChangesAsync();
+
+            var log = new List<string>();
+            log.Add("Combat has started");
+            var activeCombat = new ActiveCombatDto
+            {
+                CurrentCharacterHp = character.CurrentHp,
+                CombatantName = combatant.Name,
+                CurrentCombatantHp = combatant.BaseHp,
+                CombatantMaxHp = combatant.BaseHp,
+                CombatLogs = log
+            };
+
+            return activeCombat;
+        }
 
         private async Task UpdateCharacterStatsAsync(int characterId, CharacterStatsDto characterStats)
         {
-            var character =await _characterRepository.GetCharacterForUpdateAsync(characterId);
+            var character =await _characterRepository.GetCharacterAsync(characterId);
 
             var oldSummedStatpoints = character?.StatusPoints
                 + character?.Dexterity
@@ -223,6 +268,7 @@ namespace Margorak.Api.Services
                     $"Character {characterId} was not found.");
             }
         }
+
 
     }
 }

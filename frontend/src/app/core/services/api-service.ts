@@ -17,6 +17,8 @@ import {
   TradeItemRequestDto,
   TradeItemResponseDto,
 } from '../../features/shop/dto/shop.dto';
+import { ActiveCombatDto } from '../../features/combat/dto/combat.dto';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -81,5 +83,22 @@ export class ApiService {
       `${this.apiBaseUrl}/api/shops/${shopInteractionId}/sell`,
       item
     );
+  }
+
+  startCombat(characterId: number, combatantId: number): Observable<ActiveCombatDto> {
+    return this.http.get<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/startCombat`, {
+      params: {
+        characterId,
+        combatantId,
+      },
+    });
+  }
+
+  endCombat(characterId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/api/combat/stopCombat`, {
+      params: {
+        characterId,
+      },
+    });
   }
 }

@@ -3,6 +3,7 @@ using Margorak.Api.Dto;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Margorak.Api.Repositories
 {
@@ -10,7 +11,7 @@ namespace Margorak.Api.Repositories
     {
         private readonly AppDbContext _db;
         public CharacterRepository(AppDbContext db)
-        {            
+        {
             _db = db;
         }
 
@@ -35,7 +36,7 @@ namespace Margorak.Api.Repositories
             return character;
         }
 
-        public async Task<Character?> GetCharacterForUpdateAsync(int characterId)
+        public async Task<Character?> GetCharacterAsync(int characterId)
         {
             return await _db.Characters
                 .FirstOrDefaultAsync(character => character.Id == characterId);
@@ -113,7 +114,37 @@ namespace Margorak.Api.Repositories
             character!.StatusPoints = characterStats.StatusPoints;
             character!.CurrentHp = characterStats.CurrentHp;
             character!.CurrentMp = characterStats.CurrentMp;
+        }
 
+        public void StartCombat(int characterId,Combatant combatant)
+        {
+            var activeCombat = new ActiveCombat
+            {
+                CharacterId = characterId,
+                ActiveCombatCombatants =
+                [
+                    new ActiveCombatCombatant
+                    {
+                       CombatantId = combatant.Id,
+                       CurrentHp= combatant.BaseHp,
+                    }
+                ]
+            };
+
+            _db.ActiveCombats.Add(activeCombat);
+        }
+
+        public void StopCombat(int characterId)
+        {
+            var activeCombat = _db.ActiveCombats.FirstOrDefault(comb => comb.CharacterId == characterId);
+
+            if (activeCombat == null)
+            {
+                throw new Exception(
+                    $"ActiveCombat of {characterId} wasnt found.");
+            }
+
+            _db.ActiveCombats.Remove(activeCombat);
         }
     }
 }
