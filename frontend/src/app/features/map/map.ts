@@ -63,23 +63,27 @@ export class Map {
 
   @HostListener('window:keydown', ['$event'])
   handleKey(event: KeyboardEvent) {
-    switch (event.key) {
-      case 'ArrowUp':
+    switch (event.key.toLowerCase()) {
+      case 'arrowup':
+      case 'w':
         event.preventDefault();
         this.playerMovement.moveBy(0, -1);
         break;
 
-      case 'ArrowDown':
+      case 'arrowdown':
+      case 's':
         event.preventDefault();
         this.playerMovement.moveBy(0, 1);
         break;
 
-      case 'ArrowLeft':
+      case 'arrowleft':
+      case 'a':
         event.preventDefault();
         this.playerMovement.moveBy(-1, 0);
         break;
 
-      case 'ArrowRight':
+      case 'arrowright':
+      case 'd':
         event.preventDefault();
         this.playerMovement.moveBy(1, 0);
         break;
