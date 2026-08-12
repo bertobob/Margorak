@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string ImageKey { get; set; } = "unknown";
         public int CombatantRaceId {  get; set; }
         public CombatantRace CombatantRace { get; set; } = null!;
         public int Level {  get; set; } 

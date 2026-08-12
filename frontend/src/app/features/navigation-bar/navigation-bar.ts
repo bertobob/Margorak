@@ -31,9 +31,10 @@ export class NavigationBar {
 
       if (this.activeView() === 'combat') {
         this.activeView.set('map');
-        return;
       }
+    });
 
+    effect(() => {
       if (this.gameState.activeShop()) {
         this.activeView.set('shop');
       }
@@ -45,6 +46,7 @@ export class NavigationBar {
   }
 
   protected showMap(): void {
+    this.gameState.closeShop();
     this.activeView.set('map');
   }
 

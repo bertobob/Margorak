@@ -187,6 +187,11 @@ export class GameStateService {
     this.characters.update((characters) => [...characters, character]);
   }
 
+  closeShop(): void {
+    this.activeShop.set(null);
+    this.activeShopInteractionId.set(null);
+  }
+
   setLoadedCharacter(loadedCharacter: LoadCharacterDto): void {
     const character = loadedCharacter.character;
     this.activeCharacter.set(character);

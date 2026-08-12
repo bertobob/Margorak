@@ -251,7 +251,8 @@ namespace Margorak.Api.Tests.Services
             {
                 Id = combatantId,
                 Name = "Dog",
-                BaseHp = 20
+                BaseHp = 20,
+                ImageKey = "dog"
             };
             var character = new Character
             {
@@ -268,9 +269,10 @@ namespace Margorak.Api.Tests.Services
                 .ReturnsAsync(character);
 
             // Act
-            await _characterService.StartCombat(characterId, combatantId);
+            var result = await _characterService.StartCombat(characterId, combatantId);
 
             // Assert
+            Assert.AreEqual(combatant.ImageKey, result.CombatantImageKey);
             _characterRepositoryMock.Verify(
                 repository => repository.StartCombat(characterId, combatant),
                 Times.Once);

@@ -13,4 +13,14 @@ describe('GameStateService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should clear the active shop when it is closed', () => {
+    service.activeShop.set({} as never);
+    service.activeShopInteractionId.set(42);
+
+    service.closeShop();
+
+    expect(service.activeShop()).toBeNull();
+    expect(service.activeShopInteractionId()).toBeNull();
+  });
 });

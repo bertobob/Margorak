@@ -118,6 +118,14 @@ namespace Margorak.Api.Repositories
 
         public void StartCombat(int characterId,Combatant combatant)
         {
+            var existingCombat = _db.ActiveCombats
+                .FirstOrDefault(activeCombat => activeCombat.CharacterId == characterId);
+
+            if (existingCombat != null)
+            {
+                _db.ActiveCombats.Remove(existingCombat);
+            }
+
             var activeCombat = new ActiveCombat
             {
                 CharacterId = characterId,

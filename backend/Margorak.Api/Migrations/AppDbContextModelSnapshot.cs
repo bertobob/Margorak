@@ -375,6 +375,10 @@ namespace Margorak.Api.Migrations
                     b.Property<int>("GoldLootMin")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Level")
                         .HasColumnType("INTEGER");
 

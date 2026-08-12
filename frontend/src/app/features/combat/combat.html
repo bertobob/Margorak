@@ -17,6 +17,7 @@
           {{ combat.currentCharacterHp }} / {{ character()?.maxHp ?? 0 }}
         </span>
       </div>
+      <img class="combat-image" src="/images/characters/warrior.png" />
     </div>
 
     <div class="combat-side combat-side--right">
@@ -29,6 +30,12 @@
           {{ combat.currentCombatantHp }} / {{ combat.combatantMaxHp }}
         </span>
       </div>
+      @if (combat.combatantImageKey !== 'unknown') {
+      <img
+        class="combat-image"
+        [src]="'/images/combatants/' + combat.combatantImageKey + '.png'"
+      />
+      }
     </div>
   </div>
 

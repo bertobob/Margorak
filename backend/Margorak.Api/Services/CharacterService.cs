@@ -183,6 +183,7 @@ namespace Margorak.Api.Services
             {
                 CurrentCharacterHp = character.CurrentHp,
                 CombatantName = combatant.Name,
+                CombatantImageKey = combatant.ImageKey,
                 CurrentCombatantHp = combatant.BaseHp,
                 CombatantMaxHp = combatant.BaseHp,
                 CombatLogs = log

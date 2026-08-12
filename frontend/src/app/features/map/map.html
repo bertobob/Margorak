@@ -1,16 +1,23 @@
 <div class="map">
   @for (row of visibleMap().tiles; track $index; let y = $index) {
   <div class="row">
-    @for (tile of row; track $index; let x = $index) { @if (x === visibleMap().playerViewX && y ===
-    visibleMap().playerViewY) {
-    <img class="charakter" src="/tileicons/charakter.gif" alt="Character" />
-    } @else {
-    <img
-      class="tile"
-      [src]="'/tileicons/' + terrainImages[tile.terrainId]"
-      alt=""
-    />
-    } }
+    @for (tile of row; track $index; let x = $index) {
+    <div class="map-cell">
+      <img
+        class="tile"
+        [src]="
+          '/tileicons-48/' + (terrainBaseImages[tile.terrainId] ?? terrainImages[tile.terrainId])
+        "
+        alt=""
+      />
+      @if (terrainOverlayImages[tile.terrainId]; as overlayImage) {
+      <img class="tile-overlay" [src]="'/tileicons-48/' + overlayImage" alt="" />
+      }
+      @if (x === visibleMap().playerViewX && y === visibleMap().playerViewY) {
+      <img class="charakter" src="/tileicons-48/charakter.png" alt="Character" />
+      }
+    </div>
+    }
   </div>
   }
 </div>

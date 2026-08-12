@@ -1,6 +1,6 @@
 import { Component, computed, HostListener, inject } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
-import { terrainImages } from './terrain-images';
+import { terrainBaseImages, terrainImages, terrainOverlayImages } from './terrain-images';
 import { PlayerMovementService } from './services/player-movement.service';
 
 @Component({
@@ -12,6 +12,8 @@ import { PlayerMovementService } from './services/player-movement.service';
 })
 export class Map {
   terrainImages = terrainImages;
+  terrainBaseImages = terrainBaseImages;
+  terrainOverlayImages = terrainOverlayImages;
   private gameState = inject(GameStateService);
   private playerMovement = inject(PlayerMovementService);
 
