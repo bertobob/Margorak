@@ -2,9 +2,9 @@
 # Margorak
 
 Margorak is a work-in-progress browser RPG built with ASP.NET Core, Entity Framework Core, SQLite, and Angular.
-| World Map  | Character and Inventory |
+| World Map | Character and Inventory |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/82c5ff2a-32f3-4f47-96f6-15503017163e" alt="Character and inventory view" width="400"> | <img src="https://github.com/user-attachments/assets/b2c908cd-3d3d-4881-85e0-a0901ac58cac" alt="World map view" width="400"> |
+| <img width="400" alt="worldmap" src="https://github.com/user-attachments/assets/5c0e840d-eedd-4c45-a90a-1679edc0d058" />| <img width="400" alt="Character and inventory" src="https://github.com/user-attachments/assets/b2c908cd-3d3d-4881-85e0-a0901ac58cac" /> |
 
 
 
@@ -63,7 +63,7 @@ users or a public deployment.
 
 ## Development
 
-AI-assisted tools were used during development, primarily for CSS styling,
+AI-assisted tools were used during development, primarily for image generating, CSS styling,
 HTML templates, code review, and refactoring. Architecture, feature design,
 integration, and final implementation decisions were made and validated by
 the project author.
