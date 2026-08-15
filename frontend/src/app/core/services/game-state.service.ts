@@ -265,4 +265,46 @@ export class GameStateService {
     this.activeCombat.set(combatantId);
     this.combatService.loadCombatData(this.activeCharacter()!.id, combatantId);
   }
+
+  collectLoot(): void {}
+
+  respawnCharacter(): void {
+    const character = this.activeCharacter();
+
+    if (character === null) {
+      return;
+    }
+
+    this.apiService.respawnCharacter(character.id).subscribe({
+      next: (location) => {
+        this.activeCharacter.update((currentCharacter) => {
+          if (currentCharacter === null) {
+            return null;
+          }
+
+          return {
+            ...currentCharacter,
+            locX: location.locX,
+            locY: location.locY,
+            currentMapId: location.mapId,
+            currentHp: currentCharacter.maxHp,
+          };
+        });
+
+        this.setPlayerPos(location.locX, location.locY);
+
+        const mapIndex = this.maps().findIndex((map) => map.id === location.mapId);
+
+        if (mapIndex !== -1) {
+          this.currentMapIndex.set(mapIndex);
+        }
+
+        this.combatService.clearCombat();
+        this.endCombat();
+      },
+      error: (error) => {
+        console.error('Failed to respawn.', error);
+      },
+    });
+  }
 }

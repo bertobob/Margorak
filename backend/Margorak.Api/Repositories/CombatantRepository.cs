@@ -14,6 +14,13 @@ namespace Margorak.Api.Repositories
             _db = db;
         }
 
+        public async Task<List<CombatantLoot>> GetLootByCombatantIdAsync(int combatantId)
+        {
+            return await _db.CombatantLoots
+                .Include(cl => cl.Item)
+                .Where(cl => cl.CombatantId == combatantId)
+                .ToListAsync();
+        }
         public async Task<List<CombatantHabitat>> GetCombatantHabitatsByMapIdAsync(int mapId)
         {
             return await _db.CombatantHabitats

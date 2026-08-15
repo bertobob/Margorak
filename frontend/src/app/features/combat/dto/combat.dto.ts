@@ -4,5 +4,6 @@ export interface ActiveCombatDto {
   currentCharacterHp: number;
   currentCombatantHp: number;
   combatantMaxHp: number;
-  combatLogs: string[];
+  combatLogs: string;
+  battleOver: boolean;
 }

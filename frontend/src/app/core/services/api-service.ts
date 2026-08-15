@@ -19,6 +19,7 @@ import {
 } from '../../features/shop/dto/shop.dto';
 import { ActiveCombatDto } from '../../features/combat/dto/combat.dto';
 import { Observable } from 'rxjs';
+import { LocationDto } from '../../features/character/dto/location.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +50,12 @@ export class ApiService {
   getCharacterClasses() {
     return this.http.get<CharacterClassDto[]>(`${this.apiBaseUrl}/api/characters/options/classes`);
   }
-
+  respawnCharacter(characterId: number) {
+    return this.http.put<LocationDto>(
+      `${this.apiBaseUrl}/api/characters/${characterId}/respawnCharacter`,
+      characterId
+    );
+  }
   createCharacter(character: CreateCharacterDto) {
     return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/characters`, character);
   }
@@ -96,6 +102,14 @@ export class ApiService {
 
   endCombat(characterId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiBaseUrl}/api/combat/stopCombat`, {
+      params: {
+        characterId,
+      },
+    });
+  }
+
+  attack(characterId: number): Observable<ActiveCombatDto> {
+    return this.http.post<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/attack`, null, {
       params: {
         characterId,
       },

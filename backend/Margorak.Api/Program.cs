@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<CharacterService>();
+builder.Services.AddScoped<CombatService>();
 builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<ShopService>();
 builder.Services.AddScoped<IStartingItemService, StartingItemService>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IMapInteractionDtoFactory, ShopInteractionDtoFactory>
 builder.Services.AddScoped<IMapInteractionDtoFactory, TeleporterInteractionDtoFactory>();
 builder.Services.AddScoped<MapService>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+builder.Services.AddScoped<ICombatRepository, CombatRepository>();
 builder.Services.AddScoped<ICombatantRepository, CombatantRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IShopRepository, ShopRepository>();

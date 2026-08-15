@@ -31,23 +31,23 @@
         </span>
       </div>
       @if (combat.combatantImageKey !== 'unknown') {
-      <img
-        class="combat-image"
-        [src]="'/images/combatants/' + combat.combatantImageKey + '.png'"
-      />
+      <img class="combat-image" [src]="'/images/combatants/' + combat.combatantImageKey + '.png'" />
       }
     </div>
   </div>
-
+  @if(!combatantDefeated() && !characterDefeated()){
   <div class="combat-actions">
     <button class="button button--neutral" (click)="endCombat()">Flee</button>
-    <button class="button button--neutral" (click)="endCombat()">Flee</button>
+    <button class="button button--neutral" (click)="attack()">Attack</button>
   </div>
+  } @else if(combatantDefeated()){
+  <button class="button button--neutral" (click)="returnToMap()">Return to Map</button>
+  } @else {
+  <button class="button button--neutral" (click)="respawn()">Respawn in town</button>
+  }
 
-  <div class="combat-log">
-    @for (entry of combat.combatLogs; track $index) {
-    <p>{{ entry }}</p>
-    }
+  <div #combatLog class="combat-log">
+    <p>{{ combat.combatLogs }}</p>
   </div>
 </section>
 }

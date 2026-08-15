@@ -17,8 +17,14 @@ namespace Margorak.Api.Interfaces
         Task<CharacterClass?> GetClassByIdAsync(int classId);
         Task AddCharacterAsync(Character newCharacter);
         Task UpdateCharacterStatsAsync(int characterId, CharacterStatsDto characterStats);
+        Task UpdateCharacterHpAsync(int characterId, int value);
+        Task AddItemsToInventoryAsync(int characterId,List<Item> itemList,int goldLoot);
+        Task<int> AddExpByCharacterAndCombatantIdAsync(int characterId, int combatantId);
+        Task<int> GetLevelByExperienceAsync(int experience);
+        Task UpdateCharacterLevelAndStatPointsAsync(int characterId, int level);
         void StartCombat(int characterId, Combatant combatant);
         void StopCombat(int characterId);
+
 
     }
 }

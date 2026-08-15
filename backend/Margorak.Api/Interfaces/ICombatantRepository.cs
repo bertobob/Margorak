@@ -6,5 +6,6 @@ namespace Margorak.Api.Interfaces
     {
         Task<List<CombatantHabitat>> GetCombatantHabitatsByMapIdAsync(int mapId);
         Task<Combatant?> GetCombatantForBattleAsync(int combatantId);
+        Task<List<CombatantLoot>> GetLootByCombatantIdAsync(int combatantId);
     }
 }

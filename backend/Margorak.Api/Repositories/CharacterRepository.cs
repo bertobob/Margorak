@@ -10,6 +10,7 @@ namespace Margorak.Api.Repositories
     public class CharacterRepository : ICharacterRepository
     {
         private readonly AppDbContext _db;
+        const int StatPointsPerLevel = 5;
         public CharacterRepository(AppDbContext db)
         {
             _db = db;
@@ -29,6 +30,24 @@ namespace Margorak.Api.Repositories
                     .ThenInclude(ce => ce.OwnedItem)
                         .ThenInclude(oe => oe.Item)
                             .ThenInclude(i => i.ItemCategory)
+                .Include(c => c.CharacterEquipment)
+                    .ThenInclude(ce => ce.OwnedItem)
+                        .ThenInclude(oe => oe.Item)
+                            .ThenInclude(i => i.WeaponStat)
+                .Include(c => c.CharacterEquipment)
+                    .ThenInclude(ce => ce.OwnedItem)
+                        .ThenInclude(oe => oe.Item)
+                            .ThenInclude(i => i.ArmorStat)
+                .Include(c => c.CharacterEquipment)
+                    .ThenInclude(ce => ce.OwnedItem)
+                        .ThenInclude(oe => oe.Item)
+                            .ThenInclude(i => i.ItemDamages)
+                                .ThenInclude(itemDamage => itemDamage.DamageType)
+                .Include(c => c.CharacterEquipment)
+                    .ThenInclude(ce => ce.OwnedItem)
+                        .ThenInclude(oe => oe.Item)
+                            .ThenInclude(i => i.ItemResistances)
+                                .ThenInclude(itemResistance => itemResistance.ResistanceType)
                 .AsNoTracking()
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(c => c.Id == characterId);
@@ -146,13 +165,80 @@ namespace Margorak.Api.Repositories
         {
             var activeCombat = _db.ActiveCombats.FirstOrDefault(comb => comb.CharacterId == characterId);
 
-            if (activeCombat == null)
+            if (activeCombat != null)
             {
-                throw new Exception(
-                    $"ActiveCombat of {characterId} wasnt found.");
+                _db.ActiveCombats.Remove(activeCombat);
+            }
+        }
+
+        public async Task UpdateCharacterHpAsync(int characterId, int value)
+        {
+            var character = await _db.Characters
+                .FirstAsync(c  => c.Id == characterId);
+
+            character.CurrentHp += value;
+        }
+
+        public async Task AddItemsToInventoryAsync(int characterId,List<Item> itemList,int goldLoot)
+        {
+            var ownedItems = await _db.OwnedItems
+                .Where(ownedItem => ownedItem.CharacterId == characterId)
+                .ToListAsync();
+
+            foreach(var item in itemList)
+            {
+                var ownedItem = ownedItems
+                    .FirstOrDefault(oi => oi.ItemId == item.Id);
+                if(ownedItem != null)
+                {
+                    ownedItem.Quantity++;
+                }
+                else
+                {
+                    _db.OwnedItems
+                        .Add(new OwnedItem
+                        {
+                            CharacterId = characterId,
+                            ItemId = item.Id,
+                            Quantity =1 ,
+                            Version =1
+                        });
+                }
             }
 
-            _db.ActiveCombats.Remove(activeCombat);
+            var character = await _db.Characters
+                .FirstAsync(c => c.Id == characterId);
+            character.Gold += goldLoot;
+        }
+
+        public async Task<int> AddExpByCharacterAndCombatantIdAsync(int characterId, int combatantId)
+        {
+            var combatant = await _db.Combatants
+                .FirstAsync(combatant => combatant.Id == combatantId);
+            var experience = combatant.ExpValue;
+            var character = await _db.Characters
+                .FirstAsync(character => character.Id == characterId);
+
+            character.Experience += experience;
+
+            return experience;
+        }
+
+        public async Task<int> GetLevelByExperienceAsync(int experience)
+        {
+            var nextLevel = await _db.Levels
+                .FirstAsync(level => level.ExpRequiered > experience);
+
+            return nextLevel.Value - 1;
+        }
+
+        public async Task UpdateCharacterLevelAndStatPointsAsync(int characterId, int level)
+        {
+            var character= await _db.Characters
+                .FirstAsync (character => character.Id == characterId);
+
+            character.StatusPoints += StatPointsPerLevel * (level - character.Level);
+            character.Level = level;
         }
     }
 }

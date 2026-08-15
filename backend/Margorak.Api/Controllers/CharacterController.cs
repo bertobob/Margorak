@@ -80,5 +80,13 @@ namespace Margorak.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{characterId:int}/respawnCharacter")]
+        public async Task<ActionResult<LocationDto>> RespawnCharacter(int characterId)
+        {
+            var result = await _characterService.RespawnCharacter(characterId);
+
+            return Ok(result);
+        }
     }
 }

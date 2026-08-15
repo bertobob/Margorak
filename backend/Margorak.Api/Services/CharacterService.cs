@@ -177,8 +177,8 @@ namespace Margorak.Api.Services
             _characterRepository.StartCombat(characterId,combatant);
             await _unitOfWork.SaveChangesAsync();
 
-            var log = new List<string>();
-            log.Add("Combat has started");
+            string log = ("Combat has started\n");
+
             var activeCombat = new ActiveCombatDto
             {
                 CurrentCharacterHp = character.CurrentHp,
@@ -217,6 +217,31 @@ namespace Margorak.Api.Services
 
         }
 
+        public async Task<LocationDto> RespawnCharacter(int characterId)
+        {
+            var character = await _characterRepository.GetCharacterAsync(characterId);
+
+            if(character == null)
+            {
+                throw new InvalidOperationException(
+                    $"Couldnt respawn character {characterId}");
+            }
+
+            character.CurrentHp = character.MaxHp;
+            character.CurrentMapId = 1;
+            character.LocX = 3;
+            character.LocY = 31;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new LocationDto
+            {
+                LocX = character.LocX,
+                LocY = character.LocY,
+                MapId = character.CurrentMapId,
+            };
+
+        }
         private async Task ReplaceEquipmentAsync(int characterId, EquippedItemDto[] equippedItems)
         {
             var ownedItemIds = equippedItems.Select(item => item.OwnedItemId);

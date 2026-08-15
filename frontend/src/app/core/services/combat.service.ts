@@ -7,7 +7,7 @@ import { ActiveCombatDto } from '../../features/combat/dto/combat.dto';
 })
 export class CombatService {
   private readonly apiService = inject(ApiService);
-  private readonly activeCombatState = signal<ActiveCombatDto | null>(null);
+  private activeCombatState = signal<ActiveCombatDto | null>(null);
 
   readonly activeCombat = this.activeCombatState.asReadonly();
 
@@ -25,5 +25,19 @@ export class CombatService {
   }
   clearCombat(): void {
     this.activeCombatState.set(null);
+  }
+
+  attack(characterId: number) {
+    this.apiService.attack(characterId).subscribe({
+      next: (activeCombat) => {
+        const log = activeCombat.combatLogs;
+
+        this.activeCombatState.set({
+          ...activeCombat,
+          combatLogs: (this.activeCombat()?.combatLogs ?? '') + '\n' + log,
+        });
+        console.log(this.activeCombat()?.combatLogs);
+      },
+    });
   }
 }
