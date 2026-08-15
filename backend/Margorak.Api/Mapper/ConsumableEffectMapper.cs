@@ -12,7 +12,7 @@ namespace Margorak.Api.Mapper
                 EffectType = EffectTypeMapper.ToDto(effect.EffectType),
                 MinValue = effect.MinValue,
                 MaxValue = effect.MaxValue,
-                Duration = effect.Duration
+                Duration = effect.ConsumeTime
             };
         }
     }
