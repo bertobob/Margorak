@@ -242,6 +242,7 @@ export class GameStateService {
 
   endCombat(): void {
     this.activeCombat.set(null);
+    this.activeEncounter.set(null);
     this.apiService.endCombat(this.activeCharacter()!.id).subscribe();
   }
 
