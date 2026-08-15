@@ -16,6 +16,8 @@ namespace Margorak.Api.Services
         private readonly IItemRepository _itemRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+        const int BaseHp = 20;
+
         public CharacterService(
             ICharacterRepository characterRepository,
             IMapRepository mapRepository,
@@ -65,6 +67,8 @@ namespace Margorak.Api.Services
 
         public async Task<Character> CreateCharacterAsync(CreateCharacterDto request)
         {
+            const int InitialStatusPoints = 10;
+            const int InitialStatusValues = 10;
             var race = await _characterRepository.GetRaceByIdAsync(request.CharacterRaceId);
 
             if (race is null)
@@ -103,9 +107,13 @@ namespace Margorak.Api.Services
                 LocX = 3,
                 LocY =31,
                 CurrentMapId =1,
-                CurrentHp = 20,
-                MaxHp  =20,
-                StatusPoints=10
+                Strength = InitialStatusValues,
+                Dexterity = InitialStatusValues,
+                Vitality = InitialStatusValues,
+                Intelligence = InitialStatusValues,
+                CurrentHp = (int)(race.VitalityMod * InitialStatusValues) + BaseHp,
+                MaxHp  = (int)(race.VitalityMod*InitialStatusValues) + BaseHp,
+                StatusPoints= InitialStatusPoints
             };
 
             await _characterRepository.AddCharacterAsync(character);
@@ -212,7 +220,8 @@ namespace Margorak.Api.Services
                 throw new InvalidOperationException(
                     "The sum of old and new Statpoints is invalid");
             }
-
+            character!.MaxHp = (int) (characterStats!.Vitality * character.CharacterRace.VitalityMod) + BaseHp;
+            
             await _characterRepository.UpdateCharacterStatsAsync(characterId,characterStats!);
 
         }

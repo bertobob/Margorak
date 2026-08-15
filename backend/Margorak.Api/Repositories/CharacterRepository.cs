@@ -58,6 +58,7 @@ namespace Margorak.Api.Repositories
         public async Task<Character?> GetCharacterAsync(int characterId)
         {
             return await _db.Characters
+                .Include(character => character.CharacterRace)
                 .FirstOrDefaultAsync(character => character.Id == characterId);
         }
 

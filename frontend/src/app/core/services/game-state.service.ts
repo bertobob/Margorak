@@ -267,7 +267,25 @@ export class GameStateService {
     this.combatService.loadCombatData(this.activeCharacter()!.id, combatantId);
   }
 
-  collectLoot(): void {}
+  collectLoot(): void {
+    const characterId = this.activeCharacter()?.id;
+
+    if (characterId === undefined) {
+      return;
+    }
+
+    this.apiService.loadCharacter(characterId).subscribe({
+      next: (loadedCharacter) => {
+        this.setLoadedCharacter(loadedCharacter);
+        this.combatService.clearCombat();
+        this.activeCombat.set(null);
+        this.activeEncounter.set(null);
+      },
+      error: (error) => {
+        console.error('Failed to refresh character after combat.', error);
+      },
+    });
+  }
 
   respawnCharacter(): void {
     const character = this.activeCharacter();

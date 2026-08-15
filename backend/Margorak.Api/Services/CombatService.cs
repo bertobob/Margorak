@@ -107,6 +107,8 @@ namespace Margorak.Api.Services
             await _combatRepository.UpdateCharacterTimelineAsync(activeCombatCombatant, characterAttackSpeed);
             await _unitOfWork.SaveChangesAsync();
 
+            //combatants turn
+
             var combatantTimeline = activeCombat.ActiveCombatCombatants.First().CombatantTimeline;
             var combatantAttackRating = combatant.CombatantAttacks.First().Attack.AttackRating;
             var combatantAttackSpeed = combatant.CombatantAttacks.First().Attack.AttackSpeed;
@@ -123,7 +125,7 @@ namespace Margorak.Api.Services
                     var hpLoss = CalculateHpLoss(combatantDamages,characterResistances,characterDefense);
                     await _characterRepository.UpdateCharacterHpAsync(character.Id, -hpLoss);
                     characterCurrentHp -= hpLoss;
-                    log.AppendLine($"{combatant.Name} hits you for {hpLoss} damage.");
+                    log.AppendLine($"{combatant.Name} {combatant.CombatantAttacks.First().Attack.Description} and hits you for {hpLoss} damage.");
                     if(characterCurrentHp <= 0)
                     {
                         log.AppendLine($"You have been defeated by {combatant.Name}.");
@@ -182,18 +184,17 @@ namespace Margorak.Api.Services
         }
         private string BuildLogEntryFromLoot(CombatantLootDto loot)
         {
-            var logEntry = "You found ";
-
-            for(int i = 0; i< loot.ItemList.Count; i++)
+            if (loot.ItemList.Count == 0)
             {
-                logEntry += "1 "+ loot.ItemList[i].Name+",";
+                return $"You found {loot.GoldLoot} gold.";
             }
 
-            logEntry = logEntry[..^1];
+            var items = string.Join(
+                ", ",
+                loot.ItemList.Select(item => $"1 {item.Name}")
+            );
 
-            logEntry += $" and {loot.GoldLoot} gold.";
-
-            return logEntry;
+            return $"You found {items} and {loot.GoldLoot} gold.";
         }
         private async Task<CombatantLootDto> GetLootByCombatantAsync(Combatant combatant,int characterId)
         {
@@ -221,7 +222,7 @@ namespace Margorak.Api.Services
         }
         private int GetCharacterAttackRating(Character character)
         {
-            return character.CharacterEquipment.Sum(ce => ce.OwnedItem.Item.AttackRating);
+            return character.CharacterEquipment.Sum(ce => ce.OwnedItem.Item.AttackRating) + character.Dexterity/2;
         }
         private Dictionary<string, int> GetCharacterResistances(Character character)
         {
@@ -322,6 +323,11 @@ namespace Margorak.Api.Services
                         damageType.MaxDamage + damageTypes[key].maxDamage);
                 }
             }
+            // apply race modifier
+            damageTypes["physical"] = (
+                    (int)(damageTypes["physical"].minDamage * (1 + character.CharacterRace.StrengthMod * character.Strength / 100)),
+                    (int)(damageTypes["physical"].maxDamage * (1 + character.CharacterRace.StrengthMod * character.Strength / 100))
+                );
 
             return damageTypes;
         }
@@ -329,7 +335,7 @@ namespace Margorak.Api.Services
         {
             //TODO formel ausbessern
             var hitChance = Math.Clamp(
-                (attackRating *100) / (attackRating + evasion+20),
+                (attackRating *100) / ( evasion+20),
                 MinimumHitChance,
                 MaximumHitChance);
 
@@ -351,9 +357,5 @@ namespace Margorak.Api.Services
                     type => type.ToString().ToLowerInvariant(),
                     value => 0);
         }
-
-        /*
-         *
-         */
     }
 }

@@ -66,7 +66,6 @@ export class Combat {
 
   protected returnToMap(): void {
     this.gameState.collectLoot();
-    this.endCombat();
   }
 
   protected respawn(): void {
