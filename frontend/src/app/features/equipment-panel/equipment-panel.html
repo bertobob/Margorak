@@ -5,7 +5,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Helmet"
+        [disabled]="!equipment().Helmet || combatActive()"
         (click)="onItemClick(equipment().Helmet!.item)"
       >
         {{ equipment().Helmet?.item?.name ?? 'empty' }}
@@ -13,7 +13,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Helmet"
+        [disabled]="!equipment().Helmet || combatActive()"
         (click)="onUnequipClicked('Helmet')"
       >
         Unequip
@@ -24,7 +24,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Chest"
+        [disabled]="!equipment().Chest || combatActive()"
         (click)="onItemClick(equipment().Chest!.item)"
       >
         {{ equipment().Chest?.item?.name ?? 'empty' }}
@@ -32,7 +32,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Chest"
+        [disabled]="!equipment().Chest || combatActive()"
         (click)="onUnequipClicked('Chest')"
       >
         Unequip
@@ -43,7 +43,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Legs"
+        [disabled]="!equipment().Legs || combatActive()"
         (click)="onItemClick(equipment().Legs!.item)"
       >
         {{ equipment().Legs?.item?.name ?? 'empty' }}
@@ -51,7 +51,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Legs"
+        [disabled]="!equipment().Legs || combatActive()"
         (click)="onUnequipClicked('Legs')"
       >
         Unequip
@@ -62,7 +62,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Gloves"
+        [disabled]="!equipment().Gloves || combatActive()"
         (click)="onItemClick(equipment().Gloves!.item)"
       >
         {{ equipment().Gloves?.item?.name ?? 'empty' }}
@@ -70,7 +70,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Gloves"
+        [disabled]="!equipment().Gloves || combatActive()"
         (click)="onUnequipClicked('Gloves')"
       >
         Unequip
@@ -81,7 +81,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Boots"
+        [disabled]="!equipment().Boots || combatActive()"
         (click)="onItemClick(equipment().Boots!.item)"
       >
         {{ equipment().Boots?.item?.name ?? 'empty' }}
@@ -89,7 +89,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Boots"
+        [disabled]="!equipment().Boots || combatActive()"
         (click)="onUnequipClicked('Boots')"
       >
         Unequip
@@ -100,7 +100,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Weapon"
+        [disabled]="!equipment().Weapon || combatActive()"
         (click)="onItemClick(equipment().Weapon!.item)"
       >
         {{ equipment().Weapon?.item?.name ?? 'empty' }}
@@ -108,7 +108,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Weapon"
+        [disabled]="!equipment().Weapon || combatActive()"
         (click)="onUnequipClicked('Weapon')"
       >
         Unequip
@@ -119,7 +119,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Shield"
+        [disabled]="!equipment().Shield || combatActive()"
         (click)="onItemClick(equipment().Shield!.item)"
       >
         {{ equipment().Shield?.item?.name ?? 'empty' }}
@@ -127,7 +127,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Shield"
+        [disabled]="!equipment().Shield || combatActive()"
         (click)="onUnequipClicked('Shield')"
       >
         Unequip
@@ -138,7 +138,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Ring"
+        [disabled]="!equipment().Ring || combatActive()"
         (click)="onItemClick(equipment().Ring!.item)"
       >
         {{ equipment().Ring?.item?.name ?? 'empty' }}
@@ -146,7 +146,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Ring"
+        [disabled]="!equipment().Ring || combatActive()"
         (click)="onUnequipClicked('Ring')"
       >
         Unequip
@@ -157,7 +157,7 @@
       <button
         class="equipment-slot"
         type="button"
-        [disabled]="!equipment().Amulet"
+        [disabled]="!equipment().Amulet || combatActive()"
         (click)="onItemClick(equipment().Amulet!.item)"
       >
         {{ equipment().Amulet?.item?.name ?? 'empty' }}
@@ -165,7 +165,7 @@
       <button
         class="button button--neutral equipment-unequip-button"
         type="button"
-        [disabled]="!equipment().Amulet"
+        [disabled]="!equipment().Amulet || combatActive()"
         (click)="onUnequipClicked('Amulet')"
       >
         Unequip
