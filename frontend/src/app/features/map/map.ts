@@ -14,12 +14,12 @@ export class Map {
   terrainImages = terrainImages;
   terrainBaseImages = terrainBaseImages;
   terrainOverlayImages = terrainOverlayImages;
-  private gameState = inject(GameStateService);
-  private playerMovement = inject(PlayerMovementService);
+  private readonly gameStateService = inject(GameStateService);
+  private readonly playerMovementService = inject(PlayerMovementService);
 
-  playerPos = this.gameState.playerPos;
+  playerPos = this.gameStateService.playerPos;
 
-  currentMap = this.gameState.currentMap;
+  currentMap = this.gameStateService.currentMap;
 
   visibleMap = computed(() => {
     const map = this.currentMap();
@@ -67,25 +67,25 @@ export class Map {
       case 'arrowup':
       case 'w':
         event.preventDefault();
-        this.playerMovement.moveBy(0, -1);
+        this.playerMovementService.moveBy(0, -1);
         break;
 
       case 'arrowdown':
       case 's':
         event.preventDefault();
-        this.playerMovement.moveBy(0, 1);
+        this.playerMovementService.moveBy(0, 1);
         break;
 
       case 'arrowleft':
       case 'a':
         event.preventDefault();
-        this.playerMovement.moveBy(-1, 0);
+        this.playerMovementService.moveBy(-1, 0);
         break;
 
       case 'arrowright':
       case 'd':
         event.preventDefault();
-        this.playerMovement.moveBy(1, 0);
+        this.playerMovementService.moveBy(1, 0);
         break;
     }
   }

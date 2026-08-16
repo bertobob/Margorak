@@ -1,16 +1,20 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
 import { CharacterDto, CharacterStat } from './dto/character.dto';
+import { HealthBar } from '../../shared/components/health-bar/health-bar';
+import { switchMap } from 'rxjs';
+import { ApiService } from '../../core/services/api-service';
 
 @Component({
   selector: 'app-character',
-  imports: [],
+  imports: [HealthBar],
   templateUrl: './character.html',
   styleUrl: './character.css',
 })
 export class Character {
-  private readonly gameState = inject(GameStateService);
-  character = this.gameState.activeCharacter;
+  private readonly gameStateService = inject(GameStateService);
+  private readonly apiService = inject(ApiService);
+  character = this.gameStateService.activeCharacter;
   editedCharacter = signal<CharacterDto | null>(null);
   characterEdited = signal(false);
 
@@ -39,9 +43,23 @@ export class Character {
 
   saveChanges(): void {
     const editedCharacter = this.editedCharacter();
+
     this.character.set(editedCharacter ? { ...editedCharacter } : null);
-    this.characterEdited.set(false);
-    this.gameState.saveCharacter()?.subscribe();
+
+    this.gameStateService
+      .saveCharacter()
+      ?.pipe(
+        switchMap(() => {
+          this.characterEdited.set(false);
+
+          return this.apiService.loadCharacter(editedCharacter!.id);
+        })
+      )
+      .subscribe({
+        next: (loadedCharacter) => {
+          this.gameStateService.setLoadedCharacter(loadedCharacter);
+        },
+      });
   }
 
   resetChanges(): void {

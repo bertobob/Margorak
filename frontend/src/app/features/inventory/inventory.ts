@@ -16,14 +16,14 @@ import { ApiService } from '../../core/services/api-service';
   styleUrl: './inventory.css',
 })
 export class Inventory {
-  private gameState = inject(GameStateService);
-  private equipmentService = inject(EquipmentService);
-  private api = inject(ApiService);
-  protected inventory = this.gameState.currentInventory;
-  protected wealth = this.gameState.wealth;
-  protected activeShop = this.gameState.activeShop;
-  private activeShopInteractionId = this.gameState.activeShopInteractionId;
-  protected shopActive = this.gameState.shopActive;
+  private readonly gameStateService = inject(GameStateService);
+  private readonly equipmentService = inject(EquipmentService);
+  private readonly apiService = inject(ApiService);
+  protected inventory = this.gameStateService.currentInventory;
+  protected wealth = this.gameStateService.wealth;
+  protected activeShop = this.gameStateService.activeShop;
+  private activeShopInteractionId = this.gameStateService.activeShopInteractionId;
+  protected shopActive = this.gameStateService.shopActive;
 
   protected onEquipClicked(inventoryItem: InventoryItemDto): void {
     this.equipmentService.onEquipClicked(inventoryItem);
@@ -45,7 +45,7 @@ export class Inventory {
   }
 
   protected isAllRequirementsMet(itemRequirements: ItemRequirementDto[]): boolean {
-    const character = this.gameState.activeCharacter();
+    const character = this.gameStateService.activeCharacter();
 
     if (!character) {
       return false;
@@ -54,7 +54,7 @@ export class Inventory {
   }
 
   onSellClicked(item: ItemDto) {
-    const character = this.gameState.activeCharacter();
+    const character = this.gameStateService.activeCharacter();
     const shopInteractionId = this.activeShopInteractionId();
 
     if (character === null || shopInteractionId === null) {
@@ -65,12 +65,12 @@ export class Inventory {
       itemId: item.id,
     };
 
-    this.api.sell(request, shopInteractionId).subscribe({
+    this.apiService.sell(request, shopInteractionId).subscribe({
       next: (response) => {
-        this.gameState.activeCharacter.update((currentCharacter) =>
+        this.gameStateService.activeCharacter.update((currentCharacter) =>
           currentCharacter ? { ...currentCharacter, gold: response.remainingGold } : null
         );
-        this.gameState.currentInventory.set(response.inventoryItems);
+        this.gameStateService.currentInventory.set(response.inventoryItems);
       },
     });
   }

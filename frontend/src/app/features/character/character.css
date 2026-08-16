@@ -5,7 +5,7 @@
 
 .character__overview {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 1rem;
 }
 
@@ -15,8 +15,20 @@
 }
 .character__stat-row {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
+  gap: 2rem;
+}
+
+.character__stat-controls {
+  display: grid;
   grid-template-columns: 10rem 2rem 2rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.character__stat-description {
+  font-style: italic;
 }
 
 .character__stat-add-button {
@@ -31,6 +43,6 @@
 .character__stat-actions {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 2fr;
   gap: 20px;
 }

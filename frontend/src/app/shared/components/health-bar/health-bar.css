@@ -1,0 +1,25 @@
+.health-bar {
+  position: relative;
+  width: 200px;
+  height: 2.5rem;
+  padding: 1px;
+  overflow: hidden;
+  border: 1px solid white;
+  background: black;
+}
+
+.health-bar__fill {
+  height: 100%;
+  background: red;
+  transition: width 250ms ease-out;
+}
+
+.health-bar__text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 1.25rem;
+  text-shadow: 1px 1px 2px black;
+}

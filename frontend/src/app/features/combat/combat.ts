@@ -1,20 +1,21 @@
 import { Component, computed, effect, ElementRef, inject, viewChild } from '@angular/core';
 import { GameStateService } from '../../core/services/game-state.service';
 import { CombatService } from '../../core/services/combat.service';
+import { HealthBar } from '../../shared/components/health-bar/health-bar';
 
 @Component({
   selector: 'app-combat',
-  imports: [],
+  imports: [HealthBar],
   templateUrl: './combat.html',
   styleUrl: './combat.css',
 })
 export class Combat {
-  private readonly gameState = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
   private readonly combatService = inject(CombatService);
 
   private readonly combatLog = viewChild<ElementRef<HTMLElement>>('combatLog');
 
-  protected readonly character = this.gameState.activeCharacter;
+  protected readonly character = this.gameStateService.activeCharacter;
   protected readonly activeCombat = this.combatService.activeCombat;
 
   constructor() {
@@ -41,17 +42,9 @@ export class Combat {
 
     return combat?.battleOver === true && combat.currentCombatantHp <= 0;
   });
-  protected hpPercent(currentHp: number, maxHp: number): number {
-    if (maxHp <= 0) {
-      return 0;
-    }
-
-    return Math.max(0, Math.min(100, (currentHp / maxHp) * 100));
-  }
-
   protected endCombat(): void {
     this.combatService.clearCombat();
-    this.gameState.endCombat();
+    this.gameStateService.endCombat();
   }
 
   protected attack(): void {
@@ -65,10 +58,10 @@ export class Combat {
   }
 
   protected returnToMap(): void {
-    this.gameState.collectLoot();
+    this.gameStateService.collectLoot();
   }
 
   protected respawn(): void {
-    this.gameState.respawnCharacter();
+    this.gameStateService.respawnCharacter();
   }
 }

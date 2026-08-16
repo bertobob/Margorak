@@ -15,7 +15,7 @@ import { LoadCharacterDto } from '../character/dto/load-character.dto';
 })
 export class CharacterGeneration implements OnInit {
   private readonly apiService = inject(ApiService);
-  private readonly gameState = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
 
   public readonly races = signal<CharacterRaceDto[]>([]);
   public readonly classes = signal<CharacterClassDto[]>([]);
@@ -115,9 +115,9 @@ export class CharacterGeneration implements OnInit {
   }
 
   private handleCharacterCreated(loadedCharacter: LoadCharacterDto): void {
-    this.gameState.addCharacter(loadedCharacter.character);
-    this.gameState.setLoadedCharacter(loadedCharacter);
-    this.gameState.loadCombatantHabitats();
+    this.gameStateService.addCharacter(loadedCharacter.character);
+    this.gameStateService.setLoadedCharacter(loadedCharacter);
+    this.gameStateService.loadCombatantHabitats();
     this.form.controls.name.reset('');
   }
 

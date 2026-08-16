@@ -6,36 +6,36 @@ import { CombatantHabitatService } from './combatant-habitat.service';
   providedIn: 'root',
 })
 export class PlayerMovementService {
-  private gameState = inject(GameStateService);
-  private combatantHabitatService = inject(CombatantHabitatService);
+  private readonly gameStateService = inject(GameStateService);
+  private readonly combatantHabitatService = inject(CombatantHabitatService);
 
   moveBy(xOffset: number, yOffset: number): void {
-    const map = this.gameState.currentMap();
+    const map = this.gameStateService.currentMap();
 
     if (!map) {
       return;
     }
 
-    const [x, y] = this.gameState.playerPos();
+    const [x, y] = this.gameStateService.playerPos();
     const nextPos = this.clampToMap(x + xOffset, y + yOffset);
 
     if (!this.isAccessible(nextPos.x, nextPos.y)) {
       return;
     }
-    this.gameState.setPlayerPos(nextPos.x, nextPos.y);
+    this.gameStateService.setPlayerPos(nextPos.x, nextPos.y);
 
     const terrainTypeId = map.tiles[nextPos.y][nextPos.x].terrainTypeId;
     const habitat = this.combatantHabitatService.checkForEncounter(
-      this.gameState.playerPos(),
+      this.gameStateService.playerPos(),
       terrainTypeId,
-      this.gameState.combatantHabitats()
+      this.gameStateService.combatantHabitats()
     );
 
-    this.gameState.activeEncounter.set(habitat);
+    this.gameStateService.activeEncounter.set(habitat);
   }
 
   private clampToMap(x: number, y: number) {
-    const map = this.gameState.currentMap();
+    const map = this.gameStateService.currentMap();
 
     if (!map) {
       return { x: 0, y: 0 };
@@ -51,7 +51,7 @@ export class PlayerMovementService {
   }
 
   private isAccessible(x: number, y: number): boolean {
-    const map = this.gameState.currentMap();
+    const map = this.gameStateService.currentMap();
 
     return Number(map?.tiles[y]?.[x]?.accessible) === 1;
   }

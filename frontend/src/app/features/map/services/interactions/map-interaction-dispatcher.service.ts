@@ -8,11 +8,15 @@ import { EncounterInteractionHandlerService } from './encounter-interaction-hand
   providedIn: 'root',
 })
 export class MapInteractionDispatcherService {
-  private teleporterHandler = inject(TeleporterInteractionHandler);
-  private shopHandler = inject(ShopInteractionHandlerService);
-  private encounterHandler = inject(EncounterInteractionHandlerService);
+  private readonly teleporterInteractionHandler = inject(TeleporterInteractionHandler);
+  private readonly shopInteractionHandlerService = inject(ShopInteractionHandlerService);
+  private readonly encounterInteractionHandlerService = inject(EncounterInteractionHandlerService);
 
-  private handlers = [this.teleporterHandler, this.shopHandler, this.encounterHandler];
+  private readonly handlers = [
+    this.teleporterInteractionHandler,
+    this.shopInteractionHandlerService,
+    this.encounterInteractionHandlerService,
+  ];
 
   handle(interaction: MapInteractionDto): void {
     const handler = this.handlers.find((handler) => handler.type == interaction.type);
@@ -25,6 +29,6 @@ export class MapInteractionDispatcherService {
       return;
     }
 
-    handler?.handle(interaction);
+    handler.handle(interaction);
   }
 }

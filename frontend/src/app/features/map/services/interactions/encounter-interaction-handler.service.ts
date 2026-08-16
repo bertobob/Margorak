@@ -1,21 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { MapInteractionDto, MapInteractionHandler } from '../../dto/map-interaction.dto';
 import { GameStateService } from '../../../../core/services/game-state.service';
-import { CombatService } from '../../../../core/services/combat.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EncounterInteractionHandlerService implements MapInteractionHandler {
   readonly type = 'encounter';
-  private readonly gameState = inject(GameStateService);
-  private readonly combat = inject(CombatService);
+  private readonly gameStateService = inject(GameStateService);
 
   handle(interaction: MapInteractionDto): void {
     if (interaction.type !== this.type) {
       return;
     }
+    this.gameStateService.saveCharacter()?.subscribe();
 
-    this.gameState.startCombat(interaction.id);
+    this.gameStateService.startCombat(interaction.id);
   }
 }

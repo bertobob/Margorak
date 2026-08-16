@@ -8,13 +8,13 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AppInitService {
-  private gameState = inject(GameStateService);
-  private apiService = inject(ApiService);
-  private clientSession = inject(ClientSessionService);
+  private readonly gameStateService = inject(GameStateService);
+  private readonly apiService = inject(ApiService);
+  private readonly clientSessionService = inject(ClientSessionService);
 
   init(): void {
-    const clientId = this.clientSession.getOrCreateClientId();
-    this.gameState.setClientId(clientId);
+    const clientId = this.clientSessionService.getOrCreateClientId();
+    this.gameStateService.setClientId(clientId);
 
     this.loadCharacters();
     this.loadMapData();
@@ -23,10 +23,10 @@ export class AppInitService {
   private loadCharacters(): void {
     this.apiService.getCharacters().subscribe({
       next: (characters) => {
-        this.gameState.setCharacters(characters);
+        this.gameStateService.setCharacters(characters);
       },
       error: (error: HttpErrorResponse) => {
-        this.gameState.setErrorMessage('couldnt load Character' + error);
+        this.gameStateService.setErrorMessage('couldnt load Character' + error);
       },
     });
   }
@@ -34,10 +34,10 @@ export class AppInitService {
   private loadMapData(): void {
     this.apiService.getMapData().subscribe({
       next: (maps) => {
-        this.gameState.setMaps(maps);
+        this.gameStateService.setMaps(maps);
       },
       error: (error: HttpErrorResponse) => {
-        this.gameState.setErrorMessage('couldnt load map data' + error);
+        this.gameStateService.setErrorMessage('couldnt load map data' + error);
       },
     });
   }

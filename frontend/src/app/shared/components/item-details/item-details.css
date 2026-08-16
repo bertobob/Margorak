@@ -49,7 +49,6 @@
 
 .stat-card__category {
   margin-bottom: 0.25rem !important;
-  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -57,7 +56,7 @@
 .stat-card__slot {
   padding: 0.25rem 0.55rem;
   color: var(--color-text);
-  font-size: 0.8rem;
+
   background: var(--color-primary);
   border-radius: 999px;
 }
@@ -85,7 +84,6 @@
 .stat-grid dt,
 .stat-list dt {
   color: var(--color-text-muted);
-  font-size: 0.8rem;
 }
 
 .stat-grid dd {
@@ -102,7 +100,6 @@
 .stat-group h4 {
   margin-bottom: 0.55rem;
   color: var(--color-text-muted);
-  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }

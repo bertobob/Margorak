@@ -1,0 +1,4 @@
+<div class="health-bar">
+  <div class="health-bar__fill" [style.width.%]="hpPercent(currentHp(),maxHp())"></div>
+  <span class="health-bar__text"> {{ currentHp() }} / {{ maxHp()}} </span>
+</div>

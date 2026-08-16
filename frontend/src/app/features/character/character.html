@@ -5,76 +5,95 @@
     <p>Level: {{ edited.level }}</p>
     <p>Experience: {{ edited.experience }}</p>
   </div>
+  <app-health-bar [currentHp]="character()?.currentHp ?? 0" [maxHp]="character()?.maxHp ?? 0" />
 
   <div class="character__stats">
     {{edited.statusPoints}} Statuspoints available
+    <div class="character__stat-row">
+      <div class="character__stat-controls">
+        <span>Dexterity</span>
+        <span>{{edited.dexterity}}</span>
+        <button
+          type="button"
+          class="button button--primary character__stat-add-button"
+          [disabled]="!hasAvailableStatPoints()"
+          (click)="increaseStat('dexterity')"
+        >
+          +
+        </button>
+      </div>
+      <div class="character__stat-description">
+        Increases attack rating by 1 for every 2 points.
+      </div>
+    </div>
 
     <div class="character__stat-row">
-      <span>Dexterity</span>
-      <span>{{edited.dexterity}}</span>
-      <button
-        type="button"
-        class="button button--primary character__stat-add-button"
-        [disabled]="!hasAvailableStatPoints()"
-        (click)="increaseStat('dexterity')"
-      >
-        +
-      </button>
+      <div class="character__stat-controls">
+        <span>Strength</span>
+        <span>{{edited.strength}}</span>
+        <button
+          type="button"
+          class="button button--primary character__stat-add-button"
+          [disabled]="!hasAvailableStatPoints()"
+          (click)="increaseStat('strength')"
+        >
+          +
+        </button>
+      </div>
+      <div class="character__stat-description">
+        Increases physical damage based on your race's Strength modifier.
+      </div>
     </div>
     <div class="character__stat-row">
-      <span>Strength</span>
-      <span>{{edited.strength}}</span>
-      <button
-        type="button"
-        class="button button--primary character__stat-add-button"
-        [disabled]="!hasAvailableStatPoints()"
-        (click)="increaseStat('strength')"
-      >
-        +
-      </button>
+      <div class="character__stat-controls">
+        <span>Intelligence</span>
+        <span>{{edited.intelligence}}</span>
+        <button
+          type="button"
+          class="button button--primary character__stat-add-button"
+          [disabled]="!hasAvailableStatPoints()"
+          (click)="increaseStat('intelligence')"
+        >
+          +
+        </button>
+      </div>
+      <div class="character__stat-description">Currently has no effect.</div>
     </div>
     <div class="character__stat-row">
-      <span>Intelligence</span>
-      <span>{{edited.intelligence}}</span>
-      <button
-        type="button"
-        class="button button--primary character__stat-add-button"
-        [disabled]="!hasAvailableStatPoints()"
-        (click)="increaseStat('intelligence')"
-      >
-        +
-      </button>
+      <div class="character__stat-controls">
+        <span>Vitality</span>
+        <span>{{edited.vitality}}</span>
+        <button
+          type="button"
+          class="button button--primary character__stat-add-button"
+          [disabled]="!hasAvailableStatPoints()"
+          (click)="increaseStat('vitality')"
+        >
+          +
+        </button>
+      </div>
+      <div class="character__stat-description">
+        Increases maximum health based on your race's Vitality modifier.
+      </div>
     </div>
-    <div class="character__stat-row">
-      <span>Vitality</span>
-      <span>{{edited.vitality}}</span>
-      <button
-        type="button"
-        class="button button--primary character__stat-add-button"
-        [disabled]="!hasAvailableStatPoints()"
-        (click)="increaseStat('vitality')"
-      >
-        +
-      </button>
-    </div>
-    <div class="character__stat-actions">
-      <button
-        type="button"
-        class="button button--success"
-        [disabled]="!characterEdited()"
-        (click)="saveChanges()"
-      >
-        Save
-      </button>
-      <button
-        type="button"
-        class="button button--danger"
-        [disabled]="!characterEdited()"
-        (click)="resetChanges()"
-      >
-        Reset
-      </button>
-    </div>
+  </div>
+  <div class="character__stat-actions">
+    <button
+      type="button"
+      class="button button--success"
+      [disabled]="!characterEdited()"
+      (click)="saveChanges()"
+    >
+      Save
+    </button>
+    <button
+      type="button"
+      class="button button--danger"
+      [disabled]="!characterEdited()"
+      (click)="resetChanges()"
+    >
+      Reset
+    </button>
   </div>
 
   } @else {

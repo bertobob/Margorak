@@ -6,7 +6,7 @@ import { GameStateService } from '../../../../core/services/game-state.service';
   providedIn: 'root',
 })
 export class TeleporterInteractionHandler implements MapInteractionHandler {
-  private gameStateService = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
   type: 'teleporter' = 'teleporter';
   handle(interaction: MapInteractionDto): void {
     if (interaction.type !== 'teleporter') {
@@ -24,5 +24,6 @@ export class TeleporterInteractionHandler implements MapInteractionHandler {
     this.gameStateService.currentMapIndex.set(targetMapIndex);
     this.gameStateService.setPlayerPos(interaction.destinationLocX, interaction.destinationLocY);
     this.gameStateService.loadCombatantHabitats();
+    this.gameStateService.saveCharacter()?.subscribe();
   }
 }

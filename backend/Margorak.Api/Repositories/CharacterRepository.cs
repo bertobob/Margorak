@@ -132,8 +132,6 @@ namespace Margorak.Api.Repositories
             character!.Strength = characterStats.Strength;
             character!.Vitality = characterStats.Vitality;
             character!.StatusPoints = characterStats.StatusPoints;
-            character!.CurrentHp = characterStats.CurrentHp;
-            character!.CurrentMp = characterStats.CurrentMp;
         }
 
         public void StartCombat(int characterId,Combatant combatant)

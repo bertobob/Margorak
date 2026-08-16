@@ -7,7 +7,5 @@
         public int Intelligence { get; set; }
         public int Vitality { get; set; }
         public int StatusPoints { get; set;}
-        public int CurrentHp { get; set; }
-        public int CurrentMp { get; set; }
     }
 }

@@ -7,21 +7,21 @@ import { GameStateService } from '../../../../core/services/game-state.service';
 })
 export class ShopInteractionHandlerService implements MapInteractionHandler {
   readonly type = 'shop';
-  private readonly gameState = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
 
   handle(interaction: MapInteractionDto): void {
     if (interaction.type !== this.type) {
       return;
     }
-    this.gameState.loadShop(interaction.id).subscribe({
+    this.gameStateService.loadShop(interaction.id).subscribe({
       next: (loadedShop) => {
-        this.gameState.activeShop.set(loadedShop);
-        this.gameState.activeShopInteractionId.set(interaction.id);
+        this.gameStateService.activeShop.set(loadedShop);
+        this.gameStateService.activeShopInteractionId.set(interaction.id);
       },
 
       error: (error) => {
         console.error('Shop couldnt be loaded', error);
-        this.gameState.setErrorMessage('Shop couldnt be loaded.');
+        this.gameStateService.setErrorMessage('Shop couldnt be loaded.');
       },
     });
   }

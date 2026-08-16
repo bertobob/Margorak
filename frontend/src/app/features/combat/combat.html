@@ -8,28 +8,12 @@
 
   <div class="combat-arena">
     <div class="combat-side">
-      <div class="health-bar">
-        <div
-          class="health-bar__fill"
-          [style.width.%]="hpPercent(combat.currentCharacterHp, character()?.maxHp ?? 0)"
-        ></div>
-        <span class="health-bar__text">
-          {{ combat.currentCharacterHp }} / {{ character()?.maxHp ?? 0 }}
-        </span>
-      </div>
+      <app-health-bar [currentHp]="combat.currentCharacterHp" [maxHp]="character()?.maxHp ?? 0" />
       <img class="combat-image" src="/images/characters/warrior.png" />
     </div>
 
     <div class="combat-side combat-side--right">
-      <div class="health-bar">
-        <div
-          class="health-bar__fill"
-          [style.width.%]="hpPercent(combat.currentCombatantHp, combat.combatantMaxHp)"
-        ></div>
-        <span class="health-bar__text">
-          {{ combat.currentCombatantHp }} / {{ combat.combatantMaxHp }}
-        </span>
-      </div>
+      <app-health-bar [currentHp]="combat.currentCombatantHp" [maxHp]="combat.combatantMaxHp" />
       @if (combat.combatantImageKey !== 'unknown') {
       <img class="combat-image" [src]="'/images/combatants/' + combat.combatantImageKey + '.png'" />
       }

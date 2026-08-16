@@ -19,8 +19,8 @@ import { CombatService } from './combat.service';
   providedIn: 'root',
 })
 export class GameStateService {
-  private apiService = inject(ApiService);
-  private combatService = inject(CombatService);
+  private readonly apiService = inject(ApiService);
+  private readonly combatService = inject(CombatService);
   private clientId = '';
 
   maps = signal<MapDto[]>([]);
@@ -124,7 +124,6 @@ export class GameStateService {
       intelligence: activeCharacter.intelligence,
       vitality: activeCharacter.vitality,
       statusPoints: activeCharacter.statusPoints,
-      currentHp: activeCharacter.currentHp,
     };
 
     const character: SaveCharacterDto = {
@@ -317,6 +316,7 @@ export class GameStateService {
         if (mapIndex !== -1) {
           this.currentMapIndex.set(mapIndex);
         }
+        this.loadCombatantHabitats();
 
         this.combatService.clearCombat();
         this.endCombat();

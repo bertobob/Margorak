@@ -13,12 +13,12 @@ import { TradeItemRequestDto } from './dto/shop.dto';
   styleUrl: './shop.css',
 })
 export class Shop {
-  private readonly gameState = inject(GameStateService);
-  private readonly api = inject(ApiService);
-  protected activeShop = this.gameState.activeShop;
-  protected activeShopInteractionId = this.gameState.activeShopInteractionId;
-  protected shopActive = this.gameState.shopActive;
-  protected wealth = this.gameState.wealth;
+  private readonly gameStateService = inject(GameStateService);
+  private readonly apiService = inject(ApiService);
+  protected activeShop = this.gameStateService.activeShop;
+  protected activeShopInteractionId = this.gameStateService.activeShopInteractionId;
+  protected shopActive = this.gameStateService.shopActive;
+  protected wealth = this.gameStateService.wealth;
 
   getBuyPrice(item: ItemDto): number {
     const shop = this.activeShop();
@@ -31,7 +31,7 @@ export class Shop {
   }
 
   isAffordable(item: ItemDto): boolean {
-    const character = this.gameState.activeCharacter();
+    const character = this.gameStateService.activeCharacter();
 
     if (character === null) {
       return false;
@@ -41,7 +41,7 @@ export class Shop {
   }
 
   buy(item: ItemDto): void {
-    const character = this.gameState.activeCharacter();
+    const character = this.gameStateService.activeCharacter();
     const shopInteractionId = this.activeShopInteractionId();
 
     if (character === null || shopInteractionId === null) {
@@ -52,10 +52,10 @@ export class Shop {
       itemId: item.id,
     };
 
-    this.api.buy(request, shopInteractionId).subscribe({
+    this.apiService.buy(request, shopInteractionId).subscribe({
       next: (response) => {
-        this.gameState.currentInventory.set(response.inventoryItems);
-        this.gameState.activeCharacter.update((currentCharacter) =>
+        this.gameStateService.currentInventory.set(response.inventoryItems);
+        this.gameStateService.activeCharacter.update((currentCharacter) =>
           currentCharacter ? { ...currentCharacter, gold: response.remainingGold } : null
         );
       },

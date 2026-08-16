@@ -36,7 +36,7 @@ const bonusFields = {
   providedIn: 'root',
 })
 export class EquipmentService {
-  gameStateService = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
   selectedItemStats = signal<ItemDto | null>(null);
   equipment = this.gameStateService.equipment;
 

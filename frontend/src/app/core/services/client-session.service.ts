@@ -5,17 +5,17 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root',
 })
 export class ClientSessionService {
-  private localStorage = inject(LocalStorageService);
+  private readonly localStorageService = inject(LocalStorageService);
 
   getOrCreateClientId(): string {
-    const storedId = this.localStorage.getItem('clientId');
+    const storedId = this.localStorageService.getItem('clientId');
 
     if (storedId) {
       return storedId;
     }
 
     const clientId = crypto.randomUUID();
-    this.localStorage.setItem('clientId', clientId);
+    this.localStorageService.setItem('clientId', clientId);
 
     return clientId;
   }

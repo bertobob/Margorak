@@ -9,8 +9,8 @@ import { MapInteractionDispatcherService } from '../map/services/interactions/ma
   styleUrl: './interaction-bar.css',
 })
 export class InteractionBar {
-  private gameStateService = inject(GameStateService);
-  private mapInteractionDispatcher = inject(MapInteractionDispatcherService);
+  private readonly gameStateService = inject(GameStateService);
+  private readonly mapInteractionDispatcherService = inject(MapInteractionDispatcherService);
   interactionText = this.gameStateService.interactionText;
 
   handleInteractionClick(): void {
@@ -20,6 +20,6 @@ export class InteractionBar {
       return;
     }
 
-    this.mapInteractionDispatcher.handle(interaction);
+    this.mapInteractionDispatcherService.handle(interaction);
   }
 }

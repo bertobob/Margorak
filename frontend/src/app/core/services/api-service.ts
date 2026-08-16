@@ -25,74 +25,74 @@ import { LocationDto } from '../../features/character/dto/location.dto';
   providedIn: 'root',
 })
 export class ApiService {
-  private http = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
   private apiBaseUrl = environment.apiBaseUrl;
 
   saveCharacter(characterId: number, saveCharacterDto: SaveCharacterDto) {
-    return this.http.put<void>(
+    return this.httpClient.put<void>(
       `${this.apiBaseUrl}/api/characters/${characterId}/save`,
       saveCharacterDto
     );
   }
 
   getCharacters() {
-    return this.http.get<CharacterDto[]>(`${this.apiBaseUrl}/api/characters`);
+    return this.httpClient.get<CharacterDto[]>(`${this.apiBaseUrl}/api/characters`);
   }
 
   loadCharacter(characterId: number) {
-    return this.http.get<LoadCharacterDto>(`${this.apiBaseUrl}/api/characters/${characterId}/load`);
+    return this.httpClient.get<LoadCharacterDto>(`${this.apiBaseUrl}/api/characters/${characterId}/load`);
   }
 
   getCharacterRaces() {
-    return this.http.get<CharacterRaceDto[]>(`${this.apiBaseUrl}/api/characters/options/races`);
+    return this.httpClient.get<CharacterRaceDto[]>(`${this.apiBaseUrl}/api/characters/options/races`);
   }
 
   getCharacterClasses() {
-    return this.http.get<CharacterClassDto[]>(`${this.apiBaseUrl}/api/characters/options/classes`);
+    return this.httpClient.get<CharacterClassDto[]>(`${this.apiBaseUrl}/api/characters/options/classes`);
   }
   respawnCharacter(characterId: number) {
-    return this.http.put<LocationDto>(
+    return this.httpClient.put<LocationDto>(
       `${this.apiBaseUrl}/api/characters/${characterId}/respawnCharacter`,
       characterId
     );
   }
   createCharacter(character: CreateCharacterDto) {
-    return this.http.post<CharacterDto>(`${this.apiBaseUrl}/api/characters`, character);
+    return this.httpClient.post<CharacterDto>(`${this.apiBaseUrl}/api/characters`, character);
   }
 
   getMapData() {
-    return this.http.get<MapDto[]>(`${this.apiBaseUrl}/api/maps`);
+    return this.httpClient.get<MapDto[]>(`${this.apiBaseUrl}/api/maps`);
   }
 
   getCombatantHabitatsByMapId(mapId: number) {
-    return this.http.get<CombatantHabitatDto[]>(
+    return this.httpClient.get<CombatantHabitatDto[]>(
       `${this.apiBaseUrl}/api/maps/${mapId}/combatant-habitats`
     );
   }
   getItemById(itemId: number) {
-    return this.http.get<ItemDto>(`${this.apiBaseUrl}/api/items/${itemId}`);
+    return this.httpClient.get<ItemDto>(`${this.apiBaseUrl}/api/items/${itemId}`);
   }
 
   loadShop(shopInteractionId: number) {
-    return this.http.get<ShopDto>(`${this.apiBaseUrl}/api/shops/${shopInteractionId}`);
+    return this.httpClient.get<ShopDto>(`${this.apiBaseUrl}/api/shops/${shopInteractionId}`);
   }
 
   buy(item: TradeItemRequestDto, shopInteractionId: number) {
-    return this.http.post<TradeItemResponseDto>(
+    return this.httpClient.post<TradeItemResponseDto>(
       `${this.apiBaseUrl}/api/shops/${shopInteractionId}/buy`,
       item
     );
   }
 
   sell(item: TradeItemRequestDto, shopInteractionId: number) {
-    return this.http.post<TradeItemResponseDto>(
+    return this.httpClient.post<TradeItemResponseDto>(
       `${this.apiBaseUrl}/api/shops/${shopInteractionId}/sell`,
       item
     );
   }
 
   startCombat(characterId: number, combatantId: number): Observable<ActiveCombatDto> {
-    return this.http.get<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/startCombat`, {
+    return this.httpClient.get<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/startCombat`, {
       params: {
         characterId,
         combatantId,
@@ -101,7 +101,7 @@ export class ApiService {
   }
 
   endCombat(characterId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/api/combat/stopCombat`, {
+    return this.httpClient.delete<void>(`${this.apiBaseUrl}/api/combat/stopCombat`, {
       params: {
         characterId,
       },
@@ -109,7 +109,7 @@ export class ApiService {
   }
 
   attack(characterId: number): Observable<ActiveCombatDto> {
-    return this.http.post<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/attack`, null, {
+    return this.httpClient.post<ActiveCombatDto>(`${this.apiBaseUrl}/api/combat/attack`, null, {
       params: {
         characterId,
       },

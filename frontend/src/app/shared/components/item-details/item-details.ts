@@ -12,7 +12,7 @@ import { requirementChecks } from '../../utils/requirement-checks';
 })
 export class ItemDetails {
   private readonly equipmentService = inject(EquipmentService);
-  private readonly gameState = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
 
   protected selectedItemStats = this.equipmentService.selectedItemStats;
 
@@ -21,7 +21,7 @@ export class ItemDetails {
   }
 
   protected isRequirementMet(requirement: ItemRequirementDto): boolean {
-    const character = this.gameState.activeCharacter();
+    const character = this.gameStateService.activeCharacter();
 
     if (!character) {
       return false;

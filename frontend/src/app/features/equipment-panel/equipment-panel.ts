@@ -13,11 +13,11 @@ import { GameStateService } from '../../core/services/game-state.service';
 })
 export class EquipmentPanel {
   private readonly equipmentService = inject(EquipmentService);
-  private readonly gamestate = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
 
   protected readonly equipment = this.equipmentService.equipment;
   protected readonly combatActive = computed(() => {
-    return this.gamestate.activeCombat() !== null;
+    return this.gameStateService.activeCombat() !== null;
   });
 
   protected onItemClick(item: ItemDto): void {

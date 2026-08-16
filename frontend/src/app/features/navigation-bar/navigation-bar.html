@@ -1,10 +1,10 @@
-@if (gameState.errorMessage()) {
+@if (gameStateService.errorMessage()) {
 <div class="global-error" role="alert">
-  <span>{{ gameState.errorMessage() }}</span>
+  <span>{{ gameStateService.errorMessage() }}</span>
 
   <button
     type="button"
-    (click)="gameState.clearErrorMessage()"
+    (click)="gameStateService.clearErrorMessage()"
     aria-label="Fehlermeldung schließen"
   >
     ×
@@ -27,7 +27,7 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'map'"
-        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
+        [disabled]="!gameStateService.activeCharacter() || gameStateService.activeCombat()"
         type="button"
         (click)="showMap()"
       >
@@ -37,7 +37,7 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'inventory'"
-        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
+        [disabled]="!gameStateService.activeCharacter() || gameStateService.activeCombat()"
         type="button"
         (click)="showInventory()"
       >
@@ -47,18 +47,18 @@
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'character'"
-        [disabled]="!gameState.activeCharacter() || gameState.activeCombat()"
+        [disabled]="!gameStateService.activeCharacter() || gameStateService.activeCombat()"
         type="button"
         (click)="showCharacter()"
       >
         Character
       </button>
-      @if(gameState.shopActive()){
+      @if(gameStateService.shopActive()){
 
       <button
         class="button button--neutral view-switch-button"
         [class.active]="activeView() === 'shop'"
-        [disabled]="!gameState.activeCharacter() || !gameState.shopActive()"
+        [disabled]="!gameStateService.activeCharacter() || !gameStateService.shopActive()"
         type="button"
         (click)="showShop()"
       >
@@ -69,9 +69,9 @@
 
     <button
       class="button button--success save-character-button"
-      [disabled]="!gameState.activeCharacter()"
+      [disabled]="!gameStateService.activeCharacter()"
       type="button"
-      (click)="gameState.saveCharacter()"
+      (click)="gameStateService.saveCharacter()?.subscribe()"
     >
       Save
     </button>

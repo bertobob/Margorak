@@ -48,7 +48,6 @@ export interface CharacterStatsDto {
   intelligence: number;
   vitality: number;
   statusPoints: number;
-  currentHp: number;
 }
 
 export type CharacterStat = 'dexterity' | 'strength' | 'intelligence' | 'vitality';

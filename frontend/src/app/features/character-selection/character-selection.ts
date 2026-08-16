@@ -12,11 +12,11 @@ import { CharacterGeneration } from '../character-generation/character-generatio
   styleUrl: './character-selection.css',
 })
 export class CharacterSelection {
-  private readonly gameState = inject(GameStateService);
+  private readonly gameStateService = inject(GameStateService);
   private readonly apiService = inject(ApiService);
 
-  public readonly characters = this.gameState.characters.asReadonly();
-  public readonly activeCharacter = this.gameState.activeCharacter.asReadonly();
+  public readonly characters = this.gameStateService.characters.asReadonly();
+  public readonly activeCharacter = this.gameStateService.activeCharacter.asReadonly();
   public readonly switchingCharacter = signal(false);
 
   public selectCharacter(character: CharacterDto): void {
@@ -25,10 +25,10 @@ export class CharacterSelection {
     }
 
     this.switchingCharacter.set(true);
-    this.gameState.clearErrorMessage();
-    this.gameState.activeEncounter.set(null);
+    this.gameStateService.clearErrorMessage();
+    this.gameStateService.activeEncounter.set(null);
 
-    const saveRequest = this.gameState.saveCharacter();
+    const saveRequest = this.gameStateService.saveCharacter();
     const loadCharacter = () => this.apiService.loadCharacter(character.id);
     const loadCharacterRequest = saveRequest
       ? saveRequest.pipe(switchMap(loadCharacter))
@@ -36,12 +36,12 @@ export class CharacterSelection {
 
     loadCharacterRequest.pipe(finalize(() => this.switchingCharacter.set(false))).subscribe({
       next: (loadedCharacter) => {
-        this.gameState.setLoadedCharacter(loadedCharacter);
-        this.gameState.loadCombatantHabitats();
+        this.gameStateService.setLoadedCharacter(loadedCharacter);
+        this.gameStateService.loadCombatantHabitats();
       },
       error: (error) => {
         console.error('Character could not be switched.', error);
-        this.gameState.setErrorMessage(
+        this.gameStateService.setErrorMessage(
           'The current position could not be saved or the character could not be loaded.'
         );
       },

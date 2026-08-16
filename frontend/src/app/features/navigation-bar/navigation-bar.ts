@@ -15,14 +15,14 @@ import { Combat } from '../combat/combat';
   styleUrl: './navigation-bar.css',
 })
 export class NavigationBar {
-  protected readonly gameState = inject(GameStateService);
+  protected readonly gameStateService = inject(GameStateService);
   protected activeView = signal<
     'character-selection' | 'map' | 'inventory' | 'character' | 'shop' | 'combat'
   >('character-selection');
 
   constructor() {
     effect(() => {
-      const activeCombat = this.gameState.activeCombat();
+      const activeCombat = this.gameStateService.activeCombat();
 
       if (activeCombat !== null) {
         this.activeView.set('combat');
@@ -35,7 +35,7 @@ export class NavigationBar {
     });
 
     effect(() => {
-      if (this.gameState.activeShop()) {
+      if (this.gameStateService.activeShop()) {
         this.activeView.set('shop');
       }
     });
@@ -46,7 +46,8 @@ export class NavigationBar {
   }
 
   protected showMap(): void {
-    this.gameState.closeShop();
+    this.gameStateService.closeShop();
+    this.gameStateService.saveCharacter()?.subscribe();
     this.activeView.set('map');
   }
 
