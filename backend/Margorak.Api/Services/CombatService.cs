@@ -2,6 +2,7 @@
 using Margorak.Api.Enums;
 using Margorak.Api.Interfaces;
 using Margorak.Api.Models;
+using Margorak.Api.Services.combat;
 using System.Text;
 
 namespace Margorak.Api.Services
@@ -35,7 +36,106 @@ namespace Margorak.Api.Services
          */
         public async Task<ActiveCombatDto> Attack(int characterId)
         {
-            var log = new StringBuilder();
+            var combatContext = await GetCombatContextAsync(characterId);
+            var combatState = CreateCombatState(combatContext.ActiveCombat, combatContext.ActiveCombatCombatant, combatContext.Character);
+
+            await ProcessCharacterTurnAsync(combatContext, combatState);
+
+            if (combatState.CombatantDead)
+            {
+                return await ProcessCombatantDefeated(combatState.Log, combatContext.Combatant, combatContext.Character);
+            }
+
+            combatState.CharacterTimeLine += combatContext.CharacterAttackSpeed;
+            await _combatRepository.UpdateCharacterTimelineAsync(combatContext.ActiveCombatCombatant, combatContext.CharacterAttackSpeed);
+            
+            await ProcessCombatantTurnAsync(combatContext, combatState);
+
+            if (!combatState.CharacterDead)
+            {
+                var oldCombatantTimeline = combatContext.ActiveCombatCombatant.CombatantTimeline;
+                if (oldCombatantTimeline != combatState.CombatantTimeLine)
+                {
+                    await _combatRepository.UpdateCombatantTimelineAsync(combatContext.ActiveCombatCombatant, combatState.CombatantTimeLine - oldCombatantTimeline);
+                }
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            if (combatState.CharacterDead)
+            {
+                return new ActiveCombatDto
+                {
+                    CombatantName = combatContext.Combatant.Name,
+                    CombatantImageKey = combatContext.Combatant.ImageKey,
+                    CurrentCharacterHp = 0,
+                    CurrentCombatantHp = combatState.CombatantCurrentHp,
+                    CombatantMaxHp = combatContext.Combatant.BaseHp,
+                    CombatLogs = combatState.Log.ToString(),
+                    BattleOver = true
+                };
+            }
+
+            return new ActiveCombatDto
+            {
+                CombatantName = combatContext.Combatant.Name,
+                CombatantImageKey = combatContext.Combatant.ImageKey,
+                CurrentCharacterHp = combatState.CharacterCurrentHp,
+                CurrentCombatantHp = combatState.CombatantCurrentHp,
+                CombatantMaxHp = combatContext.Combatant.BaseHp,
+                CombatLogs = combatState.Log.ToString()
+            };
+        }
+
+        private async Task ProcessCharacterTurnAsync(CombatContext combatContext, CombatState combatState)
+        {            
+            if (IsHit(combatContext.CharacterAttackRating, combatContext.CombatantResistances["evasion"]))
+            {
+                var hpLoss = CalculateHpLoss(combatContext.CharacterDamages, combatContext.CombatantResistances);
+
+                combatState.CombatantCurrentHp -= hpLoss;
+                combatState.Log.AppendLine($"You hit {combatContext.Combatant.Name} for {hpLoss} damage.");
+
+                if (combatState.CombatantDead)
+                {
+                    return;
+                }
+
+                await _combatRepository.UpdateActiveCombatCombatantHpAsync(combatContext.ActiveCombatCombatant, -hpLoss);
+            }
+            else
+            {
+                combatState.Log.AppendLine($"You miss {combatContext.Combatant.Name}.");
+            }
+        }
+        private async Task ProcessCombatantTurnAsync(CombatContext combatContext, CombatState combatState)
+        {
+            while (combatState.CombatantTimeLine <= combatState.CharacterTimeLine)
+            {
+                if (IsHit(combatContext.CombatantAttackRating, combatContext.CharacterResistances["evasion"]))
+                {
+                    var combatantDamages = GetCombatantAttackDamages(combatContext.Combatant);
+                    var hpLoss = CalculateHpLoss(combatantDamages, combatContext.CharacterResistances);
+                    await _characterRepository.UpdateCharacterHpAsync(combatContext.Character.Id, -hpLoss);
+                    combatState.CharacterCurrentHp -= hpLoss;
+                    combatState.Log.AppendLine($"{combatContext.Combatant.Name} {combatContext.Combatant.CombatantAttacks.First().Attack.Description} and hits you for {hpLoss} damage.");
+                    if (combatState.CharacterDead)
+                    {
+                        combatState.Log.AppendLine($"You have been defeated by {combatContext.Combatant.Name}.");
+                        _characterRepository.StopCombat(combatContext.Character.Id);                        
+                        return;
+                    }
+                }
+                else
+                {
+                    combatState.Log.AppendLine($"{combatContext.Combatant.Name} misses you.");
+                }
+
+                combatState.CombatantTimeLine += combatContext.CombatantAttackSpeed;
+            }
+        }
+        private async Task<CombatContext> GetCombatContextAsync(int characterId)
+        {            
             var activeCombat = await _combatRepository.GetActiveCombatAsync(characterId);
 
             if (activeCombat == null)
@@ -44,117 +144,77 @@ namespace Margorak.Api.Services
                     $"Activecombat for {characterId} does not exist");
             }
 
-            var character =await _characterRepository.GetCompleteCharacterAsync(characterId);
-            var combatant =await _combatantRepository.GetCombatantForBattleAsync(activeCombat.ActiveCombatCombatants.First().CombatantId);
-            var activeCombatCombatant = activeCombat.ActiveCombatCombatants.FirstOrDefault();
-            if (character == null || combatant == null || activeCombatCombatant == null)
+            var activeCombatCombatant = activeCombat.ActiveCombatCombatants.FirstOrDefault()
+                ?? throw new InvalidOperationException(
+                    $"ActiveCombat {activeCombat.Id} has no combatant.");
+
+            var character = await _characterRepository.GetCompleteCharacterAsync(characterId);
+            var combatant = await _combatantRepository.GetCombatantForBattleAsync(activeCombatCombatant.CombatantId);
+            if (character == null || combatant == null)
             {
                 throw new InvalidOperationException(
                     $"Participants of ActiveCombat {activeCombat.Id} not valid.");
             }
 
             var characterAttackSpeed = GetCharacterAttackSpeed(character);
-            var characterTimeline = activeCombat.CharacterTimeline;
-            // characters turn
             var characterAttackRating = GetCharacterAttackRating(character);
             var combatantResistances = GetCombatantResistances(combatant);
-            var combatantEvasion = combatantResistances["evasion"];
-            var combatantCurrentHp = activeCombatCombatant.CurrentHp;
+            var characterDamages = GetCharacterAttackDamages(character);
 
-            if(IsHit(characterAttackRating, combatantEvasion))
-            {
-                var characterDamages = GetCharacterAttackDamages(character);
-                var combatantDefense = combatantResistances["defense"];
+            var combatantAttack = combatant.CombatantAttacks.FirstOrDefault()
+                ?? throw new InvalidOperationException(
+                    $"Combatant {combatant.Id} has no valid attacks.");
 
-                var hpLoss = CalculateHpLoss(characterDamages, combatantResistances, combatantDefense);
-                combatantCurrentHp -= hpLoss;
-                log.AppendLine($"You hit {combatant.Name} for {hpLoss} damage.");
-                if(combatantCurrentHp <= 0 )
-                {
-                    log.AppendLine($"You have defeated {combatant.Name}.");
-                    var loot = await GetLootByCombatantAsync(combatant,characterId);
-                    log.AppendLine(BuildLogEntryFromLoot(loot));
-                    var experience = await _characterRepository.AddExpByCharacterAndCombatantIdAsync(character.Id, combatant.Id);
-                    log.AppendLine($"You gained {experience} experience.");
-                    var levelupResult = await CheckAndDoLevelup(character, experience);
-                    if (!string.IsNullOrEmpty(levelupResult))
-                    {
-                        log.AppendLine(levelupResult);
-                    }
-                    _characterRepository.StopCombat(characterId);
-
-                    await _unitOfWork.SaveChangesAsync();
-
-                    return new ActiveCombatDto
-                    {
-                        CombatantName = combatant.Name,
-                        CombatantImageKey = combatant.ImageKey,
-                        CurrentCharacterHp = character.CurrentHp,
-                        CurrentCombatantHp = combatantCurrentHp,
-                        CombatantMaxHp = combatant.BaseHp,
-                        CombatLogs = log.ToString(),
-                        BattleOver = true
-                    };
-                }
-                await _combatRepository.UpdateActiveCombatCombatantHpAsync(activeCombatCombatant, -hpLoss);
-            }
-            else
-            {
-                log.AppendLine($"You miss {combatant.Name}.");
-            }
-
-            characterTimeline += characterAttackSpeed;
-            await _combatRepository.UpdateCharacterTimelineAsync(activeCombatCombatant, characterAttackSpeed);
-            await _unitOfWork.SaveChangesAsync();
-
-            //combatants turn
-
-            var combatantTimeline = activeCombat.ActiveCombatCombatants.First().CombatantTimeline;
-            var combatantAttackRating = combatant.CombatantAttacks.First().Attack.AttackRating;
-            var combatantAttackSpeed = combatant.CombatantAttacks.First().Attack.AttackSpeed;
+            var combatantAttackRating = combatantAttack.Attack.AttackRating;
+            var combatantAttackSpeed = combatantAttack.Attack.AttackSpeed;
             var characterResistances = GetCharacterResistances(character);
-            var characterEvasion = characterResistances["evasion"];
-            var characterDefense = characterResistances["defense"];
-            var characterCurrentHp = character.CurrentHp;
-
-            while(combatantTimeline <= characterTimeline)
+            return new CombatContext
             {
-                if(IsHit(combatantAttackRating,characterEvasion))
-                {
-                    var combatantDamages = GetCombatantAttackDamages(combatant);
-                    var hpLoss = CalculateHpLoss(combatantDamages,characterResistances,characterDefense);
-                    await _characterRepository.UpdateCharacterHpAsync(character.Id, -hpLoss);
-                    characterCurrentHp -= hpLoss;
-                    log.AppendLine($"{combatant.Name} {combatant.CombatantAttacks.First().Attack.Description} and hits you for {hpLoss} damage.");
-                    if(characterCurrentHp <= 0)
-                    {
-                        log.AppendLine($"You have been defeated by {combatant.Name}.");
-                        await _unitOfWork.SaveChangesAsync();
-                        return new ActiveCombatDto
-                        {
-                            CombatantName = combatant.Name,
-                            CombatantImageKey = combatant.ImageKey,
-                            CurrentCharacterHp = characterCurrentHp,
-                            CurrentCombatantHp = combatantCurrentHp,
-                            CombatantMaxHp = combatant.BaseHp,
-                            CombatLogs = log.ToString(),
-                            BattleOver = true
-                        };
-                    }
-                }
-                else
-                {
-                    log.AppendLine($"{combatant.Name} misses you.");
-                }
+                ActiveCombat = activeCombat,
+                Character = character,
+                Combatant = combatant,
+                ActiveCombatCombatant = activeCombatCombatant,
+                CharacterAttackSpeed = characterAttackSpeed,
+                CharacterAttackRating = characterAttackRating,
+                CombatantAttackSpeed = combatantAttackSpeed,
+                CombatantAttackRating = combatantAttackRating,
+                CombatantResistances = combatantResistances,
+                CharacterDamages = characterDamages,
+                CharacterResistances = characterResistances
+            };
+            
+            
+        }
 
-                combatantTimeline += combatantAttackSpeed;
-            }
-
-            var oldCombatantTimeline = activeCombat.ActiveCombatCombatants.First().CombatantTimeline;
-            if (oldCombatantTimeline != combatantTimeline)
+        private CombatState CreateCombatState(            
+            ActiveCombat activeCombat,
+            ActiveCombatCombatant activeCombatCombatant,
+            Character character)
+        {
+            var log = new StringBuilder();
+            
+            return new CombatState
             {
-                await _combatRepository.UpdateCombatantTimelineAsync(activeCombat.ActiveCombatCombatants.First(),combatantTimeline - oldCombatantTimeline);
+                CharacterCurrentHp = character.CurrentHp,
+                CharacterTimeLine = activeCombat.CharacterTimeline,
+                CombatantCurrentHp = activeCombatCombatant.CurrentHp,
+                CombatantTimeLine = activeCombatCombatant.CombatantTimeline,
+                Log = log
+            };
+        }
+        private  async Task <ActiveCombatDto> ProcessCombatantDefeated( StringBuilder log,Combatant combatant, Character character)
+        {
+            log.AppendLine($"You have defeated {combatant.Name}.");
+            var loot = await GetLootByCombatantAsync(combatant, character.Id);
+            log.AppendLine(BuildLogEntryFromLoot(loot));
+            var experience = await _characterRepository.AddExpByCharacterAndCombatantIdAsync(character.Id, combatant.Id);
+            log.AppendLine($"You gained {experience} experience.");
+            var levelupResult = await CheckAndDoLevelup(character, experience);
+            if (!string.IsNullOrEmpty(levelupResult))
+            {
+                log.AppendLine(levelupResult);
             }
+            _characterRepository.StopCombat(character.Id);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -162,14 +222,13 @@ namespace Margorak.Api.Services
             {
                 CombatantName = combatant.Name,
                 CombatantImageKey = combatant.ImageKey,
-                CurrentCharacterHp = characterCurrentHp,
-                CurrentCombatantHp = combatantCurrentHp,
+                CurrentCharacterHp = character.CurrentHp,
+                CurrentCombatantHp = 0,
                 CombatantMaxHp = combatant.BaseHp,
-                CombatLogs = log.ToString()
-
+                CombatLogs = log.ToString(),
+                BattleOver = true
             };
         }
-
         private async Task<string> CheckAndDoLevelup(Character character, int experience)
         {
             var level = await _characterRepository.GetLevelByExperienceAsync(character.Experience+experience);
@@ -276,7 +335,7 @@ namespace Margorak.Api.Services
 
             return attackSpeed>0 ? attackSpeed : DefaultAttackspeed;
         }
-        private int CalculateHpLoss(Dictionary<string, (int minDamage, int maxDamage)> damages, Dictionary<string, int> resistances, int defense)
+        private int CalculateHpLoss(IReadOnlyDictionary<string, (int minDamage, int maxDamage)> damages, IReadOnlyDictionary<string, int> resistances)
         {
             int hpLoss = 1;
             foreach(var damage in damages)
@@ -285,7 +344,7 @@ namespace Margorak.Api.Services
                 var calculatedDamage = (int)damageValue * (100 - resistances[damage.Key.ToLower()]) / 100;
                 if(damage.Key == "physical")
                 {
-                    calculatedDamage = Math.Max(0, calculatedDamage - defense);
+                    calculatedDamage = Math.Max(0, calculatedDamage - resistances["defense"]);
                 }
 
                 hpLoss += calculatedDamage;
